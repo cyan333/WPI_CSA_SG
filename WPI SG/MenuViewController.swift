@@ -18,6 +18,11 @@ class MenuViewController : UIViewController {
     
     let menuItems = ["First", "Second"]
     
+    override func viewDidLoad() {
+        
+        print("1123")
+    }
+    
     @IBAction func handleGesture(sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: view)
         
