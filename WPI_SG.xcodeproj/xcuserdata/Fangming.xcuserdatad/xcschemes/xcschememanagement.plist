@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>WPI SG.xcscheme</key>
+		<key>WPI_SG.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,7 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>9101652A1E6CA8E40099809E</key>
+		<key>910CFDB01E80BF950005CC1D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
