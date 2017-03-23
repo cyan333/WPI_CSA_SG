@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		87ADA8291E8227C300EF81A4 /* SQLiteDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ADA8281E8227C300EF81A4 /* SQLiteDatabase.swift */; };
+		87ADA82C1E82300800EF81A4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */; };
+		87CD3A471E84080500C9E5F3 /* SG.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 87CD3A461E830A7000C9E5F3 /* SG.sqlite */; };
 		910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDB41E80BF950005CC1D /* AppDelegate.swift */; };
 		910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDB81E80BF950005CC1D /* Main.storyboard */; };
 		910CFDBC1E80BF950005CC1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDBB1E80BF950005CC1D /* Assets.xcassets */; };
@@ -15,12 +18,15 @@
 		910CFDD51E80C1130005CC1D /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDCF1E80C1130005CC1D /* Interactor.swift */; };
 		910CFDD61E80C1130005CC1D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD01E80C1130005CC1D /* MainViewController.swift */; };
 		910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD11E80C1130005CC1D /* MenuHelper.swift */; };
-		910CFDD81E80C1130005CC1D /* MenuVieController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD21E80C1130005CC1D /* MenuVieController.swift */; };
 		910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD31E80C1130005CC1D /* MenuViewController.swift */; };
 		910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		87ADA8241E82275000EF81A4 /* WPI_SG-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WPI_SG-Bridging-Header.h"; sourceTree = "<group>"; };
+		87ADA8281E8227C300EF81A4 /* SQLiteDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteDatabase.swift; path = Database/SQLiteDatabase.swift; sourceTree = "<group>"; };
+		87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
+		87CD3A461E830A7000C9E5F3 /* SG.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = SG.sqlite; sourceTree = "<group>"; };
 		910CFDB11E80BF950005CC1D /* WPI_SG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WPI_SG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		910CFDB41E80BF950005CC1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		910CFDB91E80BF950005CC1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -31,7 +37,6 @@
 		910CFDCF1E80C1130005CC1D /* Interactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
 		910CFDD01E80C1130005CC1D /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		910CFDD11E80C1130005CC1D /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuHelper.swift; sourceTree = "<group>"; };
-		910CFDD21E80C1130005CC1D /* MenuVieController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuVieController.swift; sourceTree = "<group>"; };
 		910CFDD31E80C1130005CC1D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentMenuAnimator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,17 +46,36 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87ADA82C1E82300800EF81A4 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		87ADA8231E82272300EF81A4 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				87ADA8241E82275000EF81A4 /* WPI_SG-Bridging-Header.h */,
+				87ADA8281E8227C300EF81A4 /* SQLiteDatabase.swift */,
+			);
+			name = Database;
+			sourceTree = "<group>";
+		};
+		87ADA82A1E82300700EF81A4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		910CFDA81E80BF950005CC1D = {
 			isa = PBXGroup;
 			children = (
 				910CFDB31E80BF950005CC1D /* WPI_SG */,
 				910CFDB21E80BF950005CC1D /* Products */,
+				87ADA82A1E82300700EF81A4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -66,6 +90,7 @@
 		910CFDB31E80BF950005CC1D /* WPI_SG */ = {
 			isa = PBXGroup;
 			children = (
+				87ADA8231E82272300EF81A4 /* Database */,
 				910CFDB41E80BF950005CC1D /* AppDelegate.swift */,
 				910CFDB81E80BF950005CC1D /* Main.storyboard */,
 				910CFDBB1E80BF950005CC1D /* Assets.xcassets */,
@@ -75,9 +100,9 @@
 				910CFDCF1E80C1130005CC1D /* Interactor.swift */,
 				910CFDD01E80C1130005CC1D /* MainViewController.swift */,
 				910CFDD11E80C1130005CC1D /* MenuHelper.swift */,
-				910CFDD21E80C1130005CC1D /* MenuVieController.swift */,
 				910CFDD31E80C1130005CC1D /* MenuViewController.swift */,
 				910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */,
+				87CD3A461E830A7000C9E5F3 /* SG.sqlite */,
 			);
 			path = WPI_SG;
 			sourceTree = "<group>";
@@ -114,6 +139,7 @@
 				TargetAttributes = {
 					910CFDB01E80BF950005CC1D = {
 						CreatedOnToolsVersion = 8.2.1;
+						LastSwiftMigration = 0820;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -141,6 +167,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87CD3A471E84080500C9E5F3 /* SG.sqlite in Resources */,
 				910CFDBF1E80BF950005CC1D /* LaunchScreen.storyboard in Resources */,
 				910CFDBC1E80BF950005CC1D /* Assets.xcassets in Resources */,
 				910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */,
@@ -158,10 +185,10 @@
 				910CFDD41E80C1130005CC1D /* DismissMenuAnimator.swift in Sources */,
 				910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */,
 				910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */,
-				910CFDD81E80C1130005CC1D /* MenuVieController.swift in Sources */,
 				910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */,
 				910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */,
 				910CFDD61E80C1130005CC1D /* MainViewController.swift in Sources */,
+				87ADA8291E8227C300EF81A4 /* SQLiteDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,10 +311,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = WPI_SG/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fmning.WPI-SG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WPI_SG/WPI_SG-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -296,10 +326,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = WPI_SG/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fmning.WPI-SG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WPI_SG/WPI_SG-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -323,6 +355,7 @@
 				910CFDC51E80BF950005CC1D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

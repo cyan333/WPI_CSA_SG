@@ -18,9 +18,28 @@ class MenuViewController : UIViewController {
     
     let menuItems = ["First", "Second"]
     
+    
     override func viewDidLoad() {
         
-        print("1123")
+        var fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            .appendingPathComponent("SG11.sqlite")
+        
+        let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
+        
+        
+        
+        let db:SQLiteDatabase
+        do{
+            db = try SQLiteDatabase.open(path: path!)
+            print("ok")
+            //db.createTable()
+            db.run(query: "")
+        }catch {
+            print(error)
+        }
+        
+        
+        
     }
     
     @IBAction func handleGesture(sender: UIPanGestureRecognizer) {
