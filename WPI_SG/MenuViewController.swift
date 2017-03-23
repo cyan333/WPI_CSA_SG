@@ -21,19 +21,12 @@ class MenuViewController : UIViewController {
     
     override func viewDidLoad() {
         
-        var fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent("SG11.sqlite")
-        
-        let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
-        
-        
-        
-        let db:SQLiteDatabase
+        let db:SGDatabase
         do{
-            db = try SQLiteDatabase.open(path: path!)
+            db = try SGDatabase.connect()
             print("ok")
             //db.createTable()
-            db.run(query: "")
+            //db.run(query: "")
         }catch {
             print(error)
         }

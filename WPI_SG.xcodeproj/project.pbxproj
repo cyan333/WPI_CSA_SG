@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		87ADA8291E8227C300EF81A4 /* SQLiteDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ADA8281E8227C300EF81A4 /* SQLiteDatabase.swift */; };
+		87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ADA8281E8227C300EF81A4 /* SGDatabase.swift */; };
 		87ADA82C1E82300800EF81A4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */; };
 		87CD3A471E84080500C9E5F3 /* SG.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 87CD3A461E830A7000C9E5F3 /* SG.sqlite */; };
 		910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDB41E80BF950005CC1D /* AppDelegate.swift */; };
@@ -23,8 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		87ADA8241E82275000EF81A4 /* WPI_SG-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WPI_SG-Bridging-Header.h"; sourceTree = "<group>"; };
-		87ADA8281E8227C300EF81A4 /* SQLiteDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteDatabase.swift; path = Database/SQLiteDatabase.swift; sourceTree = "<group>"; };
+		87ADA8241E82275000EF81A4 /* WPI_SG-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "WPI_SG-Bridging-Header.h"; path = "Database/WPI_SG-Bridging-Header.h"; sourceTree = "<group>"; };
+		87ADA8281E8227C300EF81A4 /* SGDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SGDatabase.swift; path = Database/SGDatabase.swift; sourceTree = "<group>"; };
 		87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		87CD3A461E830A7000C9E5F3 /* SG.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = SG.sqlite; sourceTree = "<group>"; };
 		910CFDB11E80BF950005CC1D /* WPI_SG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WPI_SG.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,7 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				87ADA8241E82275000EF81A4 /* WPI_SG-Bridging-Header.h */,
-				87ADA8281E8227C300EF81A4 /* SQLiteDatabase.swift */,
+				87ADA8281E8227C300EF81A4 /* SGDatabase.swift */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -188,7 +188,7 @@
 				910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */,
 				910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */,
 				910CFDD61E80C1130005CC1D /* MainViewController.swift in Sources */,
-				87ADA8291E8227C300EF81A4 /* SQLiteDatabase.swift in Sources */,
+				87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,7 +316,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fmning.WPI-SG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "WPI_SG/WPI_SG-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "WPI_SG/Database/WPI_SG-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -331,7 +331,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fmning.WPI-SG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "WPI_SG/WPI_SG-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "WPI_SG/Database/WPI_SG-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

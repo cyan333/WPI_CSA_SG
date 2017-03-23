@@ -1,14 +1,14 @@
 //
-//  SQLiteDatabase.swift
+//  SGDatabase.swift
 //  WPI_SG
 //
-//  Created by Cyan Xie on 3/21/17.
+//  Created by NingFangming on 3/21/17.
 //  Copyright © 2017 fangming. All rights reserved.
 //
 
 import Foundation
 
-class SQLiteDatabase {
+class SGDatabase {
     private let dbPointer: OpaquePointer
     
     private init(dbPointer: OpaquePointer) {
@@ -19,14 +19,12 @@ class SQLiteDatabase {
         sqlite3_close(dbPointer)
     }
     
-    static func open(path: String) throws -> SQLiteDatabase {
+    static func connect() throws -> SGDatabase {
         var db: OpaquePointer? = nil
-        // 1
+        let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
         if sqlite3_open(path, &db) == SQLITE_OK {
-            // 2
-            return SQLiteDatabase(dbPointer: db!)
+            return SGDatabase(dbPointer: db!)
         } else {
-            // 3
             defer {
                 if db != nil {
                     sqlite3_close(db)
