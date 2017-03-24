@@ -26,12 +26,16 @@ class MenuViewController : UIViewController {
             db = try SGDatabase.connect()
             print("ok")
             //db.createTable()
-            //db.run(query: "")
+            db.run(query: "")
         }catch {
             print(error)
         }
         
+        /*var t = [Menu]()
         
+        for index in 1...90 {
+            t.append(Menu(id: index, name: "haha let me see how big!!!!!!!"))
+        }*/
         
     }
     

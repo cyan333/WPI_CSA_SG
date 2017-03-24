@@ -41,10 +41,10 @@ class SGDatabase {
     
     func run(query: String){
         var queryStatement: OpaquePointer? = nil
-        // 1
-        let a = sqlite3_prepare_v2(dbPointer, "SELECT * FROM MENUS;", -1, &queryStatement, nil)
-        if a == SQLITE_OK {
-            // 2
+        
+        if sqlite3_prepare_v2(dbPointer, "SELECT * FROM MENUS ",
+                              -1, &queryStatement, nil) == SQLITE_OK {
+            /*
             if sqlite3_step(queryStatement) == SQLITE_ROW {
                 // 3
                 let id = sqlite3_column_int(queryStatement, 0)
@@ -59,7 +59,22 @@ class SGDatabase {
                 
             } else {
                 print("Query returned no results")
+            }*/
+            
+            while (sqlite3_step(queryStatement) == SQLITE_ROW) {
+                let id = sqlite3_column_int(queryStatement, 0)
+                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
+                let name = String(cString: queryResultCol1!)
+                let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
+                var position : String
+                if(queryResultCol2 == nil){
+                    position = "null"
+                }else{
+                    position = String(cString: queryResultCol2!)
+                }
+                print("\(id) | \(name) | \(position)")
             }
+            
         } else {
             print("SELECT statement could not be prepared")
         }
