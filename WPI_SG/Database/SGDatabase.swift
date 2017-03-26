@@ -39,6 +39,31 @@ class SGDatabase {
         }
     }
     
+    func getSubMenus(menuId: Int){
+        var query: String
+        if(menuId == 0){
+            query = "SELECT ID, NAME FROM MENUS WHERE PARENT_ID IS NULL ORDER BY POSITION ASC"
+        }else{
+            query = "SELECT ID, NAME FROM MENUS WHERE PARENT_ID = \(menuId) ORDER BY POSITION ASC"
+        }
+        
+        var queryStatement: OpaquePointer? = nil
+        if sqlite3_prepare(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK{
+            while (sqlite3_step(queryStatement) == SQLITE_ROW) {
+                let id = sqlite3_column_int(queryStatement, 0)
+                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
+                let name = String(cString: queryResultCol1!)
+                
+                //print("\(id) | \(name)")
+                let menu = Menu(id: Int(id), name: name)
+            }
+            //print("well done")
+        }else{
+            
+        }
+        sqlite3_finalize(queryStatement)
+    }
+    
     func run(query: String){
         var queryStatement: OpaquePointer? = nil
         

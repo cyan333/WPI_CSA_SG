@@ -9,15 +9,17 @@
 import Foundation
 
 class Menu{
-    var id : Int
-    var name : String
-    var isOpened : Bool
-    var childMenus : [Menu]
+    var id: Int
+    var name: String
+    var isOpened: Bool
+    var isParentMenu: Bool
+    var subMenus: [Menu]
     
     init(id : Int, name : String) {
         self.id = id
         self.name = name
         self.isOpened = false
-        self.childMenus = []
+        self.isParentMenu = false
+        self.subMenus = []
     }
 }

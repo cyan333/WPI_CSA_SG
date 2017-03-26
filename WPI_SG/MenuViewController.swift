@@ -26,7 +26,8 @@ class MenuViewController : UIViewController {
             db = try SGDatabase.connect()
             print("ok")
             //db.createTable()
-            db.run(query: "")
+            //db.run(query: "")
+            db.getSubMenus(menuId: 0)
         }catch {
             print(error)
         }
