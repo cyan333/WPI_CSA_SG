@@ -12,26 +12,40 @@ class MenuViewController : UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var interactor:Interactor? = nil
+    var interactor: Interactor? = nil
     
-    var menuActionDelegate:MenuActionDelegate? = nil
+    var menuList = [Menu]()
+    var visibleCells: Int = 0
     
-    let menuItems = ["First", "Second"]
+    var menuActionDelegate: MenuActionDelegate? = nil
+    
+    //let menuItems = ["First", "Second"]
     
     
     override func viewDidLoad() {
-        
+        let startTime = CFAbsoluteTimeGetCurrent()
         let db:SGDatabase
         do{
             db = try SGDatabase.connect()
-            print("ok")
+            //print("ok")
             //db.createTable()
             //db.run(query: "")
-            db.getSubMenus(menuId: 0)
+            menuList = db.getSubMenus(menuId: 0)
+            var str = ""
+            str = "["
+            for m in menuList as [Menu]{
+                str += m.toJson()
+                str += ","
+            }
+            str = str.substring(to: str.index(before: str.endIndex))
+            str += "]"
+            //print(str)
         }catch {
             print(error)
         }
         
+        let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+        //print("Time elapsed for \(title): \(timeElapsed) s")
         /*var t = [Menu]()
         
         for index in 1...90 {
@@ -75,12 +89,12 @@ class MenuViewController : UIViewController {
 
 extension MenuViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menuItems.count
+        return visibleCells
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
-        cell.textLabel?.text = menuItems[indexPath.row]
+        cell.textLabel?.text = menuList[indexPath.row].name
         return cell
     }
 }

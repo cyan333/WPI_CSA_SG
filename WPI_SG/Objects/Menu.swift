@@ -22,4 +22,26 @@ class Menu{
         self.isParentMenu = false
         self.subMenus = []
     }
+    /*Sample:
+     {"id" : "1",
+      "name" : "Chapter 1",
+      "isParentMenu" : "true",
+      "subMenus" : [{}, {}]
+     }
+     */
+    func toJson() -> String{
+        var jsonStr = ""
+        jsonStr += "{\"id\":\"\(id)\",\"name\":\"\(name)\",\"isParentMenu\":\"\(isParentMenu)\","
+        jsonStr += "\"subMenus\":["
+        for m in subMenus as [Menu]{
+            jsonStr += m.toJson()
+            jsonStr += ","
+        }
+        if (isParentMenu){
+            jsonStr = jsonStr.substring(to: jsonStr.index(before: jsonStr.endIndex))
+        }
+        jsonStr += "]}"
+        
+        return jsonStr
+    }
 }
