@@ -15,7 +15,7 @@ class MenuViewController : UIViewController {
     var interactor: Interactor? = nil
     
     var menuList = [Menu]()
-    var visibleCells: Int = 0
+    var visibleCellCount: Int = 0
     
     var menuActionDelegate: MenuActionDelegate? = nil
     
@@ -23,14 +23,12 @@ class MenuViewController : UIViewController {
     
     
     override func viewDidLoad() {
-        let startTime = CFAbsoluteTimeGetCurrent()
+        //let startTime = CFAbsoluteTimeGetCurrent()
         let db:SGDatabase
         do{
             db = try SGDatabase.connect()
-            //print("ok")
-            //db.createTable()
-            //db.run(query: "")
             menuList = db.getSubMenus(menuId: 0)
+            //json part
             var str = ""
             str = "["
             for m in menuList as [Menu]{
@@ -39,12 +37,16 @@ class MenuViewController : UIViewController {
             }
             str = str.substring(to: str.index(before: str.endIndex))
             str += "]"
-            //print(str)
+            //json part end
+            
+            visibleCellCount = calculateVisibleCellNumber(menuList: menuList)
+            tableView.reloadData();
+            
         }catch {
             print(error)
         }
         
-        let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
+        //alet timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
         //print("Time elapsed for \(title): \(timeElapsed) s")
         /*var t = [Menu]()
         
@@ -85,15 +87,47 @@ class MenuViewController : UIViewController {
         }
     }
     
+    func calculateVisibleCellNumber(menuList: [Menu]) -> Int{
+        var count: Int = menuList.count
+        for m in menuList as [Menu]{
+            if(m.isOpened){
+                count += calculateVisibleCellNumber(menuList: m.subMenus)
+            }
+        }
+        return count
+    }
+    
+    func getSelectedMenu(menuList: [Menu], index: Int) -> Menu?{
+        var counter: Int = 0
+        for m in menuList as [Menu]{
+            counter += 1
+            if(counter - 1 == index){
+                return m
+            }else if (m.isOpened){
+                let subMenusCount = calculateVisibleCellNumber(menuList: m.subMenus)
+                if(counter + subMenusCount - 1 >= index){
+                    return getSelectedMenu(menuList: m.subMenus, index: index - counter)
+                }
+            }
+        }
+        return nil
+    }
 }
 
 extension MenuViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return visibleCells
+        return visibleCellCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
+        
+        if let menu = getSelectedMenu(menuList: menuList, index: indexPath.row) {
+            cell.textLabel?.text = menu.name
+        }else{
+            cell.textLabel?.text = "unknown"
+        }
+        
         cell.textLabel?.text = menuList[indexPath.row].name
         return cell
     }
@@ -102,15 +136,20 @@ extension MenuViewController : UITableViewDataSource {
 extension MenuViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        switch indexPath.row {
+        /*switch indexPath.row {
         case 0:
-            print("1")
-            //menuActionDelegate?.openSegue(segueName: "openFirst", sender: nil)
+            menuActionDelegate?.openSegue(segueName: "openFirst", sender: nil)
         case 1:
-            print("2")
-            //menuActionDelegate?.openSegue(segueName: "openSecond", sender: nil)
+            menuActionDelegate?.openSegue(segueName: "openSecond", sender: nil)
         default:
             break
+        }*/
+        if let menu = getSelectedMenu(menuList: menuList, index: indexPath.row) {
+            if(menu.isParentMenu){
+                print("parent")
+            }else{
+                print("child")
+            }
         }
     }
 }
