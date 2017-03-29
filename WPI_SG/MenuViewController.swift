@@ -16,19 +16,19 @@ class MenuViewController : UIViewController {
     
     var menuList = [Menu]()
     var visibleCellCount: Int = 0
+    var selectedIndexRow: Int = 0
     
     var menuActionDelegate: MenuActionDelegate? = nil
     
-    //let menuItems = ["First", "Second"]
-    
+    var t = true
     
     override func viewDidLoad() {
-        //let startTime = CFAbsoluteTimeGetCurrent()
         let db:SGDatabase
         do{
             db = try SGDatabase.connect()
             menuList = db.getSubMenus(menuId: 0)
-            //json part
+            
+            /*json part
             var str = ""
             str = "["
             for m in menuList as [Menu]{
@@ -37,7 +37,7 @@ class MenuViewController : UIViewController {
             }
             str = str.substring(to: str.index(before: str.endIndex))
             str += "]"
-            //json part end
+            */
             
             visibleCellCount = calculateVisibleCellNumber(menuList: menuList)
             tableView.reloadData();
@@ -45,14 +45,6 @@ class MenuViewController : UIViewController {
         }catch {
             print(error)
         }
-        
-        //alet timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
-        //print("Time elapsed for \(title): \(timeElapsed) s")
-        /*var t = [Menu]()
-        
-        for index in 1...90 {
-            t.append(Menu(id: index, name: "haha let me see how big!!!!!!!"))
-        }*/
         
     }
     
@@ -107,10 +99,61 @@ class MenuViewController : UIViewController {
                 let subMenusCount = calculateVisibleCellNumber(menuList: m.subMenus)
                 if(counter + subMenusCount - 1 >= index){
                     return getSelectedMenu(menuList: m.subMenus, index: index - counter)
+                }else{
+                    counter += subMenusCount
                 }
             }
         }
         return nil
+    }
+    
+    func toggleSelectedMenu(menuList: [Menu], index: Int){
+        var counter: Int = 0
+        for m in menuList as [Menu]{
+            counter += 1
+            if(counter - 1 == index){
+                if(m.isParentMenu){
+                    m.isOpened = !m.isOpened
+                    //print("parent name: \(m.name)")
+                    visibleCellCount = calculateVisibleCellNumber(menuList: self.menuList)
+                    let length = calculateVisibleCellNumber(menuList: m.subMenus)
+                    print("child length \(length) at row \(counter)")
+                    if(m.isOpened){
+                        tableView.insertRows(at: createIndexPathArray(from: selectedIndexRow ,
+                                                                      length: length),
+                                             with: UITableViewRowAnimation.fade)
+                    }else{
+                        tableView.deleteRows(at: createIndexPathArray(from: selectedIndexRow ,
+                                                                      length: length),
+                                             with: UITableViewRowAnimation.fade)
+                    }
+                    
+                    
+                }else{
+                    //segue
+                    print("segue name: \(m.name)")
+                    
+                }
+                return
+            }else if (m.isOpened){
+                let subMenusCount = calculateVisibleCellNumber(menuList: m.subMenus)
+                if(counter + subMenusCount - 1 >= index){
+                    toggleSelectedMenu(menuList: m.subMenus, index: index - counter)
+                    return
+                }else{
+                    counter += subMenusCount
+                }
+            }
+        }
+    }
+    
+    func createIndexPathArray(from: Int, length: Int) -> [IndexPath] {
+        var indexPath = [IndexPath]()
+        for i in 1...length {
+            indexPath.append(IndexPath(row: from + i, section: 0))
+        }
+        
+        return indexPath
     }
 }
 
@@ -128,13 +171,14 @@ extension MenuViewController : UITableViewDataSource {
             cell.textLabel?.text = "unknown"
         }
         
-        cell.textLabel?.text = menuList[indexPath.row].name
+        //cell.textLabel?.text = menuList[indexPath.row].name
         return cell
     }
 }
 
 extension MenuViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
         /*switch indexPath.row {
         case 0:
@@ -144,12 +188,27 @@ extension MenuViewController : UITableViewDelegate {
         default:
             break
         }*/
-        if let menu = getSelectedMenu(menuList: menuList, index: indexPath.row) {
-            if(menu.isParentMenu){
-                print("parent")
+        selectedIndexRow = indexPath.row
+        toggleSelectedMenu(menuList: menuList, index: indexPath.row)
+        /*if(indexPath.row == 9){
+            if(t){
+                t = false
+                let m: Menu = Menu(id: 999, name: "haha")
+                menuList.insert(m, at: 10)
+                let n: Menu = Menu(id: 999, name: "haha11")
+                menuList.insert(n, at: 11)
+                visibleCellCount += 2
+                tableView.insertRows(at: [IndexPath(row: indexPath.row + 1, section: 0),
+                                          IndexPath(row: indexPath.row + 2, section: 0)], with: UITableViewRowAnimation.fade)
             }else{
-                print("child")
+                t = true
+                menuList.remove(at: 11)
+                menuList.remove(at: 10)
+                visibleCellCount -= 2
+                tableView.deleteRows(at: [IndexPath(row: indexPath.row + 1, section: 0),
+                                          IndexPath(row: indexPath.row + 2, section: 0)], with: UITableViewRowAnimation.fade)
             }
-        }
+            
+        }*/
     }
 }
