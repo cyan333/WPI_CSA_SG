@@ -39,7 +39,7 @@ class SGDatabase {
         }
     }
     
-    func getSubMenus(menuId: Int) -> [Menu]{
+    func getSubMenus(menuId: Int, prefix: String) -> [Menu]{
         var query: String
         if(menuId == 0){
             query = "SELECT ID, NAME FROM MENUS WHERE PARENT_ID IS NULL ORDER BY POSITION ASC"
@@ -53,11 +53,11 @@ class SGDatabase {
             while (sqlite3_step(queryStatement) == SQLITE_ROW) {
                 let id = sqlite3_column_int(queryStatement, 0)
                 let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
-                let name = String(cString: queryResultCol1!)
-                
+                var name = String(cString: queryResultCol1!)
+                name = prefix + name
                 let menu = Menu(id: Int(id), name: name)
                 
-                menu.subMenus = self.getSubMenus(menuId: Int(id))
+                menu.subMenus = self.getSubMenus(menuId: Int(id), prefix: prefix + "   ")
                 menu.isParentMenu = menu.subMenus.count > 0
                 menuList.append(menu)
             }

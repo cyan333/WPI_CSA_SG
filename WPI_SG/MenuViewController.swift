@@ -23,10 +23,11 @@ class MenuViewController : UIViewController {
     var t = true
     
     override func viewDidLoad() {
+        print("menu loaded")
         let db:SGDatabase
         do{
             db = try SGDatabase.connect()
-            menuList = db.getSubMenus(menuId: 0)
+            menuList = db.getSubMenus(menuId: 0, prefix: "")
             
             /*json part
             var str = ""
@@ -171,7 +172,6 @@ extension MenuViewController : UITableViewDataSource {
             cell.textLabel?.text = "unknown"
         }
         
-        //cell.textLabel?.text = menuList[indexPath.row].name
         return cell
     }
 }
@@ -190,25 +190,5 @@ extension MenuViewController : UITableViewDelegate {
         }*/
         selectedIndexRow = indexPath.row
         toggleSelectedMenu(menuList: menuList, index: indexPath.row)
-        /*if(indexPath.row == 9){
-            if(t){
-                t = false
-                let m: Menu = Menu(id: 999, name: "haha")
-                menuList.insert(m, at: 10)
-                let n: Menu = Menu(id: 999, name: "haha11")
-                menuList.insert(n, at: 11)
-                visibleCellCount += 2
-                tableView.insertRows(at: [IndexPath(row: indexPath.row + 1, section: 0),
-                                          IndexPath(row: indexPath.row + 2, section: 0)], with: UITableViewRowAnimation.fade)
-            }else{
-                t = true
-                menuList.remove(at: 11)
-                menuList.remove(at: 10)
-                visibleCellCount -= 2
-                tableView.deleteRows(at: [IndexPath(row: indexPath.row + 1, section: 0),
-                                          IndexPath(row: indexPath.row + 2, section: 0)], with: UITableViewRowAnimation.fade)
-            }
-            
-        }*/
     }
 }

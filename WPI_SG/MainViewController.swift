@@ -22,6 +22,8 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         
         //print("@%", testView.attributedText)
+        print("main loaded")
+        var a: Article = Article(text: "hahahaha wtf <font a b>")
     }
     
     @IBAction func openMenu(_ sender: UIButton) {
@@ -43,6 +45,7 @@ class MainViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? MenuViewController {
+            print("prepared")
             destinationViewController.transitioningDelegate = self
             destinationViewController.interactor = interactor
             destinationViewController.menuActionDelegate = self
