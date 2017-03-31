@@ -30,10 +30,13 @@ class Article{
             print(t)
             
             var c = "{\"resource\":\"font\",\"length\":\"9\"}"
+            
             if let data = c.data(using: .utf8) {
                 do {
-                    let d = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                    print(d?["length"]!)
+                    let a = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                    if let b = a?["resource"] as? String{
+                        print(b)
+                    }
                 } catch {
                     print(error.localizedDescription)
                 }

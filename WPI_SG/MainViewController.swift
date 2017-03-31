@@ -11,6 +11,7 @@ import UIKit
 protocol MenuActionDelegate {
     func openSegue(segueName: String, sender: AnyObject?)
     func reopenMenu()
+    func saveMenuState(menuList: [Menu])    
 }
 
 class MainViewController: UIViewController {
@@ -18,6 +19,8 @@ class MainViewController: UIViewController {
     @IBOutlet var testView: UITextView!
     
     let interactor = Interactor()
+    
+    var menuList = [Menu]()
     
     override func viewDidLoad() {
         
@@ -45,7 +48,7 @@ class MainViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? MenuViewController {
-            print("prepared")
+            destinationViewController.menuList = self.menuList
             destinationViewController.transitioningDelegate = self
             destinationViewController.interactor = interactor
             destinationViewController.menuActionDelegate = self
@@ -81,7 +84,12 @@ extension MainViewController : MenuActionDelegate {
             self.performSegue(withIdentifier: segueName, sender: sender)
         }
     }
+    
     func reopenMenu(){
         performSegue(withIdentifier: "openMenu", sender: nil)
+    }
+    
+    func saveMenuState(menuList: [Menu]){
+        self.menuList = menuList
     }
 }

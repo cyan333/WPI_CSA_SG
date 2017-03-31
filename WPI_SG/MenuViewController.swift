@@ -23,29 +23,32 @@ class MenuViewController : UIViewController {
     var t = true
     
     override func viewDidLoad() {
-        print("menu loaded")
-        let db:SGDatabase
-        do{
-            db = try SGDatabase.connect()
-            menuList = db.getSubMenus(menuId: 0, prefix: "")
-            
-            /*json part
-            var str = ""
-            str = "["
-            for m in menuList as [Menu]{
-                str += m.toJson()
-                str += ","
+        if(menuList.count == 0){
+            let db:SGDatabase
+            do{
+                db = try SGDatabase.connect()
+                menuList = db.getSubMenus(menuId: 0, prefix: "")
+                
+                /*json part
+                 var str = ""
+                 str = "["
+                 for m in menuList as [Menu]{
+                 str += m.toJson()
+                 str += ","
+                 }
+                 str = str.substring(to: str.index(before: str.endIndex))
+                 str += "]"
+                 */
+                
+                
+                
+            }catch {
+                print(error)
             }
-            str = str.substring(to: str.index(before: str.endIndex))
-            str += "]"
-            */
-            
-            visibleCellCount = calculateVisibleCellNumber(menuList: menuList)
-            tableView.reloadData();
-            
-        }catch {
-            print(error)
         }
+        
+        visibleCellCount = calculateVisibleCellNumber(menuList: menuList)
+        tableView.reloadData();
         
     }
     
@@ -63,6 +66,7 @@ class MenuViewController : UIViewController {
     }
     
     @IBAction func closeMenu(sender: UIButton) {
+        menuActionDelegate?.saveMenuState(menuList: menuList)        
         dismiss(animated: true, completion: nil)
     }
     
@@ -118,7 +122,7 @@ class MenuViewController : UIViewController {
                     //print("parent name: \(m.name)")
                     visibleCellCount = calculateVisibleCellNumber(menuList: self.menuList)
                     let length = calculateVisibleCellNumber(menuList: m.subMenus)
-                    print("child length \(length) at row \(counter)")
+                    //print("child length \(length) at row \(counter)")
                     if(m.isOpened){
                         tableView.insertRows(at: createIndexPathArray(from: selectedIndexRow ,
                                                                       length: length),
@@ -133,7 +137,7 @@ class MenuViewController : UIViewController {
                 }else{
                     //segue
                     print("segue name: \(m.name)")
-                    
+                    menuActionDelegate?.saveMenuState(menuList: menuList)
                 }
                 return
             }else if (m.isOpened){
