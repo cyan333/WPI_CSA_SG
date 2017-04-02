@@ -18,7 +18,7 @@
 		910CFDBF1E80BF950005CC1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDBD1E80BF950005CC1D /* LaunchScreen.storyboard */; };
 		910CFDD41E80C1130005CC1D /* DismissMenuAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */; };
 		910CFDD51E80C1130005CC1D /* Interactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDCF1E80C1130005CC1D /* Interactor.swift */; };
-		910CFDD61E80C1130005CC1D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD01E80C1130005CC1D /* MainViewController.swift */; };
+		910CFDD61E80C1130005CC1D /* SGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD01E80C1130005CC1D /* SGViewController.swift */; };
 		910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD11E80C1130005CC1D /* MenuHelper.swift */; };
 		910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD31E80C1130005CC1D /* MenuViewController.swift */; };
 		910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */; };
@@ -39,7 +39,7 @@
 		910CFDC01E80BF950005CC1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissMenuAnimator.swift; sourceTree = "<group>"; };
 		910CFDCF1E80C1130005CC1D /* Interactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Interactor.swift; sourceTree = "<group>"; };
-		910CFDD01E80C1130005CC1D /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		910CFDD01E80C1130005CC1D /* SGViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SGViewController.swift; sourceTree = "<group>"; };
 		910CFDD11E80C1130005CC1D /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuHelper.swift; sourceTree = "<group>"; };
 		910CFDD31E80C1130005CC1D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentMenuAnimator.swift; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 				910CFDC01E80BF950005CC1D /* Info.plist */,
 				910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */,
 				910CFDCF1E80C1130005CC1D /* Interactor.swift */,
-				910CFDD01E80C1130005CC1D /* MainViewController.swift */,
+				910CFDD01E80C1130005CC1D /* SGViewController.swift */,
 				910CFDD11E80C1130005CC1D /* MenuHelper.swift */,
 				910CFDD31E80C1130005CC1D /* MenuViewController.swift */,
 				910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */,
@@ -203,7 +203,7 @@
 				910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */,
 				910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */,
 				87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */,
-				910CFDD61E80C1130005CC1D /* MainViewController.swift in Sources */,
+				910CFDD61E80C1130005CC1D /* SGViewController.swift in Sources */,
 				87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

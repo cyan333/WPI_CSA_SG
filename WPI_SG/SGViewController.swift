@@ -14,7 +14,7 @@ protocol MenuActionDelegate {
     func saveMenuState(menuList: [Menu])    
 }
 
-class MainViewController: UIViewController {
+class SGViewController: UIViewController {
 
     @IBOutlet var testView: UITextView!
     
@@ -23,6 +23,10 @@ class MainViewController: UIViewController {
     var menuList = [Menu]()
     
     override func viewDidLoad() {
+        
+        let b = "<p>I am normal</p>I am just a notmal haha<span style=\"font-size:18px;font-weight:bold;\">   I am big</span>   and then the "
+        
+        testView.attributedText = b.htmlAttributedString()
         
         //print("@%", testView.attributedText)
         print("main loaded")
@@ -59,7 +63,7 @@ class MainViewController: UIViewController {
 }
 
 
-extension MainViewController: UIViewControllerTransitioningDelegate {
+extension SGViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return PresentMenuAnimator()
     }
@@ -78,7 +82,7 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
-extension MainViewController : MenuActionDelegate {
+extension SGViewController : MenuActionDelegate {
     func openSegue(segueName: String, sender: AnyObject?) {
         dismiss(animated: true){
             self.performSegue(withIdentifier: segueName, sender: sender)
@@ -91,5 +95,16 @@ extension MainViewController : MenuActionDelegate {
     
     func saveMenuState(menuList: [Menu]){
         self.menuList = menuList
+    }
+}
+
+extension String {
+    func htmlAttributedString() -> NSAttributedString? {
+        guard let data = self.data(using: String.Encoding.utf16, allowLossyConversion: false) else { return nil }
+        guard let html = try? NSMutableAttributedString(
+            data: data,
+            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
+            documentAttributes: nil) else { return nil }
+        return html
     }
 }
