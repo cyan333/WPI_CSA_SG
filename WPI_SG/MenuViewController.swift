@@ -20,7 +20,7 @@ class MenuViewController : UIViewController {
     
     var menuActionDelegate: MenuActionDelegate? = nil
     
-    var t = true
+    //var t = true
     
     override func viewDidLoad() {
         if(menuList.count == 0){
@@ -44,6 +44,13 @@ class MenuViewController : UIViewController {
                 
             }catch {
                 print(error)
+                do{
+                    db = try SGDatabase.connect()
+                    menuList = db.getSubMenus(menuId: 0, prefix: "")
+                    
+                }catch {
+                    print("wrong again" + error.localizedDescription)
+                }
             }
         }
         
@@ -168,7 +175,7 @@ extension MenuViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SGMenuCell")!
         
         if let menu = getSelectedMenu(menuList: menuList, index: indexPath.row) {
             cell.textLabel?.text = menu.name

@@ -16,7 +16,9 @@ protocol MenuActionDelegate {
 
 class SGViewController: UIViewController {
 
-    @IBOutlet var testView: UITextView!
+    @IBOutlet weak var tableView: UITableView!
+    
+    
     
     let interactor = Interactor()
     
@@ -26,7 +28,6 @@ class SGViewController: UIViewController {
         
         let b = "<p>I am normal</p>I am just a notmal haha<span style=\"font-size:18px;font-weight:bold;\">   I am big</span>   and then the "
         
-        testView.attributedText = b.htmlAttributedString()
         
         //print("@%", testView.attributedText)
         print("main loaded")
@@ -62,6 +63,30 @@ class SGViewController: UIViewController {
 
 }
 
+extension SGViewController : UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        return 200
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SGImgTextCell")!
+        
+        
+        
+        return cell
+    }
+}
+
+extension SGViewController : UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(indexPath)
+    }
+}
 
 extension SGViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
