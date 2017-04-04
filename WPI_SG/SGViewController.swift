@@ -14,11 +14,15 @@ protocol MenuActionDelegate {
     func saveMenuState(menuList: [Menu])    
 }
 
+class SGImgTextCell: UITableViewCell{
+    @IBOutlet weak var imgView: UIImageView!
+    @IBOutlet weak var textView: UITextView!
+    
+}
+
 class SGViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    
-    
     
     let interactor = Interactor()
     
@@ -74,9 +78,18 @@ extension SGViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SGImgTextCell")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SGImgTextCell") as! SGImgTextCell
         
+        cell.imgView.image = UIImage(named: "1_1.jpg")
         
+        let a = "<span style=\"font-size:14px;font-weight:bold;\">President</span><br/>陆安琪 Anqi Lu<br/>alu@wpi.edu<br/>Computer Science & Mathematical Science \'18"
+        
+        DispatchQueue.global(qos: .background).async {
+            let html = a.htmlAttributedString()
+            DispatchQueue.main.async {
+                cell.textView.attributedText = html
+            }
+        }
         
         return cell
     }
