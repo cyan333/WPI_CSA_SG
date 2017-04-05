@@ -82,7 +82,7 @@ extension SGViewController : UITableViewDataSource {
         
         cell.imgView.image = UIImage(named: "1_1.jpg")
         
-        let a = "<span style=\"font-size:14px;font-weight:bold;\">President</span><br/>陆安琪 Anqi Lu<br/>alu@wpi.edu<br/>Computer Science & Mathematical Science \'18"
+        let a = "<span style=\"font-size:14px;font-weight:bold;\">President</span><br/>陆安琪 Anqi Lu<br/>fning@wpi.edu<br/>Computer Science & Mathematical Science \'18"
         
         DispatchQueue.global(qos: .background).async {
             let html = a.htmlAttributedString()

@@ -8,6 +8,12 @@
 
 import UIKit
 
+class SGMenuCell: UITableViewCell {
+    @IBOutlet weak var menuLabel: UILabel!
+    @IBOutlet weak var menuStatus: UIImageView!
+    
+}
+
 class MenuViewController : UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -134,17 +140,22 @@ class MenuViewController : UIViewController {
                         tableView.insertRows(at: createIndexPathArray(from: selectedIndexRow ,
                                                                       length: length),
                                              with: UITableViewRowAnimation.fade)
+                        tableView.reloadRows(at: [IndexPath(row: selectedIndexRow, section: 0)],
+                                             with: UITableViewRowAnimation.none)
                     }else{
                         tableView.deleteRows(at: createIndexPathArray(from: selectedIndexRow ,
                                                                       length: length),
                                              with: UITableViewRowAnimation.fade)
+                        tableView.reloadRows(at: [IndexPath(row: selectedIndexRow, section: 0)],
+                                             with: UITableViewRowAnimation.none)
                     }
                     
                     
                 }else{
                     //segue
-                    print("segue name: \(m.name)")
+                    print("segue name: \(m.id)")
                     menuActionDelegate?.saveMenuState(menuList: menuList)
+                    dismiss(animated: true, completion: nil)                    
                 }
                 return
             }else if (m.isOpened){
@@ -174,13 +185,24 @@ extension MenuViewController : UITableViewDataSource {
         return visibleCellCount
     }
     
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0.1
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SGMenuCell")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SGMenuCell") as! SGMenuCell
         
         if let menu = getSelectedMenu(menuList: menuList, index: indexPath.row) {
-            cell.textLabel?.text = menu.name
-        }else{
-            cell.textLabel?.text = "unknown"
+            cell.menuLabel.text = menu.name
+            if(menu.isParentMenu){
+                if(menu.isOpened){
+                    cell.menuStatus.image = UIImage(named: "menuExpanded.png");
+                }else{
+                    cell.menuStatus.image = UIImage(named: "menuCollapsed.png");
+                }
+            }else{
+                cell.menuStatus.image = nil
+            }
         }
         
         return cell
@@ -189,16 +211,8 @@ extension MenuViewController : UITableViewDataSource {
 
 extension MenuViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
-        /*switch indexPath.row {
-        case 0:
-            menuActionDelegate?.openSegue(segueName: "openFirst", sender: nil)
-        case 1:
-            menuActionDelegate?.openSegue(segueName: "openSecond", sender: nil)
-        default:
-            break
-        }*/
+        
         selectedIndexRow = indexPath.row
         toggleSelectedMenu(menuList: menuList, index: indexPath.row)
     }
