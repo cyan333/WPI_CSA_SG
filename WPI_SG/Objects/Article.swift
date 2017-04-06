@@ -13,6 +13,9 @@ class Article{
     
     init(text: String){
         self.text = text
+    }
+    
+    func processArticleString(){
         var t = "hahahaha wtf <font a b> and now it should be done"
         var a: Range<String.Index>? = t.range(of: "<font")
         
@@ -48,4 +51,12 @@ class Article{
         //print(text[(a?.lowerBound)!])
     }
     
+}
+
+class Paragraph{
+    var text: String = ""
+    
+    init(text: String){
+        self.text = text
+    }
 }

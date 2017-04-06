@@ -20,9 +20,24 @@ class SGDatabase {
     }
     
     static func connect() throws -> SGDatabase {
+        let fileManger = FileManager.default
+        var doumentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        let dbPath = doumentDirectoryPath.appendingPathComponent("SG.sqlite")
+        if fileManger.fileExists(atPath: dbPath){
+            print("yes!")
+        }else{
+            print("not")
+            var error : NSError
+            let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
+            do{
+                try fileManger.copyItem(atPath: path!, toPath: dbPath)
+            }catch let error as NSError {
+                print("error occurred, here are the details:\n \(error)")
+            }
+        }
+        
         var db: OpaquePointer? = nil
-        let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
-        if sqlite3_open(path, &db) == SQLITE_OK {
+        if sqlite3_open_v2(dbPath, &db, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK {
             return SGDatabase(dbPointer: db!)
         } else {
             defer {
@@ -49,7 +64,8 @@ class SGDatabase {
         
         var queryStatement: OpaquePointer? = nil
         var menuList = [Menu]()
-        if sqlite3_prepare(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK{
+        let a = sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil)
+        if a == SQLITE_OK{
             while (sqlite3_step(queryStatement) == SQLITE_ROW) {
                 let id = sqlite3_column_int(queryStatement, 0)
                 let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
