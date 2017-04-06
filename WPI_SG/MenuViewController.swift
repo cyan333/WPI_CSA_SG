@@ -154,7 +154,7 @@ class MenuViewController : UIViewController {
                 }else{
                     //segue
                     print("segue name: \(m.id)")
-                    menuActionDelegate?.saveMenuState(menuList: menuList)
+                    menuActionDelegate?.saveMenuState(menuList: self.menuList)
                     dismiss(animated: true, completion: nil)                    
                 }
                 return

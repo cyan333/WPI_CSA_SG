@@ -23,18 +23,31 @@ class SGDatabase {
         let fileManger = FileManager.default
         var doumentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
         let dbPath = doumentDirectoryPath.appendingPathComponent("SG.sqlite")
-        if fileManger.fileExists(atPath: dbPath){
-            print("yes!")
-        }else{
-            print("not")
-            var error : NSError
+        if !fileManger.fileExists(atPath: dbPath){
             let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
             do{
                 try fileManger.copyItem(atPath: path!, toPath: dbPath)
             }catch let error as NSError {
                 print("error occurred, here are the details:\n \(error)")
             }
+            var dbPathUrl = URL(fileURLWithPath: dbPath)
+            do {
+                var resourceValues = URLResourceValues()
+                resourceValues.isExcludedFromBackup = true
+                try dbPathUrl.setResourceValues(resourceValues)
+                
+            } catch { print("failed to set resource value") }
+            
+            /*do {
+                let a = try dbPathUrl.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup
+                if(a)!{
+                    print("excluded!")
+                }else{
+                    print("Not excluded!")
+                }
+            } catch {}*/
         }
+        
         
         var db: OpaquePointer? = nil
         if sqlite3_open_v2(dbPath, &db, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK {
