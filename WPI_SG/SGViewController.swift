@@ -28,14 +28,14 @@ class SGViewController: UIViewController {
     
     var menuList = [Menu]()
     
+    var article: Article?
+    
     override func viewDidLoad() {
         
-        let b = "<p>I am normal</p>I am just a notmal haha<span style=\"font-size:18px;font-weight:bold;\">   I am big</span>   and then the "
+        let b = "<img src=\"1_1.jpg\" height=\"450\" weight=\"450\"><span style=\"font-size:14px;font-weight:bold;\">President</span>\n陆安琪 Anqi Lu\nalu@wpi.edu\nComputer Science & Mathematical Science '18</img><img src=\"1_1.jpg\" height=\"450\" weight=\"450\"><span style=\"font-size:14px;font-weight:bold;\">Vice President</span>\n周梓雨 Ziyu Zhou\nzzhou2@wpi.edu\nManagement Information System '17</img><tab>"
         
         
-        //print("@%", testView.attributedText)
-        print("main loaded")
-        var a: Article = Article(text: "hahahaha wtf <font a b>")
+        article = Article(title: "Title", content: b)
     }
     
     @IBAction func openMenu(_ sender: UIButton) {
