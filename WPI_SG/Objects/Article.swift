@@ -21,30 +21,62 @@ class Article{
     
     /* 4 possible conditions
      | img  | tab  | check | condition in code |
-     | 0    | null | 0     |        1          |
-     | null | 0    | 0     |        2          |
-     | 0    | 1    | 0     |        3          |
-     | 1    | 0    | 1     |        4          |
+     | 0    | null | img   |        1          |
+     | null | 0    | tab   |        2          |
+     | 0    | 1    | img   |        3          |
+     | 1    | 0    | tab   |        4          |
      */
     func processArticleContent(){
-        content = "hahaha<img src=\"1_1.jpg\" height=\"450\" weight=\"450\"/>This is the close"
+        content = "hahaha<img src=\"1_1.jpg\" height=\"450\" weight=\"450\">This is the close</img>This is the re/>al close"
         var imgTagRange: Range<String.Index>? = content.range(of: "<img")
-        let listTagRange: Range<String.Index>? = content.range(of: "<tab")
+        var listTagRange: Range<String.Index>? = content.range(of: "<tab")
+        var previousTagRange: Range<String.Index>?
         
-        while let rangCheck = imgTagRange ??  listTagRange {
+        while let rangeCheck = imgTagRange ??  listTagRange {
             if let imgRange = imgTagRange{
                 if let listRange = listTagRange{
                     if(imgRange.lowerBound < listRange.lowerBound){ //Condition 3
+                        if let previousRange = previousTagRange{
+                            if (previousRange.lowerBound == imgRange.lowerBound){
+                                print("Malformatted. Exist 3")
+                                break
+                            }
+                        }
+                        previousTagRange = imgRange
                         processImageTag(range: imgRange);
+                        imgTagRange = content.range(of: "<img")
                     }else{                                          //Condition 4
+                        if let previousRange = previousTagRange{
+                            if (previousRange.lowerBound == listRange.lowerBound){
+                                print("Malformatted. Exist 4")
+                                break
+                            }
+                        }
+                        previousTagRange = listRange
                         processListTag(range: listRange);
+                        listTagRange = content.range(of: "<tab")
                     }
                 }else{                                              //Condition 1
-                    processImageTag(range: rangCheck);
+                    if let previousRange = previousTagRange{
+                        if (previousRange.lowerBound == rangeCheck.lowerBound){
+                            print("Malformatted. Exist 1")
+                            break
+                        }
+                    }
+                    previousTagRange = rangeCheck
+                    processImageTag(range: rangeCheck);
                     imgTagRange = content.range(of: "<img")
                 }
             }else{                                                  //Condition 2
-                processListTag(range: rangCheck);
+                if let previousRange = previousTagRange{
+                    if (previousRange.lowerBound == rangeCheck.lowerBound){
+                        print("Malformatted. Exist 2")
+                        break
+                    }
+                }
+                previousTagRange = rangeCheck
+                processListTag(range: rangeCheck);
+                listTagRange = content.range(of: "<tab")
             }
         }
         if (content != ""){
@@ -53,12 +85,11 @@ class Article{
     }
     
     /* 5 possible conditions
-     | imgClose | imageTextClose | choose | condition in code |
-     | 10       | null           | 10     |        1          |
-     | null     | 10             | 10     |        2          |
-     | 10       | 20             | 10     |        3          |
-     | 10       | 5              | 5      |        4          |
-     | null     | null           | TBD    |        5          |
+     | imgClose | imageTextClose | choose  | condition in code |
+     | 10       | null           | img     |        1          |
+     | null     | 10             | imgText |        2          |
+     | 10       | 20             | img     |        3          |
+     | 10       | 5              | imgText |        4          |
      */
     func processImageTag(range: Range<String.Index>){
         let currentContent = content.substring(to: range.lowerBound)
@@ -71,25 +102,39 @@ class Article{
         let imgTextTagCloseRange: Range<String.Index>? = content.range(of: "</img>")
         if let imgCloseRange = imgTagCloseRange {
             if let imgTextCloseRange = imgTextTagCloseRange {
-                if(imgTextCloseRange.lowerBound < imgCloseRange.lowerBound){ //Condition 3
+                if(imgCloseRange.lowerBound < imgTextCloseRange.lowerBound){ //Condition 3
+                    let imgStr = content.substring(to: imgCloseRange.upperBound)
+                    content = content.substring(from: imgCloseRange.upperBound)
+                    paragraphs.append(Paragraph(content: "", type: .Image, properties: convertTagToDictionary(text: imgStr)))
                 }else{                                                       //Condition 4
+                    print("4")
+                    let imgStr = content.substring(to: imgTextCloseRange.lowerBound)
+                    let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
+                    content = content.substring(from: imgTextCloseRange.upperBound)
+                    if let range = tagEndRange{
+                        paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound),
+                                                    type: .ImageText,
+                                                    properties: convertTagToDictionary(text: imgStr.substring(to: range.upperBound))))
+                    }
                 }
             }else{                                                           //Condition 1
-                var imgStr = content.substring(to: imgCloseRange.upperBound)
+                let imgStr = content.substring(to: imgCloseRange.upperBound)
                 content = content.substring(from: imgCloseRange.upperBound)
-                imgStr = imgStr.replacingOccurrences(of: "<img ", with: "{\"")
-                    .replacingOccurrences(of: "/>", with: "}")
-                    .replacingOccurrences(of: " />", with: "}")
-                    .replacingOccurrences(of: "=\"", with: "\":\"")
-                    .replacingOccurrences(of: "\" ", with: "\",\"")
-                paragraphs.append(Paragraph(content: "", type: .Image, properties: convertToDictionary(text: imgStr)))
+                paragraphs.append(Paragraph(content: "", type: .Image, properties: convertTagToDictionary(text: imgStr)))
             }
-        }else{
-            if let imgTextCloseRange = imgTextTagCloseRange {                //Condition 2
-                
-            }else{                                                           //Condition 5
+        }else{                                                               //Condition 2
+            if let imgTextCloseRange = imgTextTagCloseRange {
+                let imgStr = content.substring(to: imgTextCloseRange.lowerBound)
+                let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
+                content = content.substring(from: imgTextCloseRange.upperBound)
+                if let range = tagEndRange{
+                    paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound),
+                                                type: .ImageText,
+                                                properties: convertTagToDictionary(text: imgStr.substring(to: range.upperBound))))
+                }
                 
             }
+            
         }
         
     }
@@ -97,62 +142,15 @@ class Article{
     func processListTag(range: Range<String.Index>){
     }
     
-    func processArticleContent11(){
-        content = "<img src=\"1_1.jpg\" height=\"450\" weight=\"450\"/>This is the close"
-        let imgTagCloseRange: Range<String.Index>? = content.range(of: "/>")
-        let imgTextTagCloseRange: Range<String.Index>? = content.range(of: "</img>")
-        if let imgCloseRange = imgTagCloseRange {
-            if let imgTextCloseRange = imgTextTagCloseRange {
-                if(imgCloseRange.lowerBound < imgTextCloseRange.lowerBound){ //Condition 3
-                    print("3")
-                }else{                                                       //Condition 4
-                    print("4")
-                }
-            }else{                                                           //Condition 1
-                
-            }
-        }else{                                                               //Condition 2
-            print("2")
-        }
-        //...................................................................................
-        var t = "hahahaha wtf1<font a b> and now it should be done"
-        var a: Range<String.Index>? = t.range(of: "<font")
-        
-        if let b = a {
-            
-            var counter: Int = 0;
-            for i in t.characters.indices[b.upperBound..<t.endIndex]{
-                counter += 1
-                if(t[i] == ">"){
-                    break
-                }
-            }
-            let end = t.index((a?.upperBound)!, offsetBy: counter)
-            let myRange = (a?.lowerBound)!..<end
-            t.removeSubrange(myRange)
-            //print(t)
-            
-            var c = "{\"resource\":\"font\",\"length\":\"9\"}"
-            
-            if let data = c.data(using: .utf8) {
-                do {
-                    let a = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                    if let b = a?["resource"] as? String{
-                        //print(b)
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        }
-        
-        
-        //print(content[(a?.upperBound)!])
-        //print(content[(a?.lowerBound)!])
-    }
-    
-    func convertToDictionary(text: String) -> [String: Any]? {
-        if let data = text.data(using: .utf8) {
+    func convertTagToDictionary(text: String) -> [String: Any]? {
+        let processedText = text.replacingOccurrences(of: "<img ", with: "{\"")
+                                .replacingOccurrences(of: "/>", with: "}")
+                                .replacingOccurrences(of: " />", with: "}")
+                                .replacingOccurrences(of: ">", with: "}")
+                                .replacingOccurrences(of: " >", with: "}")
+                                .replacingOccurrences(of: "=\"", with: "\":\"")
+                                .replacingOccurrences(of: "\" ", with: "\",\"")
+        if let data = processedText.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
