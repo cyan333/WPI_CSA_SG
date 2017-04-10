@@ -15,7 +15,7 @@ class Article{
     init(title: String, content: String){
         self.content = content
         paragraphs = [Paragraph]()
-        paragraphs.append(Paragraph(content: title))
+        paragraphs.append(Paragraph(content: title, type: .Title))
         processArticleContent()
     }
     
@@ -27,57 +27,48 @@ class Article{
      | 1    | 0    | tab   |        4          |
      */
     func processArticleContent(){
-        content = "hahaha<img src=\"1_1.jpg\" height=\"450\" weight=\"450\">This is the close</img>This is the re/>al close"
+        //content = "hahaha<img src=\"1_1.jpg\" height=\"450\" weight=\"450\">This is the close</img>This is the re/>al close"
         var imgTagRange: Range<String.Index>? = content.range(of: "<img")
         var listTagRange: Range<String.Index>? = content.range(of: "<tab")
-        var previousTagRange: Range<String.Index>?
+        var formatCheck = 0
+        //var previousTagRange: Range<String.Index>?
         
         while let rangeCheck = imgTagRange ??  listTagRange {
+            let contentLength = content.characters.count
             if let imgRange = imgTagRange{
                 if let listRange = listTagRange{
                     if(imgRange.lowerBound < listRange.lowerBound){ //Condition 3
-                        if let previousRange = previousTagRange{
-                            if (previousRange.lowerBound == imgRange.lowerBound){
-                                print("Malformatted. Exist 3")
-                                break
-                            }
+                        if(formatCheck == contentLength){
+                            print("Malformatted. Exist 3")
+                            break
                         }
-                        previousTagRange = imgRange
                         processImageTag(range: imgRange);
                         imgTagRange = content.range(of: "<img")
                     }else{                                          //Condition 4
-                        if let previousRange = previousTagRange{
-                            if (previousRange.lowerBound == listRange.lowerBound){
-                                print("Malformatted. Exist 4")
-                                break
-                            }
+                        if(formatCheck == contentLength){
+                            print("Malformatted. Exist 4")
+                            break
                         }
-                        previousTagRange = listRange
                         processListTag(range: listRange);
                         listTagRange = content.range(of: "<tab")
                     }
                 }else{                                              //Condition 1
-                    if let previousRange = previousTagRange{
-                        if (previousRange.lowerBound == rangeCheck.lowerBound){
-                            print("Malformatted. Exist 1")
-                            break
-                        }
+                    if(formatCheck == contentLength){
+                        print("Malformatted. Exist 1")
+                        break
                     }
-                    previousTagRange = rangeCheck
                     processImageTag(range: rangeCheck);
                     imgTagRange = content.range(of: "<img")
                 }
             }else{                                                  //Condition 2
-                if let previousRange = previousTagRange{
-                    if (previousRange.lowerBound == rangeCheck.lowerBound){
-                        print("Malformatted. Exist 2")
-                        break
-                    }
+                if(formatCheck == contentLength){
+                    print("Malformatted. Exist 2")
+                    break
                 }
-                previousTagRange = rangeCheck
                 processListTag(range: rangeCheck);
                 listTagRange = content.range(of: "<tab")
             }
+            formatCheck = contentLength
         }
         if (content != ""){
             paragraphs.append(Paragraph(content: content))
@@ -107,7 +98,6 @@ class Article{
                     content = content.substring(from: imgCloseRange.upperBound)
                     paragraphs.append(Paragraph(content: "", type: .Image, properties: convertTagToDictionary(text: imgStr)))
                 }else{                                                       //Condition 4
-                    print("4")
                     let imgStr = content.substring(to: imgTextCloseRange.lowerBound)
                     let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
                     content = content.substring(from: imgTextCloseRange.upperBound)
@@ -150,6 +140,7 @@ class Article{
                                 .replacingOccurrences(of: " >", with: "}")
                                 .replacingOccurrences(of: "=\"", with: "\":\"")
                                 .replacingOccurrences(of: "\" ", with: "\",\"")
+        print(processedText)
         if let data = processedText.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
@@ -166,6 +157,7 @@ class Paragraph{
     var content: String
     var type: ParagraphType
     var properties: [String: Any]?
+    var cellHeight = 0.0
     
     init(content: String){
         self.content = content
@@ -185,6 +177,7 @@ class Paragraph{
 }
 
 enum ParagraphType{
+    case Title
     case Plain
     case Image
     case ImageText
