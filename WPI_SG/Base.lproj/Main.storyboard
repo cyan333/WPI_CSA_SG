@@ -62,6 +62,7 @@
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rOb-qP-fYh">
                                                     <rect key="frame" x="10" y="10" width="130" height="130"/>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="130" id="6kT-1f-rO3"/>
                                                         <constraint firstAttribute="height" constant="130" id="GSj-V0-5ek"/>
@@ -69,7 +70,7 @@
                                                 </imageView>
                                                 <textView clipsSubviews="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="oWy-7X-nQc">
                                                     <rect key="frame" x="150" y="10" width="215" height="130"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="130" id="FzP-37-VeG"/>
                                                     </constraints>
@@ -82,7 +83,7 @@
                                                 <constraint firstItem="rOb-qP-fYh" firstAttribute="centerY" secondItem="Qxr-dU-164" secondAttribute="centerY" id="8Yb-hZ-XGN"/>
                                                 <constraint firstItem="rOb-qP-fYh" firstAttribute="leading" secondItem="Qxr-dU-164" secondAttribute="leading" constant="10" id="8xt-sc-gd4"/>
                                                 <constraint firstAttribute="trailing" secondItem="oWy-7X-nQc" secondAttribute="trailing" constant="10" id="9Wa-x7-HbH"/>
-                                                <constraint firstItem="oWy-7X-nQc" firstAttribute="centerY" secondItem="Qxr-dU-164" secondAttribute="centerY" id="IyM-Ak-Ong"/>
+                                                <constraint firstItem="oWy-7X-nQc" firstAttribute="top" secondItem="Qxr-dU-164" secondAttribute="topMargin" constant="2" id="AFm-wc-YD5"/>
                                                 <constraint firstItem="oWy-7X-nQc" firstAttribute="leading" secondItem="rOb-qP-fYh" secondAttribute="trailing" constant="10" id="R6b-ZK-9FM"/>
                                             </constraints>
                                         </tableViewCellContentView>

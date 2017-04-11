@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Article{
     var content: String
@@ -140,7 +141,7 @@ class Article{
                                 .replacingOccurrences(of: " >", with: "}")
                                 .replacingOccurrences(of: "=\"", with: "\":\"")
                                 .replacingOccurrences(of: "\" ", with: "\",\"")
-        print(processedText)
+        //print(processedText)
         if let data = processedText.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
@@ -157,7 +158,8 @@ class Paragraph{
     var content: String
     var type: ParagraphType
     var properties: [String: Any]?
-    var cellHeight = 0.0
+    var cellHeight: CGFloat = 0.0
+    var processedContent: NSAttributedString?
     
     init(content: String){
         self.content = content

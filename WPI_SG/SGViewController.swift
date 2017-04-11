@@ -38,7 +38,7 @@ class SGViewController: UIViewController {
         //tableView.rowHeight = UITableViewAutomaticDimension
         
         
-        let b = "123<img src=\"1_1.jpg\" height=\"450\" weight=\"450\"><span style=\"font-size:14px;font-weight:bold;\">President</span>\n陆安琪 Anqi Lu\nalu@wpi.edu\nComputer Science & Mathematical Science '18</img><img src=\"1_1.jpg\" height=\"450\" weight=\"450\"><span style=\"font-size:14px;font-weight:bold;\">Vice President</span>\n周梓雨 Ziyu Zhou\nzzhou2@wpi.edu\nManagement Information System '17</img>1"
+        let b = "<img src=\"1_1.jpg\" height=\"450\" weight=\"450\"><span style=\"font-size:14px;font-weight:bold;\">President</span><br>陆安琪 Anqi Lu<br>alu@wpi.edu<br>Computer Science & Mathematical Science '18</img><img src=\"1_1.jpg\" height=\"450\" weight=\"450\"><span style=\"font-size:14px;font-weight:bold;\">Vice President</span><br>周梓雨 Ziyu Zhou<br>zzhou2@wpi.edu<br>Management Information System '17</img>1"
         
         
         article = Article(title: "Sample Title", content: b)
@@ -80,7 +80,8 @@ extension SGViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        return CGFloat(article.paragraphs[indexPath.row].cellHeight)
+        //return article.paragraphs[indexPath.row].cellHeight
+        return 200
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -103,13 +104,39 @@ extension SGViewController : UITableViewDataSource {
         case .ImageText:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SGImgTextCell") as! SGImgTextCell
             
-            cell.textView.text = paragraph.content
-            let size = cell.textView.sizeThatFits(CGSize(width: cell.textView.frame.size.width,
-                                                         height: CGFloat.greatestFiniteMagnitude))
-            paragraph.cellHeight = Double(size.height)
-            cell.textView.frame.size = size
-            cell.imgView.image = UIImage(named: paragraph.properties?["src"] as! String)
-            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            if(paragraph.cellHeight == 0){
+                DispatchQueue.global(qos: .background).async {
+                    let html = paragraph.content.htmlAttributedString()
+                    DispatchQueue.main.async {
+                        cell.textView.attributedText = html
+                        let size = cell.textView.sizeThatFits(CGSize(width: cell.textView.frame.size.width,
+                                                                     height: CGFloat.greatestFiniteMagnitude))
+                        print(size.height)
+                        paragraph.processedContent = html
+                        paragraph.cellHeight = size.height
+                        //paragraph.content = "" Sample code to clean up memory
+                        var frame = cell.textView.frame
+                        frame.size.height = 20
+                        cell.textView.frame = frame
+                        tableView.reloadData()
+                    }
+                }
+            }else{
+                cell.textView.attributedText = paragraph.processedContent
+                var frame = cell.textView.frame
+                frame.size.height = 20
+                cell.textView.frame = frame
+                
+                
+            }
+            
+            
+            //cell.imgView.image = UIImage(named: paragraph.properties?["src"] as! String)
+            var f = cell.imgView.frame
+            f.size.height = 20
+            cell.imgView.frame = f
+            cell.imgView.translatesAutoresizingMaskIntoConstraints = true
+            //cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
             
             return cell
         default:
