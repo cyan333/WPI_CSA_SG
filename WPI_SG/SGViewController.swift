@@ -11,7 +11,7 @@ import UIKit
 protocol MenuActionDelegate {
     func openSegue(segueName: String, sender: AnyObject?)
     func reopenMenu()
-    func saveMenuState(menuList: [Menu])    
+    func saveMenuState(menuList: [Menu])
 }
 
 class SGImgTextCell: UITableViewCell{
@@ -24,7 +24,7 @@ class SGTextCell: UITableViewCell{
 }
 
 class SGViewController: UIViewController {
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     let interactor = Interactor()
@@ -34,11 +34,9 @@ class SGViewController: UIViewController {
     var article = Article(title: "", content: "")
     
     override func viewDidLoad() {
-        //tableView.estimatedRowHeight = 44;
-        //tableView.rowHeight = UITableViewAutomaticDimension
         
         
-        let b = "<img src=\"1_1.jpg\" height=\"450\" weight=\"450\"><span style=\"font-size:14px;font-weight:bold;\">President</span><br>陆安琪 Anqi Lu<br>alu@wpi.edu<br>Computer Science & Mathematical Science '18</img><img src=\"1_1.jpg\" height=\"450\" weight=\"450\"><span style=\"font-size:14px;font-weight:bold;\">Vice President</span><br>周梓雨 Ziyu Zhou<br>zzhou2@wpi.edu<br>Management Information System '17</img>1"
+        let b = "<img src=\"1_1.jpg\" height=\"450\" width=\"450\"><span style=\"font-size:14px;font-weight:bold;\">President</span><br>陆安琪 Anqi Lu<br>alu@wpi.edu<br>Computer Science & Mathematical Science '18</img><img src=\"1_1.jpg\" height=\"450\" width=\"450\"><span style=\"font-size:14px;font-weight:bold;\">Vice President</span><br>周梓雨 Ziyu Zhou<br>zzhou2@wpi.edu<br>Management Information System '17</img>"
         
         
         article = Article(title: "Sample Title", content: b)
@@ -70,7 +68,7 @@ class SGViewController: UIViewController {
         }
     }
     
-
+    
 }
 
 extension SGViewController : UITableViewDataSource {
@@ -80,8 +78,8 @@ extension SGViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        //return article.paragraphs[indexPath.row].cellHeight
-        return 200
+        return article.paragraphs[indexPath.row].cellHeight
+        //return 150
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -90,8 +88,28 @@ extension SGViewController : UITableViewDataSource {
         case .Plain:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SGTextCell") as! SGTextCell
             
-            cell.textView.text = paragraph.content
-            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            if paragraph.cellHeight == 0 {
+                DispatchQueue.global(qos: .background).async {
+                    let html = paragraph.content.htmlAttributedString()
+                    DispatchQueue.main.async {
+                        cell.textView.attributedText = html
+                        let size = cell.textView.sizeThatFits(CGSize(width: cell.textView.frame.size.width,
+                                                                     height: .greatestFiniteMagnitude))
+                        paragraph.processedContent = html
+                        paragraph.textViewHeight = size.height
+                        paragraph.cellHeight = size.height //+ 20
+                        //paragraph.content = "" Sample code to clean up memory
+                        tableView.reloadRows(at: [indexPath], with: .none)
+                    }
+                }
+            }else{
+                cell.textView.attributedText = paragraph.processedContent
+                var frame = cell.textView.frame
+                frame.size.height = paragraph.textViewHeight
+                cell.textView.frame = frame
+                cell.textView.translatesAutoresizingMaskIntoConstraints = true
+            }
+            //cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
             
             return cell
         case .Image:
@@ -104,63 +122,57 @@ extension SGViewController : UITableViewDataSource {
         case .ImageText:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SGImgTextCell") as! SGImgTextCell
             
-            if(paragraph.cellHeight == 0){
+            if paragraph.cellHeight == 0 {
                 DispatchQueue.global(qos: .background).async {
                     let html = paragraph.content.htmlAttributedString()
                     DispatchQueue.main.async {
                         cell.textView.attributedText = html
                         let size = cell.textView.sizeThatFits(CGSize(width: cell.textView.frame.size.width,
-                                                                     height: CGFloat.greatestFiniteMagnitude))
-                        print(size.height)
+                                                                     height: .greatestFiniteMagnitude))
                         paragraph.processedContent = html
-                        paragraph.cellHeight = size.height
+                        paragraph.textViewHeight = size.height
+                        if let imgWidth = paragraph.properties?["width"], let imgHeight = paragraph.properties?["height"] {
+                            if let imgWidthInt = Int(imgWidth as! String), let imgHeightInt = Int(imgHeight as! String) {
+                                paragraph.imgViewHeight = CGFloat(130 * imgWidthInt / imgHeightInt) //130 is the default image view width
+                            }
+                        }
+                        if paragraph.textViewHeight > paragraph.imgViewHeight {
+                            paragraph.imgViewY += (paragraph.textViewHeight - paragraph.imgViewHeight) / 2
+                            paragraph.cellHeight = paragraph.textViewHeight + 20
+                        }else{
+                            paragraph.textViewY += (paragraph.imgViewHeight - paragraph.textViewHeight) / 2
+                            paragraph.cellHeight = paragraph.imgViewHeight + 20
+                        }
                         //paragraph.content = "" Sample code to clean up memory
-                        var frame = cell.textView.frame
-                        frame.size.height = 20
-                        cell.textView.frame = frame
-                        tableView.reloadData()
+                        tableView.reloadRows(at: [indexPath], with: .none)
                     }
                 }
             }else{
                 cell.textView.attributedText = paragraph.processedContent
                 var frame = cell.textView.frame
-                frame.size.height = 20
+                frame.size.height = paragraph.textViewHeight
+                frame.origin.y = paragraph.textViewY
                 cell.textView.frame = frame
+                cell.textView.translatesAutoresizingMaskIntoConstraints = true
                 
-                
+                if let imgName = paragraph.properties?["src"] {
+                    cell.imgView.image = UIImage(named: imgName as! String)
+                    frame = cell.imgView.frame
+                    frame.size.height = paragraph.imgViewHeight
+                    frame.origin.y = paragraph.imgViewY
+                    cell.imgView.frame = frame
+                    cell.imgView.translatesAutoresizingMaskIntoConstraints = true
+                }else{
+                    //TODO: friendly error message?
+                    print("Cannot read image")
+                }
             }
-            
-            
-            //cell.imgView.image = UIImage(named: paragraph.properties?["src"] as! String)
-            var f = cell.imgView.frame
-            f.size.height = 20
-            cell.imgView.frame = f
-            cell.imgView.translatesAutoresizingMaskIntoConstraints = true
             //cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
             
             return cell
         default:
             return tableView.dequeueReusableCell(withIdentifier: "SGTextCell") as! SGTextCell
         }
-        /*
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SGImgTextCell") as! SGImgTextCell
-        
-        cell.imgView.image = UIImage(named: "1_1.jpg")
-        
-        let a = "<span style=\"font-size:14px;font-weight:bold;\">President</span><br/>陆安琪 Anqi Lu<br/>fning@wpi.edu<br/>Computer Science & Mathematical Science \'18"
-        
-        DispatchQueue.global(qos: .background).async {
-            let html = a.htmlAttributedString()
-            DispatchQueue.main.async {
-                cell.textView.attributedText = html
-            }
-        }*/
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SGTextCell") as! SGTextCell
-        
-        cell.textView.text = "haha wtf"
-        cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        
-        return cell
     }
 }
 

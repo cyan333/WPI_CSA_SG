@@ -16,7 +16,11 @@ class Article{
     init(title: String, content: String){
         self.content = content
         paragraphs = [Paragraph]()
-        paragraphs.append(Paragraph(content: title, type: .Title))
+        if content.range(of: "<") != nil {
+            paragraphs.append(Paragraph(content: title, type: .Plain))
+        }else{
+            paragraphs.append(Paragraph(content: "<center><h2>" + title + "</h2></center>", type: .Plain))
+        }
         processArticleContent()
     }
     
@@ -36,17 +40,17 @@ class Article{
         
         while let rangeCheck = imgTagRange ??  listTagRange {
             let contentLength = content.characters.count
-            if let imgRange = imgTagRange{
-                if let listRange = listTagRange{
-                    if(imgRange.lowerBound < listRange.lowerBound){ //Condition 3
-                        if(formatCheck == contentLength){
+            if let imgRange = imgTagRange {
+                if let listRange = listTagRange {
+                    if imgRange.lowerBound < listRange.lowerBound { //Condition 3
+                        if formatCheck == contentLength {
                             print("Malformatted. Exist 3")
                             break
                         }
                         processImageTag(range: imgRange);
                         imgTagRange = content.range(of: "<img")
                     }else{                                          //Condition 4
-                        if(formatCheck == contentLength){
+                        if formatCheck == contentLength {
                             print("Malformatted. Exist 4")
                             break
                         }
@@ -54,7 +58,7 @@ class Article{
                         listTagRange = content.range(of: "<tab")
                     }
                 }else{                                              //Condition 1
-                    if(formatCheck == contentLength){
+                    if formatCheck == contentLength {
                         print("Malformatted. Exist 1")
                         break
                     }
@@ -62,7 +66,7 @@ class Article{
                     imgTagRange = content.range(of: "<img")
                 }
             }else{                                                  //Condition 2
-                if(formatCheck == contentLength){
+                if formatCheck == contentLength {
                     print("Malformatted. Exist 2")
                     break
                 }
@@ -71,7 +75,7 @@ class Article{
             }
             formatCheck = contentLength
         }
-        if (content != ""){
+        if content != "" {
             paragraphs.append(Paragraph(content: content))
         }
     }
@@ -85,7 +89,7 @@ class Article{
      */
     func processImageTag(range: Range<String.Index>){
         let currentContent = content.substring(to: range.lowerBound)
-        if(currentContent != ""){
+        if currentContent != "" {
             paragraphs.append(Paragraph(content: currentContent))
             content = content.substring(from: range.lowerBound)
         }
@@ -94,7 +98,7 @@ class Article{
         let imgTextTagCloseRange: Range<String.Index>? = content.range(of: "</img>")
         if let imgCloseRange = imgTagCloseRange {
             if let imgTextCloseRange = imgTextTagCloseRange {
-                if(imgCloseRange.lowerBound < imgTextCloseRange.lowerBound){ //Condition 3
+                if imgCloseRange.lowerBound < imgTextCloseRange.lowerBound { //Condition 3
                     let imgStr = content.substring(to: imgCloseRange.upperBound)
                     content = content.substring(from: imgCloseRange.upperBound)
                     paragraphs.append(Paragraph(content: "", type: .Image, properties: convertTagToDictionary(text: imgStr)))
@@ -102,7 +106,7 @@ class Article{
                     let imgStr = content.substring(to: imgTextCloseRange.lowerBound)
                     let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
                     content = content.substring(from: imgTextCloseRange.upperBound)
-                    if let range = tagEndRange{
+                    if let range = tagEndRange {
                         paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound),
                                                     type: .ImageText,
                                                     properties: convertTagToDictionary(text: imgStr.substring(to: range.upperBound))))
@@ -118,7 +122,7 @@ class Article{
                 let imgStr = content.substring(to: imgTextCloseRange.lowerBound)
                 let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
                 content = content.substring(from: imgTextCloseRange.upperBound)
-                if let range = tagEndRange{
+                if let range = tagEndRange {
                     paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound),
                                                 type: .ImageText,
                                                 properties: convertTagToDictionary(text: imgStr.substring(to: range.upperBound))))
@@ -135,17 +139,18 @@ class Article{
     
     func convertTagToDictionary(text: String) -> [String: Any]? {
         let processedText = text.replacingOccurrences(of: "<img ", with: "{\"")
-                                .replacingOccurrences(of: "/>", with: "}")
-                                .replacingOccurrences(of: " />", with: "}")
-                                .replacingOccurrences(of: ">", with: "}")
-                                .replacingOccurrences(of: " >", with: "}")
-                                .replacingOccurrences(of: "=\"", with: "\":\"")
-                                .replacingOccurrences(of: "\" ", with: "\",\"")
+            .replacingOccurrences(of: "/>", with: "}")
+            .replacingOccurrences(of: " />", with: "}")
+            .replacingOccurrences(of: ">", with: "}")
+            .replacingOccurrences(of: " >", with: "}")
+            .replacingOccurrences(of: "=\"", with: "\":\"")
+            .replacingOccurrences(of: "\" ", with: "\",\"")
         //print(processedText)
         if let data = processedText.data(using: .utf8) {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
+                //TODO: show friendly message?
                 print(error.localizedDescription)
             }
         }
@@ -158,8 +163,13 @@ class Paragraph{
     var content: String
     var type: ParagraphType
     var properties: [String: Any]?
-    var cellHeight: CGFloat = 0.0
     var processedContent: NSAttributedString?
+    
+    var cellHeight: CGFloat = 0.0
+    var textViewY: CGFloat = 10.0
+    var textViewHeight: CGFloat = 130.0
+    var imgViewY: CGFloat = 10.0
+    var imgViewHeight: CGFloat = 130.0
     
     init(content: String){
         self.content = content
@@ -179,7 +189,6 @@ class Paragraph{
 }
 
 enum ParagraphType{
-    case Title
     case Plain
     case Image
     case ImageText
