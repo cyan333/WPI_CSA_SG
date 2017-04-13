@@ -16,7 +16,7 @@ class Article{
     init(title: String, content: String){
         self.content = content
         paragraphs = [Paragraph]()
-        if content.range(of: "<") != nil {
+        if title.range(of: "<") != nil {
             paragraphs.append(Paragraph(content: title, type: .Plain))
         }else{
             paragraphs.append(Paragraph(content: "<center><h2>" + title + "</h2></center>", type: .Plain))
