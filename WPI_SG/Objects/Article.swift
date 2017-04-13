@@ -19,7 +19,8 @@ class Article{
         if title.range(of: "<") != nil {
             paragraphs.append(Paragraph(content: title, type: .Plain))
         }else{
-            paragraphs.append(Paragraph(content: "<center><h2>" + title + "</h2></center>", type: .Plain))
+            paragraphs.append(Paragraph(content: "<center><span style=\"font-weight:bold;font-size:20px;\">"
+                + title + "</span></center>", type: .Plain))
         }
         processArticleContent()
     }
