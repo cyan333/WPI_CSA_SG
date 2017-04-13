@@ -17,10 +17,10 @@ class Article{
         self.content = content
         paragraphs = [Paragraph]()
         if title.range(of: "<") != nil {
-            paragraphs.append(Paragraph(content: title, type: .Plain))
+            paragraphs.append(Paragraph(content: title.htmlAttributedString(), type: .Plain))
         }else{
-            paragraphs.append(Paragraph(content: "<center><span style=\"font-weight:bold;font-size:20px;\">"
-                + title + "</span></center>", type: .Plain))
+            let processedTitle = "<center><span style=\"font-weight:bold;font-size:20px;\">" + title + "</span></center>"
+            paragraphs.append(Paragraph(content: processedTitle.htmlAttributedString(), type: .Plain))
         }
         processArticleContent()
     }
@@ -77,7 +77,7 @@ class Article{
             formatCheck = contentLength
         }
         if content != "" {
-            paragraphs.append(Paragraph(content: content))
+            paragraphs.append(Paragraph(content: content.htmlAttributedString()))
         }
     }
     
@@ -91,7 +91,7 @@ class Article{
     func processImageTag(range: Range<String.Index>){
         let currentContent = content.substring(to: range.lowerBound)
         if currentContent != "" {
-            paragraphs.append(Paragraph(content: currentContent))
+            paragraphs.append(Paragraph(content: currentContent.htmlAttributedString()))
             content = content.substring(from: range.lowerBound)
         }
         
@@ -102,13 +102,13 @@ class Article{
                 if imgCloseRange.lowerBound < imgTextCloseRange.lowerBound { //Condition 3
                     let imgStr = content.substring(to: imgCloseRange.upperBound)
                     content = content.substring(from: imgCloseRange.upperBound)
-                    paragraphs.append(Paragraph(content: "", type: .Image, properties: convertTagToDictionary(text: imgStr)))
+                    paragraphs.append(Paragraph(content: "".htmlAttributedString(), type: .Image, properties: convertTagToDictionary(text: imgStr)))
                 }else{                                                       //Condition 4
                     let imgStr = content.substring(to: imgTextCloseRange.lowerBound)
                     let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
                     content = content.substring(from: imgTextCloseRange.upperBound)
                     if let range = tagEndRange {
-                        paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound),
+                        paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound).htmlAttributedString(),
                                                     type: .ImageText,
                                                     properties: convertTagToDictionary(text: imgStr.substring(to: range.upperBound))))
                     }
@@ -116,7 +116,8 @@ class Article{
             }else{                                                           //Condition 1
                 let imgStr = content.substring(to: imgCloseRange.upperBound)
                 content = content.substring(from: imgCloseRange.upperBound)
-                paragraphs.append(Paragraph(content: "", type: .Image, properties: convertTagToDictionary(text: imgStr)))
+                paragraphs.append(Paragraph(content: "".htmlAttributedString(),
+                                            type: .Image, properties: convertTagToDictionary(text: imgStr)))
             }
         }else{                                                               //Condition 2
             if let imgTextCloseRange = imgTextTagCloseRange {
@@ -124,7 +125,7 @@ class Article{
                 let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
                 content = content.substring(from: imgTextCloseRange.upperBound)
                 if let range = tagEndRange {
-                    paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound),
+                    paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound).htmlAttributedString(),
                                                 type: .ImageText,
                                                 properties: convertTagToDictionary(text: imgStr.substring(to: range.upperBound))))
                 }
@@ -161,10 +162,9 @@ class Article{
 }
 
 class Paragraph{
-    var content: String
+    var content: NSAttributedString?
     var type: ParagraphType
     var properties: [String: Any]?
-    var processedContent: NSAttributedString?
     
     var cellHeight: CGFloat = 0.0
     var textViewY: CGFloat = 10.0
@@ -172,17 +172,22 @@ class Paragraph{
     var imgViewY: CGFloat = 10.0
     var imgViewHeight: CGFloat = 130.0
     
-    init(content: String){
+    init(){
+        self.content = NSAttributedString(string: "")
+        self.type = .Plain
+    }
+    
+    init(content: NSAttributedString?){
         self.content = content
         self.type = .Plain
     }
     
-    init(content: String, type: ParagraphType){
+    init(content: NSAttributedString?, type: ParagraphType){
         self.content = content
         self.type = type
     }
     
-    init(content: String, type: ParagraphType, properties: [String: Any]?){
+    init(content: NSAttributedString?, type: ParagraphType, properties: [String: Any]?){
         self.content = content
         self.type = type
         self.properties = properties
@@ -194,4 +199,15 @@ enum ParagraphType{
     case Image
     case ImageText
     case Table
+}
+
+extension String {
+    func htmlAttributedString() -> NSAttributedString? {
+        guard let data = self.data(using: String.Encoding.utf16, allowLossyConversion: false) else { return nil }
+        guard let html = try? NSMutableAttributedString(
+            data: data,
+            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
+            documentAttributes: nil) else { return nil }
+        return html
+    }
 }
