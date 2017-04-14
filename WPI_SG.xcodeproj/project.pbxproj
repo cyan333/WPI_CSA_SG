@@ -137,10 +137,10 @@
 				910CFDC01E80BF950005CC1D /* Info.plist */,
 				910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */,
 				910CFDCF1E80C1130005CC1D /* Interactor.swift */,
-				910CFDD01E80C1130005CC1D /* SGViewController.swift */,
 				910CFDD11E80C1130005CC1D /* MenuHelper.swift */,
 				910CFDD31E80C1130005CC1D /* MenuViewController.swift */,
 				910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */,
+				910CFDD01E80C1130005CC1D /* SGViewController.swift */,
 				877FD59A1E95CD0A00632887 /* SG.sqlite */,
 			);
 			path = WPI_SG;

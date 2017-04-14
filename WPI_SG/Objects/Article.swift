@@ -10,8 +10,14 @@ import Foundation
 import UIKit
 
 class Article{
+    var menuId = 0 //Default ID for the SG cover page
     var content: String
     var paragraphs: [Paragraph]
+    
+    init(content: String){
+        self.content = content
+        paragraphs = [Paragraph]()
+    }
     
     init(title: String, content: String){
         self.content = content
@@ -22,7 +28,6 @@ class Article{
             let processedTitle = "<center><span style=\"font-weight:bold;font-size:20px;\">" + title + "</span></center>"
             paragraphs.append(Paragraph(content: processedTitle.htmlAttributedString(), type: .Plain))
         }
-        processArticleContent()
     }
     
     /* 4 possible conditions
@@ -32,12 +37,10 @@ class Article{
      | 0    | 1    | img   |        3          |
      | 1    | 0    | tab   |        4          |
      */
-    func processArticleContent(){
-        //content = "hahaha<img src=\"1_1.jpg\" height=\"450\" weight=\"450\">This is the close</img>This is the re/>al close"
+    func processContent(){
         var imgTagRange: Range<String.Index>? = content.range(of: "<img")
         var listTagRange: Range<String.Index>? = content.range(of: "<tab")
         var formatCheck = 0
-        //var previousTagRange: Range<String.Index>?
         
         while let rangeCheck = imgTagRange ??  listTagRange {
             let contentLength = content.characters.count

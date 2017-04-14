@@ -16,6 +16,7 @@ class SGDatabase {
     }
     
     deinit {
+        print("DB disconnected")
         sqlite3_close(dbPointer)
     }
     
@@ -60,33 +61,31 @@ class SGDatabase {
             }
             let message = String(cString : sqlite3_errmsg(db))
             if !message.isEmpty {
-                throw SQLiteError.OpenDatabase(message: message)
+                throw SQLiteError.OpenDatabase(message: message)//TODO: Exception or friendly error msg?
             } else {
                 throw SQLiteError.OpenDatabase(message: "No error message provided from sqlite.")
             }
         }
     }
     
-    func getSubMenus(menuId: Int, prefix: String) -> [Menu]{
+    func getSubMenusById(menuId: Int, prefix: String) -> [Menu]{
         var query: String
-        if(menuId == 0){
+        var queryStatement: OpaquePointer? = nil
+        var menuList = [Menu]()
+        
+        if menuId == 0 {
             query = "SELECT ID, NAME FROM MENUS WHERE PARENT_ID IS NULL ORDER BY POSITION ASC"
         }else{
             query = "SELECT ID, NAME FROM MENUS WHERE PARENT_ID = \(menuId) ORDER BY POSITION ASC"
         }
         
-        var queryStatement: OpaquePointer? = nil
-        var menuList = [Menu]()
-        let a = sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil)
-        if a == SQLITE_OK{
-            while (sqlite3_step(queryStatement) == SQLITE_ROW) {
+        if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
                 let id = sqlite3_column_int(queryStatement, 0)
-                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
-                var name = String(cString: queryResultCol1!)
+                var name = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
                 name = prefix + name
                 let menu = Menu(id: Int(id), name: name)
-                
-                menu.subMenus = self.getSubMenus(menuId: Int(id), prefix: prefix + "   ")
+                menu.subMenus = self.getSubMenusById(menuId: Int(id), prefix: prefix + "   ")
                 menu.isParentMenu = menu.subMenus.count > 0
                 menuList.append(menu)
             }
@@ -95,6 +94,28 @@ class SGDatabase {
         }
         sqlite3_finalize(queryStatement)
         return menuList
+    }
+    
+    func getArticleByMenuId(menuId: Int) -> Article{
+        let query = "SELECT TITLE, CONTENT FROM ARTICLES WHERE MENU_ID = \(menuId)"
+        var queryStatement: OpaquePointer? = nil
+        var article: Article
+        
+        if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+            if sqlite3_step(queryStatement) == SQLITE_ROW {
+                let title = String(cString: sqlite3_column_text(queryStatement, 0)!) //Not null column
+                let content = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
+                article = Article(title: title, content: content)
+            }else{
+                print("query return 0 row")
+                article = Article(content: "")
+            }
+        }else{
+            print("query cannot be prepared")
+            article = Article(content: "")
+        }
+        sqlite3_finalize(queryStatement)
+        return article
     }
     
     func run(query: String){

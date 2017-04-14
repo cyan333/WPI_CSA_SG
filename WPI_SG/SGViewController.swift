@@ -10,11 +10,12 @@ import UIKit
 
 let padding: CGFloat = 10
 let imgViewWidth: Int = 130
+let coverImg = "<img src=\"1_1.jpg\" height=\"450\" width=\"450\"/>"
 
 protocol MenuActionDelegate {
     func openSegue(segueName: String, sender: AnyObject?)
     func reopenMenu()
-    func saveMenuState(menuList: [Menu])
+    func displayArticleAndSaveMenuState(article: Article?, menuList: [Menu])
 }
 
 class SGImgTextCell: UITableViewCell{
@@ -42,16 +43,16 @@ class SGViewController: UIViewController {
     
     override func viewDidLoad() {
         
-        print(UIScreen.main.bounds)
-        
         let b = "<img src=\"1_1.jpg\" height=\"450\" width=\"450\"><span style=\"font-size:14px;font-weight:bold;\">President</span><br>陆安琪 Anqi Lu<br>alu@wpi.edu<br>Computer Science & Mathematical Science '18</img><img src=\"1_1.jpg\" height=\"450\" width=\"450\"><span style=\"font-size:14px;font-weight:bold;\">Vice President</span><br>周梓雨 Ziyu Zhou<br>zzhou2@wpi.edu<br>Management Information System '17<br>111<br>111<br>11111</img> Here are some text with different <span style=\"color:blue;font-weight:bold;font-size:30px;\">fonts</span><img src=\"1_1.jpg\" height=\"450\" width=\"450\"/>"
         
         DispatchQueue.global(qos: .background).async {
-            self.article = Article(title: "Sample Title with some good shit", content: b)
+            self.article = Article(content: coverImg)
+            self.article?.processContent()
             DispatchQueue.main.async {
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: need some tweak here
             }
         }
+        
     }
     
     @IBAction func openMenu(_ sender: UIButton) {
@@ -235,8 +236,17 @@ extension SGViewController : MenuActionDelegate {
         performSegue(withIdentifier: "openMenu", sender: nil)
     }
     
-    func saveMenuState(menuList: [Menu]){
+    func displayArticleAndSaveMenuState(article: Article?, menuList: [Menu]){
         self.menuList = menuList
+        if let art = article {
+            DispatchQueue.global(qos: .background).async {
+                self.article = art
+                self.article?.processContent()
+                DispatchQueue.main.async {
+                    self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: need some tweak here
+                }
+            }
+        }
     }
 }
 

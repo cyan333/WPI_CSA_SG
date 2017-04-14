@@ -24,39 +24,32 @@ class MenuViewController : UIViewController {
     var visibleCellCount: Int = 0
     var selectedIndexRow: Int = 0
     
-    var menuActionDelegate: MenuActionDelegate? = nil
+    var menuActionDelegate: MenuActionDelegate?
     
-    //var t = true
+    var sgDatabase: SGDatabase?
     
     override func viewDidLoad() {
+        do{
+            sgDatabase = try SGDatabase.connect()
+            
+            /*json part
+             var str = ""
+             str = "["
+             for m in menuList as [Menu]{
+             str += m.toJson()
+             str += ","
+             }
+             str = str.substring(to: str.index(before: str.endIndex))
+             str += "]"
+             */
+            
+            
+        }catch {
+            print(error)
+        }
         if(menuList.count == 0){
-            let db:SGDatabase
-            do{
-                db = try SGDatabase.connect()
-                menuList = db.getSubMenus(menuId: 0, prefix: "")
-                
-                /*json part
-                 var str = ""
-                 str = "["
-                 for m in menuList as [Menu]{
-                 str += m.toJson()
-                 str += ","
-                 }
-                 str = str.substring(to: str.index(before: str.endIndex))
-                 str += "]"
-                 */
-                
-                
-                
-            }catch {
-                print(error)
-                do{
-                    db = try SGDatabase.connect()
-                    menuList = db.getSubMenus(menuId: 0, prefix: "")
-                    
-                }catch {
-                    print("wrong again" + error.localizedDescription)
-                }
+            if let db = sgDatabase{
+                menuList = db.getSubMenusById(menuId: 0, prefix: "")
             }
         }
         
@@ -79,7 +72,7 @@ class MenuViewController : UIViewController {
     }
     
     @IBAction func closeMenu(sender: UIButton) {
-        menuActionDelegate?.saveMenuState(menuList: menuList)        
+        menuActionDelegate?.displayArticleAndSaveMenuState(article: nil, menuList: menuList)
         dismiss(animated: true, completion: nil)
     }
     
@@ -132,10 +125,8 @@ class MenuViewController : UIViewController {
             if(counter - 1 == index){
                 if(m.isParentMenu){
                     m.isOpened = !m.isOpened
-                    //print("parent name: \(m.name)")
                     visibleCellCount = calculateVisibleCellNumber(menuList: self.menuList)
                     let length = calculateVisibleCellNumber(menuList: m.subMenus)
-                    //print("child length \(length) at row \(counter)")
                     if(m.isOpened){
                         tableView.insertRows(at: createIndexPathArray(from: selectedIndexRow ,
                                                                       length: length),
@@ -152,9 +143,12 @@ class MenuViewController : UIViewController {
                     
                     
                 }else{
-                    //segue
-                    print("segue name: \(m.id)")
-                    menuActionDelegate?.saveMenuState(menuList: self.menuList)
+                    var article: Article?
+                    if let db = sgDatabase {
+                        article = db.getArticleByMenuId(menuId: m.id)
+                    }
+                    menuActionDelegate?.displayArticleAndSaveMenuState(article: article, menuList: self.menuList)
+                    
                     dismiss(animated: true, completion: nil)                    
                 }
                 return
