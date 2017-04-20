@@ -103,7 +103,8 @@ class SGDatabase {
         
         if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
             if sqlite3_step(queryStatement) == SQLITE_ROW {
-                let title = String(cString: sqlite3_column_text(queryStatement, 0)!) //Not null column
+                //let title = String(cString: sqlite3_column_text(queryStatement, 0)!) //Not null column
+                let title = "<span style=\"font-weight:bold;font-size:50px;color:grey;\">关于我们</span>"
                 let content = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
                 article = Article(title: title, content: content)
             }else{
@@ -115,13 +116,14 @@ class SGDatabase {
             article = Article(content: "")
         }
         sqlite3_finalize(queryStatement)
+        article.menuId = menuId
         return article
     }
     
-    func run(query: String){
+    func printBtnList(query: String){
         var queryStatement: OpaquePointer? = nil
         
-        if sqlite3_prepare_v2(dbPointer, "SELECT * FROM MENUS ",
+        if sqlite3_prepare_v2(dbPointer, "select ID, NAME  from menus ORDER BY ID ASC",
                               -1, &queryStatement, nil) == SQLITE_OK {
             /*
             if sqlite3_step(queryStatement) == SQLITE_ROW {
@@ -144,14 +146,14 @@ class SGDatabase {
                 let id = sqlite3_column_int(queryStatement, 0)
                 let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
                 let name = String(cString: queryResultCol1!)
-                let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
+                /*let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
                 var position : String
                 if(queryResultCol2 == nil){
                     position = "null"
                 }else{
                     position = String(cString: queryResultCol2!)
-                }
-                print("\(id) | \(name) | \(position)")
+                }*/
+                print("<button type=\"button\" class=\"list-group-item list-group-item-action\" onclick=\"getArticle(\(id))\">\(name)</button>")
             }
             
         } else {

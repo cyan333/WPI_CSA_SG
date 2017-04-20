@@ -39,7 +39,7 @@ class Article{
      */
     func processContent(){
         var imgTagRange: Range<String.Index>? = content.range(of: "<img")
-        var listTagRange: Range<String.Index>? = content.range(of: "<tab")
+        var listTagRange: Range<String.Index>? = content.range(of: "<tab>")
         var formatCheck = 0
         
         while let rangeCheck = imgTagRange ??  listTagRange {
@@ -59,7 +59,7 @@ class Article{
                             break
                         }
                         processListTag(range: listRange);
-                        listTagRange = content.range(of: "<tab")
+                        listTagRange = content.range(of: "<tab>")
                     }
                 }else{                                              //Condition 1
                     if formatCheck == contentLength {
@@ -75,7 +75,7 @@ class Article{
                     break
                 }
                 processListTag(range: rangeCheck);
-                listTagRange = content.range(of: "<tab")
+                listTagRange = content.range(of: "<tab>")
             }
             formatCheck = contentLength
         }
@@ -140,6 +140,20 @@ class Article{
     }
     
     func processListTag(range: Range<String.Index>){
+        let currentContent = content.substring(to: range.lowerBound)
+        if currentContent != "" {
+            paragraphs.append(Paragraph(content: currentContent.htmlAttributedString()))
+            content = content.substring(from: range.upperBound)
+        }
+        let listTagCloseRange: Range<String.Index>? = content.range(of: "</tab>")
+        if let listCloseRange = listTagCloseRange{
+            let listContent = content.substring(to: listCloseRange.lowerBound)
+            let listItems = listContent.components(separatedBy: "<tbr>")
+            for str in listItems as [String]{
+                paragraphs.append(Paragraph(content: str.htmlAttributedString(), type: .Table))
+            }
+            content = content.substring(from: listCloseRange.upperBound)
+        }
     }
     
     func convertTagToDictionary(text: String) -> [String: Any]? {

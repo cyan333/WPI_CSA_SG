@@ -42,8 +42,7 @@ class SGViewController: UIViewController {
     var article: Article?
     
     override func viewDidLoad() {
-        
-        let b = "<img src=\"1_1.jpg\" height=\"450\" width=\"450\"><span style=\"font-size:14px;font-weight:bold;\">President</span><br>陆安琪 Anqi Lu<br>alu@wpi.edu<br>Computer Science & Mathematical Science '18</img><img src=\"1_1.jpg\" height=\"450\" width=\"450\"><span style=\"font-size:14px;font-weight:bold;\">Vice President</span><br>周梓雨 Ziyu Zhou<br>zzhou2@wpi.edu<br>Management Information System '17<br>111<br>111<br>11111</img> Here are some text with different <span style=\"color:blue;font-weight:bold;font-size:30px;\">fonts</span><img src=\"1_1.jpg\" height=\"450\" width=\"450\"/>"
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
         
         DispatchQueue.global(qos: .background).async {
             self.article = Article(content: coverImg)
@@ -239,11 +238,13 @@ extension SGViewController : MenuActionDelegate {
     func displayArticleAndSaveMenuState(article: Article?, menuList: [Menu]){
         self.menuList = menuList
         if let art = article {
-            DispatchQueue.global(qos: .background).async {
-                self.article = art
-                self.article?.processContent()
-                DispatchQueue.main.async {
-                    self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: need some tweak here
+            if(art.menuId != self.article?.menuId){
+                DispatchQueue.global(qos: .background).async {
+                    self.article = art
+                    self.article?.processContent()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: need some tweak here
+                    }
                 }
             }
         }

@@ -50,6 +50,7 @@ class MenuViewController : UIViewController {
         if(menuList.count == 0){
             if let db = sgDatabase{
                 menuList = db.getSubMenusById(menuId: 0, prefix: "")
+                //db.printBtnList(query: "")
             }
         }
         
