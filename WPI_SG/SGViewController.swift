@@ -127,7 +127,11 @@ extension SGViewController : UITableViewDataSource {
                 heightConstraint.constant = paragraph.textViewHeight
             }
             
-            //cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            if(paragraph.separatorType == .Full){
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            }else if (paragraph.separatorType == .None){
+                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            }
             
             return cell
         case .Image:
@@ -155,7 +159,11 @@ extension SGViewController : UITableViewDataSource {
                 print("Cannot read image")
             }
             
-            //cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            if(paragraph.separatorType == .Full){
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            }else if (paragraph.separatorType == .None){
+                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            }
             
             return cell
         case .ImageText:
@@ -191,10 +199,18 @@ extension SGViewController : UITableViewDataSource {
             if let heightConstraint = filteredConstraints.first {
                 heightConstraint.constant = paragraph.textViewHeight
             }
-            //cell.contentView.translatesAutoresizingMaskIntoConstraints = true
+            
+            if(paragraph.separatorType == .Full){
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            }else if (paragraph.separatorType == .None){
+                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            }
+            
             return cell
         default:
-            return tableView.dequeueReusableCell(withIdentifier: "SGTextCell") as! SGTextCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SGImgTextCell") as! SGImgTextCell
+            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            return cell
         }
     }
 }

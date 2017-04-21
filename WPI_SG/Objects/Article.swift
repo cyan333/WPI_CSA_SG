@@ -149,9 +149,16 @@ class Article{
         if let listCloseRange = listTagCloseRange{
             let listContent = content.substring(to: listCloseRange.lowerBound)
             let listItems = listContent.components(separatedBy: "<tbr>")
-            for str in listItems as [String]{
-                paragraphs.append(Paragraph(content: str.htmlAttributedString(), type: .Table))
+            if(listItems.count > 0){
+                paragraphs[paragraphs.count - 1].separatorType = .Full //This is valid because of the title cell
+                for str in listItems as [String]{
+                    let p = Paragraph(content: str.htmlAttributedString(), type: .Plain)
+                    p.separatorType = .Normal
+                    paragraphs.append(p)
+                }
+                paragraphs[paragraphs.count - 1].separatorType = .Full
             }
+            
             content = content.substring(from: listCloseRange.upperBound)
         }
     }
@@ -181,6 +188,7 @@ class Article{
 class Paragraph{
     var content: NSAttributedString?
     var type: ParagraphType
+    var separatorType = SeparatorType.None
     var properties: [String: Any]?
     
     var cellHeight: CGFloat = 0.0
@@ -216,6 +224,12 @@ enum ParagraphType{
     case Image
     case ImageText
     case Table
+}
+
+enum SeparatorType{
+    case None
+    case Full
+    case Normal
 }
 
 extension String {

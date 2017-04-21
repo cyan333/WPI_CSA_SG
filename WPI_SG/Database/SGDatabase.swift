@@ -16,7 +16,7 @@ class SGDatabase {
     }
     
     deinit {
-        print("DB disconnected")
+        //print("DB disconnected")
         sqlite3_close(dbPointer)
     }
     
@@ -103,8 +103,8 @@ class SGDatabase {
         
         if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
             if sqlite3_step(queryStatement) == SQLITE_ROW {
-                //let title = String(cString: sqlite3_column_text(queryStatement, 0)!) //Not null column
-                let title = "<span style=\"font-weight:bold;font-size:50px;color:grey;\">关于我们</span>"
+                let title = String(cString: sqlite3_column_text(queryStatement, 0)!) //Not null column
+                //let title = "<span style=\"font-weight:bold;font-size:50px;color:grey;\">关于我们</span>"
                 let content = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
                 article = Article(title: title, content: content)
             }else{
