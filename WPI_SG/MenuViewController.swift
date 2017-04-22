@@ -18,9 +18,11 @@ class MenuViewController : UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    let searchController = UISearchController(searchResultsController: nil)
     var interactor: Interactor? = nil
     
     var menuList = [Menu]()
+    var searchResults = [Menu]()
     var visibleCellCount: Int = 0
     var selectedIndexRow: Int = 0
     
@@ -29,6 +31,11 @@ class MenuViewController : UIViewController {
     var sgDatabase: SGDatabase?
     
     override func viewDidLoad() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        
         do{
             sgDatabase = try SGDatabase.connect()
             
@@ -173,10 +180,21 @@ class MenuViewController : UIViewController {
         
         return indexPath
     }
+    
+    func searchForArticles(keyword: String){
+        if let db = sgDatabase {
+            searchResults = db.searchArticles(keyword: keyword)
+        }
+        tableView.reloadData()
+    }
 }
 
+//MARK: Table view delegates
 extension MenuViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return searchResults.count
+        }
         return visibleCellCount
     }
     
@@ -186,6 +204,12 @@ extension MenuViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SGMenuCell") as! SGMenuCell
+        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            cell.menuLabel.text = searchResults[indexPath.row].name
+            cell.menuStatus.image = nil
+            return cell
+        }
         
         if let menu = getSelectedMenu(menuList: menuList, index: indexPath.row) {
             cell.menuLabel.text = menu.name
@@ -210,5 +234,12 @@ extension MenuViewController : UITableViewDelegate {
         
         selectedIndexRow = indexPath.row
         toggleSelectedMenu(menuList: menuList, index: indexPath.row)
+    }
+}
+
+//MARK: Search view delegates
+extension MenuViewController : UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        searchForArticles(keyword: searchController.searchBar.text!)
     }
 }

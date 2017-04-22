@@ -96,6 +96,24 @@ class SGDatabase {
         return menuList
     }
     
+    func searchArticles(keyword: String) -> [Menu] {
+        let query = "SELECT ID, NAME FROM MENUS WHERE NAME LIKE '%\(keyword)%' UNION SELECT ID, NAME FROM MENUS WHERE ID IN (SELECT MENU_ID FROM ARTICLES WHERE TITLE LIKE '%\(keyword)%' OR CONTENT LIKE '%\(keyword)%')"
+        var queryStatement: OpaquePointer? = nil
+        var menuList = [Menu]()
+        
+        if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let id = sqlite3_column_int(queryStatement, 0)
+                let name = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
+                menuList.append(Menu(id: Int(id), name: name))
+            }
+        }else{
+            print("query cannot be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        return menuList
+    }
+    
     func getArticleByMenuId(menuId: Int) -> Article{
         let query = "SELECT TITLE, CONTENT FROM ARTICLES WHERE MENU_ID = \(menuId)"
         var queryStatement: OpaquePointer? = nil
