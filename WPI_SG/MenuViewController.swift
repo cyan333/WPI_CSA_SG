@@ -156,7 +156,9 @@ class MenuViewController : UIViewController {
                         article = db.getArticleByMenuId(menuId: m.id)
                     }
                     menuActionDelegate?.displayArticleAndSaveMenuState(article: article, menuList: self.menuList)
-                    
+                    if searchController.isActive {
+                        searchController.isActive = false
+                    }
                     dismiss(animated: true, completion: nil)                    
                 }
                 return
@@ -192,7 +194,7 @@ class MenuViewController : UIViewController {
 //MARK: Table view delegates
 extension MenuViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.isActive && searchController.searchBar.text != "" {
+        if searchController.searchBar.text != "" {
             return searchResults.count
         }
         return visibleCellCount
@@ -205,7 +207,7 @@ extension MenuViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SGMenuCell") as! SGMenuCell
         
-        if searchController.isActive && searchController.searchBar.text != "" {
+        if searchController.searchBar.text != "" {
             cell.menuLabel.text = searchResults[indexPath.row].name
             cell.menuStatus.image = nil
             return cell
