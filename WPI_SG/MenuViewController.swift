@@ -21,6 +21,7 @@ class MenuViewController : UIViewController {
     let searchController = UISearchController(searchResultsController: nil)
     var interactor: Interactor? = nil
     
+    var keyword: String?
     var menuList = [Menu]()
     var searchResults = [Menu]()
     var visibleCellCount: Int = 0
@@ -35,6 +36,10 @@ class MenuViewController : UIViewController {
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
+        
+        if let keywrd = keyword{
+            searchController.searchBar.text = keywrd
+        }
         
         do{
             sgDatabase = try SGDatabase.connect()
@@ -58,6 +63,7 @@ class MenuViewController : UIViewController {
             if let db = sgDatabase{
                 menuList = db.getSubMenusById(menuId: 0, prefix: "")
                 //db.printBtnList(query: "")
+                print("loaded from db!")
             }
         }
         
@@ -80,7 +86,16 @@ class MenuViewController : UIViewController {
     }
     
     @IBAction func closeMenu(sender: UIButton) {
-        menuActionDelegate?.displayArticleAndSaveMenuState(article: nil, menuList: menuList)
+        let keywrd = searchController.searchBar.text
+        if keywrd == "" {
+            menuActionDelegate?.displayArticleAndSaveMenuState(article: nil, keyword: nil, menuList: menuList)
+        }else{
+            menuActionDelegate?.displayArticleAndSaveMenuState(article: nil, keyword: keywrd, menuList: searchResults)
+        }
+        if searchController.isActive {
+            dismiss(animated: true, completion: nil)
+        }
+        searchController.view.removeFromSuperview()
         dismiss(animated: true, completion: nil)
     }
     
@@ -155,10 +170,16 @@ class MenuViewController : UIViewController {
                     if let db = sgDatabase {
                         article = db.getArticleByMenuId(menuId: m.id)
                     }
-                    menuActionDelegate?.displayArticleAndSaveMenuState(article: article, menuList: self.menuList)
-                    if searchController.isActive {
-                        searchController.isActive = false
+                    let keywrd = searchController.searchBar.text
+                    if keywrd == "" {
+                        menuActionDelegate?.displayArticleAndSaveMenuState(article: article, keyword: nil, menuList: menuList)
+                    }else{
+                        menuActionDelegate?.displayArticleAndSaveMenuState(article: article, keyword: keywrd, menuList: searchResults)
                     }
+                    if searchController.isActive {
+                        dismiss(animated: false, completion: nil)
+                    }
+                    searchController.view.removeFromSuperview()
                     dismiss(animated: true, completion: nil)                    
                 }
                 return

@@ -15,7 +15,7 @@ let coverImg = "<img src=\"1_1.jpg\" height=\"450\" width=\"450\"/>"
 protocol MenuActionDelegate {
     func openSegue(segueName: String, sender: AnyObject?)
     func reopenMenu()
-    func displayArticleAndSaveMenuState(article: Article?, menuList: [Menu])
+    func displayArticleAndSaveMenuState(article: Article?, keyword: String?, menuList: [Menu])
 }
 
 class SGImgTextCell: UITableViewCell{
@@ -37,6 +37,7 @@ class SGViewController: UIViewController {
     
     let interactor = Interactor()
     
+    var searchKeyword: String?
     var menuList = [Menu]()
     
     var article: Article?
@@ -73,7 +74,12 @@ class SGViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? MenuViewController {
-            destinationViewController.menuList = self.menuList
+            if let keyword = searchKeyword{
+                destinationViewController.keyword = keyword
+                destinationViewController.searchResults = menuList
+            }else{
+                destinationViewController.menuList = menuList
+            }
             destinationViewController.transitioningDelegate = self
             destinationViewController.interactor = interactor
             destinationViewController.menuActionDelegate = self
@@ -251,7 +257,8 @@ extension SGViewController : MenuActionDelegate {
         performSegue(withIdentifier: "openMenu", sender: nil)
     }
     
-    func displayArticleAndSaveMenuState(article: Article?, menuList: [Menu]){
+    func displayArticleAndSaveMenuState(article: Article?, keyword: String?, menuList: [Menu]){
+        self.searchKeyword = keyword
         self.menuList = menuList
         if let art = article {
             if(art.menuId != self.article?.menuId){

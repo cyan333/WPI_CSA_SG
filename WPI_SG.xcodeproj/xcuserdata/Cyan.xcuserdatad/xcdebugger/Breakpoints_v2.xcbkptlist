@@ -52,45 +52,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WPI_SG/MenuViewController.swift"
-            timestampString = "514562369.890404"
+            timestampString = "514661001.135795"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
-            landmarkName = "toggleSelectedMenu(menuList:index:)"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WPI_SG.MenuViewController.toggleSelectedMenu (menuList : Swift.Array&lt;WPI_SG.Menu&gt;, index : Swift.Int) -&gt; ()"
-                  moduleName = "WPI_SG"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Cyan/Documents/WPI_CSA_SG/WPI_SG/MenuViewController.swift"
-                  timestampString = "514562370.582586"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "155"
-                  endingLineNumber = "155"
-                  offsetFromSymbolStart = "2443">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WPI_SG.MenuViewController.toggleSelectedMenu (menuList : Swift.Array&lt;WPI_SG.Menu&gt;, index : Swift.Int) -&gt; ()"
-                  moduleName = "WPI_SG"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/Cyan/Documents/WPI_CSA_SG/WPI_SG/MenuViewController.swift"
-                  timestampString = "514562370.585995"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "155"
-                  endingLineNumber = "155"
-                  offsetFromSymbolStart = "2491">
-               </Location>
-            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WPI_SG/MenuViewController.swift"
+            timestampString = "514661671.325552"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "closeMenu(sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WPI_SG/MenuViewController.swift"
+            timestampString = "514661676.308113"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "closeMenu(sender:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
