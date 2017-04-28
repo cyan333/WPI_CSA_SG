@@ -172,7 +172,7 @@ class MenuViewController : UIViewController {
                     }
                     let keywrd = searchController.searchBar.text
                     if keywrd == "" {
-                        menuActionDelegate?.displayArticleAndSaveMenuState(article: article, keyword: nil, menuList: menuList)
+                        menuActionDelegate?.displayArticleAndSaveMenuState(article: article, keyword: nil, menuList: self.menuList)
                     }else{
                         menuActionDelegate?.displayArticleAndSaveMenuState(article: article, keyword: keywrd, menuList: searchResults)
                     }

@@ -10,7 +10,7 @@ import UIKit
 
 let padding: CGFloat = 10
 let imgViewWidth: Int = 130
-let coverImg = "<img src=\"1_1.jpg\" height=\"450\" width=\"450\"/>"
+let coverImg = "<img src=\"cover.jpg\" height=\"450\" width=\"450\"/>"
 
 protocol MenuActionDelegate {
     func openSegue(segueName: String, sender: AnyObject?)
