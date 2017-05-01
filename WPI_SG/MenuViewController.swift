@@ -34,7 +34,6 @@ class MenuViewController : UIViewController {
     override func viewDidLoad() {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.disablesAutomaticKeyboardDismissal = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
         
@@ -64,7 +63,7 @@ class MenuViewController : UIViewController {
             if let db = sgDatabase{
                 menuList = db.getSubMenusById(menuId: 0, prefix: "")
                 //db.printBtnList(query: "")
-                print("loaded from db!")
+                //print("loaded from db!")
             }
         }
         
@@ -257,7 +256,15 @@ extension MenuViewController : UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         selectedIndexRow = indexPath.row
-        toggleSelectedMenu(menuList: menuList, index: indexPath.row)
+        if searchController.searchBar.text != "" {
+            toggleSelectedMenu(menuList: searchResults, index: indexPath.row)
+        }else{
+            toggleSelectedMenu(menuList: menuList, index: indexPath.row)
+        }
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchController.searchBar.resignFirstResponder()
     }
 }
 
