@@ -34,6 +34,7 @@ class MenuViewController : UIViewController {
     override func viewDidLoad() {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
+        searchController.disablesAutomaticKeyboardDismissal = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
         

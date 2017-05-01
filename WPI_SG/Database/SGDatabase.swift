@@ -124,7 +124,7 @@ class SGDatabase {
                 let title = String(cString: sqlite3_column_text(queryStatement, 0)!) //Not null column
                 //let title = "<span style=\"font-weight:bold;font-size:50px;color:grey;\">关于我们</span>"
                 let content = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
-                //let content = "<tab><b>学校主页</b><br>http://www.wpi.edu<tbr><b>WPI校园地图</b><br>http://www.wpi.edu/about/visitors/campusmap.html<tbr><b>学年日历</b><br>http://www.wpi.edu/calendars/index.html<tbr><b>MyWPI</b><br>http://my.wpi.edu<br>WPI的课程系统。教授会在里面发相关课程的大纲、作业、试验、阅读材料等等。<tbr><b>Banner System</b><br>http://bannerweb.wpi.edu<br>可以选课、查看成绩、注册等等。<tbr><b>邮件系统</b><br>http://exchange.wpi.edu<br>上面可以查到一学年中各门课的时间，地点和老师。<tbr><b>Catalog</b><br>http://www.wpi.edu/Pubs/Catalogs/Ugrad/index.html<tbr><b>Helpdesk</b><br>http://www.wpi.edu/Academics/CCC/Help/<br>可以帮助解决大多数的电脑问题<tbr><b>查询教授评价</b><br>www.ratemyprofessors.com<br>Or<br>http://bannerweb.wpi.edu<br>在banner登录之后, Student Services & Financial Aid > Additional Information for Students > WPI Student Course Reports</tab>"
+                //let content = "<span style=\"font-weight:bold;font-size:60px;color:purple;\">Test</span><span style=\"font-weight:bold;font-size:60px;color:#6633CC;\">Test</span>"
                 article = Article(title: title, content: content)
             }else{
                 print("Article not found")
