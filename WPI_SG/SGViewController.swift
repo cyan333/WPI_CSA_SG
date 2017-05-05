@@ -44,12 +44,24 @@ class SGViewController: UIViewController {
     
     override func viewDidLoad() {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
-        
         DispatchQueue.global(qos: .background).async {
             self.article = Article(content: coverImg)
             self.article?.processContent()
             DispatchQueue.main.async {
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: need some tweak here
+            }
+            do {
+                let opt = try HTTP.GET("http://fmning.com:8080/WebApp/get_sg?menuId=89")
+                opt.start { response in
+                    if let err = response.error {
+                        print("error: \(err.localizedDescription)")
+                        return //also notify app of failure as needed
+                    }
+                    print("opt finished: \(response.description)")
+                    //print("data is: \(response.data)") access the response of the data with response.data
+                }
+            } catch let error {
+                print("got an error creating the request: \(error)")
             }
         }
         
