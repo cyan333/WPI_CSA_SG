@@ -26,6 +26,8 @@
 		871E35CC1EBAA44B00EA483E /* HTTPSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871E35CB1EBAA44B00EA483E /* HTTPSecurity.swift */; };
 		871E35CE1EBAAEB300EA483E /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871E35CD1EBAAEB300EA483E /* Operation.swift */; };
 		871E35D01EBAF14C00EA483E /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871E35CF1EBAF14C00EA483E /* Request.swift */; };
+		8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE021EBC1F6800B1CDB1 /* WCService.swift */; };
+		8732FE071EBD07A600B1CDB1 /* WCUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE061EBD07A600B1CDB1 /* WCUtil.swift */; };
 		877E61581E8C4DD100B88831 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877E61571E8C4DD100B88831 /* Article.swift */; };
 		877FD5981E94300E00632887 /* menuExpanded.png in Resources */ = {isa = PBXBuildFile; fileRef = 877FD5961E94300E00632887 /* menuExpanded.png */; };
 		877FD5991E94300E00632887 /* menuCollapsed.png in Resources */ = {isa = PBXBuildFile; fileRef = 877FD5971E94300E00632887 /* menuCollapsed.png */; };
@@ -65,6 +67,8 @@
 		871E35CB1EBAA44B00EA483E /* HTTPSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPSecurity.swift; path = WebService/HTTPHelper/HTTPSecurity.swift; sourceTree = "<group>"; };
 		871E35CD1EBAAEB300EA483E /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operation.swift; path = WebService/HTTPHelper/Operation.swift; sourceTree = "<group>"; };
 		871E35CF1EBAF14C00EA483E /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Request.swift; path = WebService/HTTPHelper/Request.swift; sourceTree = "<group>"; };
+		8732FE021EBC1F6800B1CDB1 /* WCService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCService.swift; path = WebService/WCService.swift; sourceTree = "<group>"; };
+		8732FE061EBD07A600B1CDB1 /* WCUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WCUtil.swift; sourceTree = "<group>"; };
 		877E61571E8C4DD100B88831 /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Article.swift; path = Objects/Article.swift; sourceTree = "<group>"; };
 		877FD5961E94300E00632887 /* menuExpanded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuExpanded.png; path = Icons/menuExpanded.png; sourceTree = "<group>"; };
 		877FD5971E94300E00632887 /* menuCollapsed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuCollapsed.png; path = Icons/menuCollapsed.png; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 			isa = PBXGroup;
 			children = (
 				871E35C31EBA5D6300EA483E /* HTTPHelper */,
+				8732FE021EBC1F6800B1CDB1 /* WCService.swift */,
+				8732FE061EBD07A600B1CDB1 /* WCUtil.swift */,
 			);
 			name = WebService;
 			sourceTree = "<group>";
@@ -110,11 +116,11 @@
 		871E35C31EBA5D6300EA483E /* HTTPHelper */ = {
 			isa = PBXGroup;
 			children = (
-				871E35C61EBA67CB00EA483E /* Upload.swift */,
-				871E35C91EBA73A400EA483E /* StatusCode.swift */,
 				871E35CB1EBAA44B00EA483E /* HTTPSecurity.swift */,
 				871E35CD1EBAAEB300EA483E /* Operation.swift */,
 				871E35CF1EBAF14C00EA483E /* Request.swift */,
+				871E35C91EBA73A400EA483E /* StatusCode.swift */,
+				871E35C61EBA67CB00EA483E /* Upload.swift */,
 			);
 			name = HTTPHelper;
 			sourceTree = "<group>";
@@ -307,10 +313,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				910CFDD51E80C1130005CC1D /* Interactor.swift in Sources */,
+				8732FE071EBD07A600B1CDB1 /* WCUtil.swift in Sources */,
 				910CFDD41E80C1130005CC1D /* DismissMenuAnimator.swift in Sources */,
 				871E35C71EBA67CB00EA483E /* Upload.swift in Sources */,
 				910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */,
 				910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */,
+				8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */,
 				877E61581E8C4DD100B88831 /* Article.swift in Sources */,
 				871E35CA1EBA73A400EA483E /* StatusCode.swift in Sources */,
 				910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */,
