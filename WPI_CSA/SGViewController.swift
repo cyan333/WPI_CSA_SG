@@ -63,7 +63,22 @@ class SGViewController: UIViewController {
     }
     
     @IBAction func action(_ sender: UIButton) {
-        //let presenter = Presentr(presentationType: .alert)
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
+        
+        let reportAction = UIAlertAction(title: "Report a problem", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.performSegue(withIdentifier: "SGReportSegue", sender: nil)
+        })
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+            print("Cancelled")
+        })
+        
+        optionMenu.addAction(reportAction)
+        optionMenu.addAction(cancelAction)
+        
+        self.present(optionMenu, animated: true, completion: nil)
+        
     }
     
     
@@ -131,11 +146,15 @@ extension SGViewController : UITableViewDataSource {
                 cell.textView.attributedText = paragraph.content
                 let size = cell.textView.sizeThatFits(CGSize(width: cell.textView.frame.size.width,
                                                              height: .greatestFiniteMagnitude))
+                print(cell.textView.frame.size.width)
+                print("cell width: \(cell.frame.size.width)")
+                print("window width: \(UIScreen.main.bounds.width)")
                 paragraph.textViewHeight = size.height
                 paragraph.cellHeight = size.height
             }else{
                 cell.textView.attributedText = paragraph.content
             }
+            //print(paragraph.cellHeight)
             
             let filteredConstraints = cell.textView.constraints.filter { $0.identifier == "textCellTextHeight" }
             if let heightConstraint = filteredConstraints.first {

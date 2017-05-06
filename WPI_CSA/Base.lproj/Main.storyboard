@@ -11,6 +11,30 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Report a problem-->
+        <scene sceneID="k9i-sE-jAz">
+            <objects>
+                <viewController id="1tp-ZZ-GnS" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Vlv-ux-Svd"/>
+                        <viewControllerLayoutGuide type="bottom" id="xgw-dW-E0b"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="lLw-ZH-ohg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Report a problem" id="oOk-cq-hBJ">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="hnC-wT-dtB"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="zfE-DO-O4C"/>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pZd-VL-bz5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2688.8000000000002" y="-699.40029985007504"/>
+        </scene>
         <!--SG View Controller-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
@@ -134,7 +158,7 @@
                             <outletCollection property="gestureRecognizers" destination="xbC-Zd-A3r" appends="YES" id="jYo-yj-kK3"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" id="CKB-oC-8Gn">
+                    <navigationItem key="navigationItem" title="Survival Guide" id="CKB-oC-8Gn">
                         <barButtonItem key="leftBarButtonItem" id="gCz-Fj-H72">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="AgY-cO-tAc">
                                 <rect key="frame" x="16" y="9" width="25" height="25"/>
@@ -159,6 +183,7 @@
                     <connections>
                         <outlet property="tableView" destination="x4G-5e-PdY" id="NeE-aN-0bM"/>
                         <segue destination="eJL-2C-ROB" kind="presentation" identifier="openMenu" id="UxJ-as-fRa"/>
+                        <segue destination="5h7-Qy-2cp" kind="presentation" identifier="SGReportSegue" id="l1j-oD-e1x"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -334,7 +359,7 @@
         <scene sceneID="HJU-pI-jGi">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="X25-Xx-p7A" userLabel="Main Navigation" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Survival Guide" image="first" id="acW-dT-cKf"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Is3-Uw-U38">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -348,6 +373,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VC1-bO-uLr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="808.79999999999995" y="-0.44977511244377816"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="dxt-X9-Iod">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5h7-Qy-2cp" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="bra-Ma-qWz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="1tp-ZZ-GnS" kind="relationship" relationship="rootViewController" id="ver-5u-unX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="95B-bI-vrG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1749.5999999999999" y="-699.40029985007504"/>
         </scene>
     </scenes>
     <resources>
