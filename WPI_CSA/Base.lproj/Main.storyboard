@@ -14,7 +14,7 @@
         <!--SG View Controller-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="9pv-A4-QxB" userLabel="SG View Controller" customClass="SGViewController" customModule="WPI_SG" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="9pv-A4-QxB" userLabel="SG View Controller" customClass="SGViewController" customModule="WPI_CSA" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ia1-K6-d13"/>
                         <viewControllerLayoutGuide type="bottom" id="4ug-Mw-9AY"/>
@@ -27,11 +27,11 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SGTextCell" id="3Nz-4t-379" customClass="SGTextCell" customModule="WPI_SG" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SGTextCell" id="3Nz-4t-379" customClass="SGTextCell" customModule="WPI_CSA" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3Nz-4t-379" id="7so-Ti-4Fr">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" canCancelContentTouches="NO" bouncesZoom="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="6co-ps-EVF">
@@ -54,11 +54,11 @@
                                             <outlet property="textView" destination="6co-ps-EVF" id="bHn-Cv-kN9"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SGImgTextCell" rowHeight="150" id="424-z9-MQh" customClass="SGImgTextCell" customModule="WPI_SG" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SGImgTextCell" rowHeight="150" id="424-z9-MQh" customClass="SGImgTextCell" customModule="WPI_CSA" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="72" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="424-z9-MQh" id="Qxr-dU-164">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rOb-qP-fYh">
@@ -91,11 +91,11 @@
                                             <outlet property="textView" destination="oWy-7X-nQc" id="eMC-Jv-rCr"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SGImgCell" rowHeight="150" id="svw-dF-hWE" customClass="SGImgCell" customModule="WPI_SG" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SGImgCell" rowHeight="150" id="svw-dF-hWE" customClass="SGImgCell" customModule="WPI_CSA" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="222" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="svw-dF-hWE" id="Ev6-M4-fXT">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="56t-7o-R75">
@@ -136,12 +136,22 @@
                     </view>
                     <navigationItem key="navigationItem" id="CKB-oC-8Gn">
                         <barButtonItem key="leftBarButtonItem" id="gCz-Fj-H72">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AgY-cO-tAc">
-                                <rect key="frame" x="16" y="7" width="83" height="30"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="AgY-cO-tAc">
+                                <rect key="frame" x="16" y="9" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Menu"/>
+                                <state key="normal" image="Menu"/>
                                 <connections>
-                                    <action selector="openMenu:" destination="9pv-A4-QxB" eventType="touchUpInside" id="1d7-Em-m7v"/>
+                                    <action selector="openMenu:" destination="9pv-A4-QxB" eventType="touchUpInside" id="F8O-u7-GWp"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" id="n7R-e2-oMu">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="NKJ-Rp-r0i">
+                                <rect key="frame" x="334" y="9" width="25" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="Action"/>
+                                <connections>
+                                    <action selector="action:" destination="9pv-A4-QxB" eventType="touchUpInside" id="gzX-X9-lWV"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -163,7 +173,7 @@
         <!--Menu View Controller-->
         <scene sceneID="TMU-3l-b68">
             <objects>
-                <viewController id="eJL-2C-ROB" userLabel="Menu View Controller" customClass="MenuViewController" customModule="WPI_SG" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="eJL-2C-ROB" userLabel="Menu View Controller" customClass="MenuViewController" customModule="WPI_CSA" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MIb-bz-vQA"/>
                         <viewControllerLayoutGuide type="bottom" id="ES5-Yy-LAm"/>
@@ -184,11 +194,11 @@
                                 <rect key="frame" x="0.0" y="20" width="300" height="647"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SGMenuCell" id="opn-Si-ghH" customClass="SGMenuCell" customModule="WPI_SG" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SGMenuCell" id="opn-Si-ghH" customClass="SGMenuCell" customModule="WPI_CSA" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="300" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="opn-Si-ghH" id="Gfp-Kd-iyD">
-                                            <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V82-58-8l7">
@@ -341,6 +351,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Action" width="25" height="25"/>
+        <image name="Menu" width="25" height="25"/>
         <image name="first" width="30" height="30"/>
         <image name="second" width="30" height="30"/>
     </resources>

@@ -62,6 +62,12 @@ class SGViewController: UIViewController {
         performSegue(withIdentifier: "openMenu", sender: nil)
     }
     
+    @IBAction func action(_ sender: UIButton) {
+        //let presenter = Presentr(presentationType: .alert)
+    }
+    
+    
+    
     @IBAction func PanGesture(sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: view)
         

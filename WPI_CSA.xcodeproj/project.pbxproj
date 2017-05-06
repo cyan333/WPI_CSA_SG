@@ -125,6 +125,13 @@
 			name = HTTPHelper;
 			sourceTree = "<group>";
 		};
+		8732FE081EBD628500B1CDB1 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		877E615A1E92CA5900B88831 /* SGImages */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +208,7 @@
 		910CFDB31E80BF950005CC1D /* WPI_CSA */ = {
 			isa = PBXGroup;
 			children = (
+				8732FE081EBD628500B1CDB1 /* Helpers */,
 				871E35C21EBA5D5400EA483E /* WebService */,
 				877FD5951E942FAC00632887 /* Icons */,
 				877E615A1E92CA5900B88831 /* SGImages */,
