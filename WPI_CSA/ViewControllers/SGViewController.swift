@@ -10,6 +10,7 @@ import UIKit
 
 let padding: CGFloat = 10
 let imgViewWidth: Int = 130
+let screenWidth: CGFloat = UIScreen.main.bounds.width
 let coverImg = "<img src=\"cover.jpg\" height=\"450\" width=\"450\"/>"
 
 protocol MenuActionDelegate {
@@ -144,17 +145,13 @@ extension SGViewController : UITableViewDataSource {
             
             if paragraph.cellHeight == 0 {
                 cell.textView.attributedText = paragraph.content
-                let size = cell.textView.sizeThatFits(CGSize(width: cell.textView.frame.size.width,
+                let size = cell.textView.sizeThatFits(CGSize(width: screenWidth - padding * 2,
                                                              height: .greatestFiniteMagnitude))
-                print(cell.textView.frame.size.width)
-                print("cell width: \(cell.frame.size.width)")
-                print("window width: \(UIScreen.main.bounds.width)")
                 paragraph.textViewHeight = size.height
                 paragraph.cellHeight = size.height
             }else{
                 cell.textView.attributedText = paragraph.content
             }
-            //print(paragraph.cellHeight)
             
             let filteredConstraints = cell.textView.constraints.filter { $0.identifier == "textCellTextHeight" }
             if let heightConstraint = filteredConstraints.first {
@@ -205,7 +202,7 @@ extension SGViewController : UITableViewDataSource {
             
             if paragraph.cellHeight == 0 {
                 cell.textView.attributedText = paragraph.content
-                let size = cell.textView.sizeThatFits(CGSize(width: cell.textView.frame.size.width,
+                let size = cell.textView.sizeThatFits(CGSize(width: screenWidth - CGFloat(imgViewWidth) - padding * 2,
                                                              height: .greatestFiniteMagnitude))
                 paragraph.textViewHeight = size.height
                 if let imgWidth = paragraph.properties?["width"], let imgHeight = paragraph.properties?["height"] {

@@ -14,7 +14,7 @@
         <!--Report a problem-->
         <scene sceneID="k9i-sE-jAz">
             <objects>
-                <viewController id="1tp-ZZ-GnS" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="1tp-ZZ-GnS" customClass="ReportViewController" customModule="WPI_CSA" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Vlv-ux-Svd"/>
                         <viewControllerLayoutGuide type="bottom" id="xgw-dW-E0b"/>
@@ -22,14 +22,69 @@
                     <view key="view" contentMode="scaleToFill" id="lLw-ZH-ohg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="mH1-DQ-m6A">
+                                <rect key="frame" x="15" y="74" width="350" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="Bcc-wD-2QQ"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                        <color key="value" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K2f-GJ-jiS">
+                                <rect key="frame" x="10" y="104" width="355" height="1"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="6Km-9A-ZhM"/>
+                                </constraints>
+                            </view>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ncb-Bz-w6d">
+                                <rect key="frame" x="10" y="109" width="355" height="250"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" identifier="reportTxtViewHeight" id="Wgy-mn-UxW"/>
+                                </constraints>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="K2f-GJ-jiS" firstAttribute="top" secondItem="Vlv-ux-Svd" secondAttribute="bottom" constant="40" id="3jX-UF-wMp"/>
+                            <constraint firstItem="Ncb-Bz-w6d" firstAttribute="top" secondItem="Vlv-ux-Svd" secondAttribute="bottom" constant="45" id="52z-bS-Ihx"/>
+                            <constraint firstAttribute="trailing" secondItem="mH1-DQ-m6A" secondAttribute="trailing" constant="10" id="547-4d-AsT"/>
+                            <constraint firstItem="mH1-DQ-m6A" firstAttribute="leading" secondItem="lLw-ZH-ohg" secondAttribute="leading" constant="15" id="KTy-V6-INT"/>
+                            <constraint firstAttribute="trailing" secondItem="Ncb-Bz-w6d" secondAttribute="trailing" constant="10" id="Oyn-Si-UGX"/>
+                            <constraint firstItem="K2f-GJ-jiS" firstAttribute="leading" secondItem="lLw-ZH-ohg" secondAttribute="leading" constant="10" id="YkN-Qr-rPW"/>
+                            <constraint firstAttribute="trailing" secondItem="K2f-GJ-jiS" secondAttribute="trailing" constant="10" id="bvy-dB-pqP"/>
+                            <constraint firstItem="Ncb-Bz-w6d" firstAttribute="leading" secondItem="lLw-ZH-ohg" secondAttribute="leading" constant="10" id="hh4-Hv-OTD"/>
+                            <constraint firstItem="mH1-DQ-m6A" firstAttribute="top" secondItem="Vlv-ux-Svd" secondAttribute="bottom" constant="10" id="i6u-6S-oHO"/>
+                        </constraints>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Report a problem" id="oOk-cq-hBJ">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="hnC-wT-dtB"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="zfE-DO-O4C"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="hnC-wT-dtB">
+                            <connections>
+                                <action selector="cancelClicked:" destination="1tp-ZZ-GnS" id="1uE-Qu-vjC"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="zfE-DO-O4C">
+                            <connections>
+                                <action selector="doneClicked:" destination="1tp-ZZ-GnS" id="Ic4-Ff-33F"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="reportTxtView" destination="Ncb-Bz-w6d" id="9eW-Qh-fXY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pZd-VL-bz5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
