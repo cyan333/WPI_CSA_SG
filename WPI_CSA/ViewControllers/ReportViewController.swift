@@ -2,27 +2,33 @@
 //  ReportViewController.swift
 //  WPI_CSA
 //
-//  Created by Cyan Xie on 5/6/17.
+//  Created by NingFangming on 5/6/17.
 //  Copyright © 2017 fangming. All rights reserved.
 //
 
 import UIKit
 
-class ReportViewController: UIViewController {
+class ReportViewController: UIViewController, UITextViewDelegate {
     
+    @IBOutlet weak var emailTxtField: UITextField!
     @IBOutlet weak var reportTxtView: UITextView!
+    @IBOutlet weak var placeHolder: UILabel!
     
+    var db: SGDatabase?
     
     override func viewDidLoad() {
-        reportTxtView.becomeFirstResponder()
-        //reportTxtView.layer.cornerRadius = 5.0
-        //reportTxtView.layer.borderWidth = 0.5
-        //reportTxtView.layer.borderColor = UIColor.lightGray.cgColor
-        //reportTxtView.textColor = UIColor.lightGray
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: Selector("textTapped:"))
-        tapGesture.numberOfTapsRequired = 1
-        reportTxtView.addGestureRecognizer(tapGesture)
+        do{
+            db = try SGDatabase.connect()
+            if let value = db!.getParam(named: "email") {
+                emailTxtField.text = value
+                reportTxtView.becomeFirstResponder()
+            }else{
+                emailTxtField.becomeFirstResponder()
+            }
+        }catch{
+            emailTxtField.becomeFirstResponder()
+        }
+        reportTxtView.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)),
                                                name: NSNotification.Name.UIKeyboardWillChangeFrame,
@@ -33,26 +39,48 @@ class ReportViewController: UIViewController {
         if reportTxtView.text.trimmingCharacters(in: .whitespacesAndNewlines) == ""{
             dismiss(animated: true, completion: nil)
         }else{
-            let optionMenu = UIAlertController(title: nil, message: "Are you sure you want to cancel?",
-                                               preferredStyle: .alert)
+            let confirm = UIAlertController(title: nil,
+                                            message: "Are you sure you want to cancel?",
+                                            preferredStyle: .alert)
             
             let reportAction = UIAlertAction(title: "Yes", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
                 self.dismiss(animated: true, completion: nil)
             })
-            let cancelAction = UIAlertAction(title: "No", style: .cancel, handler: {
-                (alert: UIAlertAction!) -> Void in})
+            let cancelAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
             
-            optionMenu.addAction(reportAction)
-            optionMenu.addAction(cancelAction)
+            confirm.addAction(reportAction)
+            confirm.addAction(cancelAction)
             
-            self.present(optionMenu, animated: true, completion: nil)
+            self.present(confirm, animated: true, completion: nil)
         }
     }
     
     @IBAction func doneClicked(_ sender: UIBarButtonItem) {
-        print("d")
-        dismiss(animated: true, completion: nil)
+        let email = emailTxtField.text!.trimmingCharacters(in: .whitespaces)
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
+        if email != "" && emailTest.evaluate(with: email) {
+            if let db = db {
+                db.setParam(named: "email", withValue: email)
+            }
+        }else if email != "" {
+            let alert = UIAlertController(title: nil, message: "Please check email format", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        let report = reportTxtView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        if report == "" {
+            let alert = UIAlertController(title: nil, message: "Please enter a valid report", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        print("send")
+        /*
+        
+        dismiss(animated: true, completion: nil)*/
     }
     
     func keyboardNotification(notification: NSNotification) {
@@ -61,13 +89,17 @@ class ReportViewController: UIViewController {
             
             let heightConstraint = reportTxtView.constraints.filter { $0.identifier == "reportTxtViewHeight" }
             if let heightConstraint = heightConstraint.first {
-                heightConstraint.constant = UIScreen.main.bounds.height - (keyboardFrame?.height)! - 134
+                heightConstraint.constant = UIScreen.main.bounds.height - (keyboardFrame?.height)! - 120
             }
         }
     }
     
-    func textTapped(recognizer: UITapGestureRecognizer){
-        print("tapped")
+    func textViewDidChange(_ textView: UITextView) {
+        if textView.text == "" {
+            placeHolder.text = "Enter your report"
+        }else{
+            placeHolder.text = ""
+        }
     }
     
 }

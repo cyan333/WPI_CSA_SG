@@ -16,7 +16,7 @@ class SGDatabase {
     }
     
     deinit {
-        //print("DB disconnected")
+        print("DB disconnected")
         sqlite3_close(dbPointer)
     }
     
@@ -38,15 +38,6 @@ class SGDatabase {
                 try dbPathUrl.setResourceValues(resourceValues)
                 
             } catch { print("failed to set resource value") }
-            
-            /*do {
-                let a = try dbPathUrl.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup
-                if(a)!{
-                    print("excluded!")
-                }else{
-                    print("Not excluded!")
-                }
-            } catch {}*/
         }
         
         
@@ -68,7 +59,7 @@ class SGDatabase {
         }
     }
     
-    func getSubMenusById(menuId: Int, prefix: String) -> [Menu]{
+    func getSubMenus(by menuId: Int, withPrefix prefix: String) -> [Menu]{
         var query: String
         var queryStatement: OpaquePointer? = nil
         var menuList = [Menu]()
@@ -85,7 +76,7 @@ class SGDatabase {
                 var name = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
                 name = prefix + name
                 let menu = Menu(id: Int(id), name: name)
-                menu.subMenus = self.getSubMenusById(menuId: Int(id), prefix: prefix + "   ")
+                menu.subMenus = self.getSubMenus(by: Int(id), withPrefix: prefix + "   ")
                 menu.isParentMenu = menu.subMenus.count > 0
                 menuList.append(menu)
             }
@@ -96,7 +87,7 @@ class SGDatabase {
         return menuList
     }
     
-    func searchArticles(keyword: String) -> [Menu] {
+    func searchArticles(withKeyword keyword: String) -> [Menu] {
         let query = "SELECT ID, NAME FROM MENUS WHERE NAME LIKE '%\(keyword)%' UNION SELECT ID, NAME FROM MENUS WHERE ID IN (SELECT MENU_ID FROM ARTICLES WHERE TITLE LIKE '%\(keyword)%' OR CONTENT LIKE '%\(keyword)%')"
         var queryStatement: OpaquePointer? = nil
         var menuList = [Menu]()
@@ -114,16 +105,16 @@ class SGDatabase {
         return menuList
     }
     
-    func getArticleByMenuId(menuId: Int) -> Article{
+    func getArticle(byMenuId menuId: Int) -> Article{
         let query = "SELECT TITLE, CONTENT FROM ARTICLES WHERE MENU_ID = \(menuId)"
         var queryStatement: OpaquePointer? = nil
         var article: Article
         
         if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
             if sqlite3_step(queryStatement) == SQLITE_ROW {
-                let title = String(cString: sqlite3_column_text(queryStatement, 0)!) //Not null column
+                let title = String(cString: sqlite3_column_text(queryStatement, 0)) //Not null column
                 //let title = "<span style=\"font-weight:bold;font-size:50px;color:grey;\">关于我们</span>"
-                let content = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
+                let content = String(cString: sqlite3_column_text(queryStatement, 1)) //Not null column
                 //let content = "<span style=\"font-weight:bold;font-size:60px;color:purple;\">Test</span><span style=\"font-weight:bold;font-size:60px;color:#6633CC;\">Test</span>"
                 article = Article(title: title, content: content)
             }else{
@@ -137,6 +128,38 @@ class SGDatabase {
         sqlite3_finalize(queryStatement)
         article.menuId = menuId
         return article
+    }
+    
+    func getParam(named key: String) -> String? {
+        let query = "SELECT VALUE FROM PARAMS WHERE KEY = '\(key)'"
+        var queryStatement: OpaquePointer? = nil
+        var value: String?
+        
+        if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+            if sqlite3_step(queryStatement) == SQLITE_ROW {
+                value = String(cString: sqlite3_column_text(queryStatement, 0))
+            }
+        } else {
+            print("SELECT statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        
+        return value
+    }
+    
+    func setParam(named key:String, withValue value:String) {
+        let query = "INSERT OR REPLACE INTO PARAMS VALUES ('\(key)', '\(value)')"
+        var queryStatement: OpaquePointer? = nil
+        
+        if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+            if sqlite3_step(queryStatement) != SQLITE_DONE {
+                print("Cannot update param \(key) with value \(value)")
+            }
+        } else {
+            print("SELECT statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+
     }
     
     func printBtnList(query: String){

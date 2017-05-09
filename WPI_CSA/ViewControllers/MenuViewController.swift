@@ -61,7 +61,7 @@ class MenuViewController : UIViewController {
         }
         if(menuList.count == 0){
             if let db = sgDatabase{
-                menuList = db.getSubMenusById(menuId: 0, prefix: "")
+                menuList = db.getSubMenus(by: 0, withPrefix: "")
                 //db.printBtnList(query: "")
                 //print("loaded from db!")
             }
@@ -168,7 +168,7 @@ class MenuViewController : UIViewController {
                 }else{
                     var article: Article?
                     if let db = sgDatabase {
-                        article = db.getArticleByMenuId(menuId: m.id)
+                        article = db.getArticle(byMenuId: m.id)
                     }
                     let keywrd = searchController.searchBar.text
                     if keywrd == "" {
@@ -206,7 +206,7 @@ class MenuViewController : UIViewController {
     
     func searchForArticles(keyword: String){
         if let db = sgDatabase {
-            searchResults = db.searchArticles(keyword: keyword)
+            searchResults = db.searchArticles(withKeyword: keyword)
         }
         tableView.reloadData()
     }
