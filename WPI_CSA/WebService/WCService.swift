@@ -41,6 +41,39 @@ open class WCService {
         
     }
     
+    open class func reportSGProblem(forMenu menuId: Int,
+                                    byUser email: String,
+                                    withReport report: String,
+                                    completion: @escaping (String) -> Void) {
+        do {
+            let params = ["menuId": menuId, "email": email, "report": report] as [String : Any]
+            //let opt = try HTTP.POST(serviceBase + "add_sg_report", parameters: params)
+            let opt = try HTTP.New(serviceBase + "add_sg_report", method: .POST, parameters: params, headers: nil, requestSerializer: JSONParameterSerializer(), isDownload: false)
+            opt.start { response in
+                if response.error != nil {
+                    completion(serverDown)
+                    return
+                }
+                let dict = WCUtil.convertToDictionary(data: response.data)
+                if let dict = dict {
+                    if let error = dict["error"]{
+                        if error != "" {
+                            completion(error)
+                            return
+                        }else{
+                            completion("")
+                            return
+                        }
+                    }
+                }
+                completion(respondFormatError)
+            }
+        } catch let err{
+            print(err)
+            
+        }
+    }
+    
     open func start(_ completionHandler:@escaping ((Response) -> Void)) {
         do {
             let opt = try HTTP.GET("http://fmning.com:8080/WebApp/get_sg?menuId=89")

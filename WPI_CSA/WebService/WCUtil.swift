@@ -9,7 +9,7 @@
 import Foundation
 
 //let serviceBase = "http://wcservice.fmning.com/" //*****************PROD
-let serviceBase = "http://wc.fmning.com/" //********************TEST
+let serviceBase = "https://wc.fmning.com/" //********************TEST
 
 let softwareVersion = "1.00"
 

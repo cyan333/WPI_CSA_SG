@@ -15,12 +15,17 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var placeHolder: UILabel!
     
     var db: SGDatabase?
+    var menuId: Int?
     
     override func viewDidLoad() {
         do{
             db = try SGDatabase.connect()
             if let value = db!.getParam(named: "email") {
                 emailTxtField.text = value
+                
+                var attributes = reportTxtView.typingAttributes
+                attributes["\(NSForegroundColorAttributeName)"] = UIColor.red
+                reportTxtView.typingAttributes = attributes
                 reportTxtView.becomeFirstResponder()
             }else{
                 emailTxtField.becomeFirstResponder()
@@ -77,10 +82,19 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        print("send")
-        /*
         
-        dismiss(animated: true, completion: nil)*/
+        WCService.reportSGProblem(forMenu: menuId!, byUser: email, withReport: report) { (error) in
+            if error != "" {
+                OperationQueue.main.addOperation{
+                    let alert = UIAlertController(title: "Something goes wrong", message: error, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
+            }else{
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     func keyboardNotification(notification: NSNotification) {

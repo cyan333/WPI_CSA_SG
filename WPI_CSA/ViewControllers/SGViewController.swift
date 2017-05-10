@@ -108,6 +108,15 @@ class SGViewController: UIViewController {
             destinationViewController.transitioningDelegate = self
             destinationViewController.interactor = interactor
             destinationViewController.menuActionDelegate = self
+        }else if let destinationViewController = segue.destination as? UINavigationController {
+            if let reportViewController = destinationViewController.topViewController as? ReportViewController {
+                if let article = article {
+                    reportViewController.menuId = article.menuId
+                }else{
+                    reportViewController.menuId = -1
+                }
+            }
+            
         }
     }
     
