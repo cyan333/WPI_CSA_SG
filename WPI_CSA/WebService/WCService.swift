@@ -12,31 +12,32 @@ import Foundation
 
 open class WCService {
     
-    open class func checkSoftwareVersion(completion: @escaping (String, String, String) -> Void){
+    open class func checkSoftwareVersion(completion: @escaping (String, String, String, String) -> Void){
         do {
             let opt = try HTTP.GET(serviceBase + "get_version_info?version=" + softwareVersion)
             opt.start{ response in
                 if response.error != nil {
-                    completion(serverDown, "", "")
+                    completion(serverDown, "", "", "")
                     return
                 }
                 let dict = WCUtil.convertToDictionary(data: response.data)
                 if let dict = dict {
-                    if let status = dict["status"], let title = dict["title"],
-                        let msg = dict["msg"], let error = dict["error"]{
+                    if let error = dict["error"] {
                         if error != "" {
-                            completion(error, "", "")
-                            return
-                        }else{
-                            completion(status, title, msg)
+                            completion(error, "", "", "")
                             return
                         }
                     }
+                    if let status = dict["status"], let title = dict["title"],
+                        let msg = dict["msg"], let version = dict["version"]{
+                        completion(status, title, msg, version)
+                        return
+                    }
                 }
-                completion(respondFormatError, "", "")
+                completion(respondFormatError, "", "", "")
             }
         } catch{
-            completion(HTTPError, "", "")
+            completion(HTTPError, "", "", "")
         }
         
     }

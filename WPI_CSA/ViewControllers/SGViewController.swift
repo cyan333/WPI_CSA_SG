@@ -41,6 +41,7 @@ class SGViewController: UIViewController {
     var searchKeyword: String?
     var menuList = [Menu]()
     
+    var db: SGDatabase?
     var article: Article?
     
     override func viewDidLoad() {
@@ -53,8 +54,18 @@ class SGViewController: UIViewController {
             }
             
         }
-        WCService.checkSoftwareVersion(completion: { (status, title, msg) in
-            print(status + title + msg)
+        WCService.checkSoftwareVersion(completion: { (status, title, msg, version) in
+            if status == "AppUpdate" {
+                let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    print(version)
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }else{
+                print(status + title + msg)
+            }
         })
         
     }

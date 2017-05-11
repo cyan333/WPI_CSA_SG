@@ -130,35 +130,47 @@ class SGDatabase {
         return article
     }
     
-    func getParam(named key: String) -> String? {
-        let query = "SELECT VALUE FROM PARAMS WHERE KEY = '\(key)'"
-        var queryStatement: OpaquePointer? = nil
-        var value: String?
-        
-        if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
-            if sqlite3_step(queryStatement) == SQLITE_ROW {
-                value = String(cString: sqlite3_column_text(queryStatement, 0))
+    open class func getParam(named key: String) ->String? {
+        do{
+            let db = try SGDatabase.connect()
+            
+            let query = "SELECT VALUE FROM PARAMS WHERE KEY = '\(key)'"
+            var queryStatement: OpaquePointer? = nil
+            var value: String?
+            
+            if sqlite3_prepare_v2(db.dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+                if sqlite3_step(queryStatement) == SQLITE_ROW {
+                    value = String(cString: sqlite3_column_text(queryStatement, 0))
+                }
+            } else {
+                print("SELECT statement could not be prepared")
             }
-        } else {
-            print("SELECT statement could not be prepared")
+            sqlite3_finalize(queryStatement)
+            
+            return value
+        }catch{
+            return nil
         }
-        sqlite3_finalize(queryStatement)
         
-        return value
     }
     
-    func setParam(named key:String, withValue value:String) {
-        let query = "INSERT OR REPLACE INTO PARAMS VALUES ('\(key)', '\(value)')"
-        var queryStatement: OpaquePointer? = nil
-        
-        if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
-            if sqlite3_step(queryStatement) != SQLITE_DONE {
-                print("Cannot update param \(key) with value \(value)")
+    open class func setParam(named key:String, withValue value:String) {
+        do{
+            let db = try SGDatabase.connect()
+            
+            let query = "INSERT OR REPLACE INTO PARAMS VALUES ('\(key)', '\(value)')"
+            var queryStatement: OpaquePointer? = nil
+            
+            if sqlite3_prepare_v2(db.dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+                if sqlite3_step(queryStatement) != SQLITE_DONE {
+                    print("Cannot update param \(key) with value \(value)")
+                }
+            } else {
+                print("SELECT statement could not be prepared")
             }
-        } else {
-            print("SELECT statement could not be prepared")
-        }
-        sqlite3_finalize(queryStatement)
+            sqlite3_finalize(queryStatement)
+        }catch {}
+        
 
     }
     

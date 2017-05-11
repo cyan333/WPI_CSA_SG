@@ -14,23 +14,17 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var reportTxtView: UITextView!
     @IBOutlet weak var placeHolder: UILabel!
     
-    var db: SGDatabase?
     var menuId: Int?
     
     override func viewDidLoad() {
-        do{
-            db = try SGDatabase.connect()
-            if let value = db!.getParam(named: "email") {
-                emailTxtField.text = value
-                
-                var attributes = reportTxtView.typingAttributes
-                attributes["\(NSForegroundColorAttributeName)"] = UIColor.red
-                reportTxtView.typingAttributes = attributes
-                reportTxtView.becomeFirstResponder()
-            }else{
-                emailTxtField.becomeFirstResponder()
-            }
-        }catch{
+        if let value = SGDatabase.getParam(named: "email") {
+            emailTxtField.text = value
+            
+            var attributes = reportTxtView.typingAttributes
+            attributes["\(NSForegroundColorAttributeName)"] = UIColor.red
+            reportTxtView.typingAttributes = attributes
+            reportTxtView.becomeFirstResponder()
+        }else{
             emailTxtField.becomeFirstResponder()
         }
         reportTxtView.delegate = self
@@ -65,9 +59,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         let email = emailTxtField.text!.trimmingCharacters(in: .whitespaces)
         let emailTest = NSPredicate(format:"SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
         if email != "" && emailTest.evaluate(with: email) {
-            if let db = db {
-                db.setParam(named: "email", withValue: email)
-            }
+            SGDatabase.setParam(named: "email", withValue: email)
         }else if email != "" {
             let alert = UIAlertController(title: nil, message: "Please check email format", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))

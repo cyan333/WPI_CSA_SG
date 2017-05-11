@@ -8,10 +8,10 @@
 
 import Foundation
 
-//let serviceBase = "http://wcservice.fmning.com/" //*****************PROD
-let serviceBase = "https://wc.fmning.com/" //********************TEST
+//let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
+let serviceBase = "http://wc.fmning.com/" //********************TEST
 
-let softwareVersion = "1.00"
+let softwareVersion = "0.00"
 
 let serverDown = "Server down"
 let HTTPError = "Http API error"
