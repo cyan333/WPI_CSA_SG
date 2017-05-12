@@ -11,6 +11,7 @@ import Foundation
 
 
 open class WCService {
+    static let currentUser: WCUser? = nil
     
     open class func checkSoftwareVersion(completion: @escaping (String, String, String, String) -> Void){
         do {
@@ -48,7 +49,6 @@ open class WCService {
                                     completion: @escaping (String) -> Void) {
         do {
             let params = ["menuId": menuId, "email": email, "report": report] as [String : Any]
-            //let opt = try HTTP.POST(serviceBase + "add_sg_report", parameters: params)
             let opt = try HTTP.New(serviceBase + "add_sg_report", method: .POST, parameters: params, headers: nil, requestSerializer: JSONParameterSerializer(), isDownload: false)
             opt.start { response in
                 if response.error != nil {

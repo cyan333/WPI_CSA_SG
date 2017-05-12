@@ -63,10 +63,21 @@ class SGViewController: UIViewController {
                     print(version)
                 }))
                 self.present(alert, animated: true, completion: nil)
+            }else if status == "Ok"{
+                if let password = SGDatabase.getParam(named: "password") {
+                    if password != "" {
+                        
+                    }
+                }
             }else{
                 print(status + title + msg)
             }
         })
+        
+        WCUserManager.getSaltForUser(withUsername: "synfm123@gmail.com") { (test) in
+            print(test.1)
+            print(WCUtil.md5("flash" + test.1))
+        }
         
     }
     

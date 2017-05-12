@@ -406,6 +406,13 @@ open class HTTP: Operation {
     }
     
     /**
+     Simplified version of posting json to url
+     */
+    open class func POST(_ url: String, parameters: HTTPParameterProtocol? = nil) throws -> HTTP {
+        return try HTTP.New(url, method: .POST, parameters: parameters, headers: nil, requestSerializer: JSONParameterSerializer(), isDownload: false)
+    }
+    
+    /**
      Class method to create a PUT request that handles the NSMutableURLRequest and parameter encoding for you.
      */
     open class func PUT(_ url: String, parameters: HTTPParameterProtocol? = nil, headers: [String:String]? = nil,

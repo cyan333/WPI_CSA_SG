@@ -36,6 +36,7 @@
 		87ADA82C1E82300800EF81A4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */; };
 		87C14A4C1EBE321B0031E20A /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C14A4B1EBE321B0031E20A /* ReportViewController.swift */; };
 		87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CD3A491E8494E900C9E5F3 /* Menu.swift */; };
+		87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC11EC41DF800BB49EB /* WCUser.swift */; };
 		910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDB41E80BF950005CC1D /* AppDelegate.swift */; };
 		910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDB81E80BF950005CC1D /* Main.storyboard */; };
 		910CFDBC1E80BF950005CC1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDBB1E80BF950005CC1D /* Assets.xcassets */; };
@@ -79,6 +80,7 @@
 		87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		87C14A4B1EBE321B0031E20A /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportViewController.swift; path = ViewControllers/ReportViewController.swift; sourceTree = "<group>"; };
 		87CD3A491E8494E900C9E5F3 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Menu.swift; path = Objects/Menu.swift; sourceTree = "<group>"; };
+		87DE3FC11EC41DF800BB49EB /* WCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUser.swift; path = WebService/WCUser.swift; sourceTree = "<group>"; };
 		910CFDB11E80BF950005CC1D /* WPI_CSA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WPI_CSA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		910CFDB41E80BF950005CC1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		910CFDB91E80BF950005CC1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			children = (
 				871E35C31EBA5D6300EA483E /* HTTPHelper */,
 				8732FE021EBC1F6800B1CDB1 /* WCService.swift */,
+				87DE3FC11EC41DF800BB49EB /* WCUser.swift */,
 				8732FE061EBD07A600B1CDB1 /* WCUtil.swift */,
 			);
 			name = WebService;
@@ -335,6 +338,7 @@
 				8732FE071EBD07A600B1CDB1 /* WCUtil.swift in Sources */,
 				910CFDD41E80C1130005CC1D /* DismissMenuAnimator.swift in Sources */,
 				871E35C71EBA67CB00EA483E /* Upload.swift in Sources */,
+				87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */,
 				910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */,
 				910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */,
 				8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */,
