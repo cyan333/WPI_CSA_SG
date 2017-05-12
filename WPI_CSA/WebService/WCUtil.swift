@@ -12,6 +12,7 @@ import Foundation
 let serviceBase = "http://wc.fmning.com/" //********************TEST
 
 let pathGetSalt = "login_for_salt"
+let pathLogin = "login"
 
 let softwareVersion = "0.00"
 
@@ -20,9 +21,9 @@ let HTTPError = "Http API error"
 let respondFormatError = "Incorrect respond format"
 
 open class WCUtil{
-    open class func convertToDictionary(data: Data) -> [String: String]? {
+    open class func convertToDictionary(data: Data) -> [String: Any]? {
         do {
-            return try JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
+            return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
         } catch {
             print(error.localizedDescription)
         }

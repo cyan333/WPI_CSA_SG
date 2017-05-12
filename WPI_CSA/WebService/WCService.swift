@@ -13,9 +13,9 @@ import Foundation
 open class WCService {
     static let currentUser: WCUser? = nil
     
-    open class func checkSoftwareVersion(completion: @escaping (String, String, String, String) -> Void){
+    open class func checkSoftwareVersion(version: String, completion: @escaping (String, String, String, String) -> Void){
         do {
-            let opt = try HTTP.GET(serviceBase + "get_version_info?version=" + softwareVersion)
+            let opt = try HTTP.GET(serviceBase + "get_version_info?version=" + version)
             opt.start{ response in
                 if response.error != nil {
                     completion(serverDown, "", "", "")
@@ -23,14 +23,14 @@ open class WCService {
                 }
                 let dict = WCUtil.convertToDictionary(data: response.data)
                 if let dict = dict {
-                    if let error = dict["error"] {
+                    if let error = dict["error"] as? String {
                         if error != "" {
                             completion(error, "", "", "")
                             return
                         }
                     }
-                    if let status = dict["status"], let title = dict["title"],
-                        let msg = dict["msg"], let version = dict["version"]{
+                    if let status = dict["status"] as? String, let title = dict["title"] as? String,
+                        let msg = dict["msg"] as? String, let version = dict["version"] as? String{
                         completion(status, title, msg, version)
                         return
                     }
@@ -57,7 +57,7 @@ open class WCService {
                 }
                 let dict = WCUtil.convertToDictionary(data: response.data)
                 if let dict = dict {
-                    if let error = dict["error"]{
+                    if let error = dict["error"] as? String{
                         if error != "" {
                             completion(error)
                             return

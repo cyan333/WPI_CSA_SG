@@ -54,19 +54,27 @@ class SGViewController: UIViewController {
             }
             
         }
-        WCService.checkSoftwareVersion(completion: { (status, title, msg, version) in
+        var versionToCheck = softwareVersion
+        if let version = SGDatabase.getParam(named: "suppressedVersion"){
+            versionToCheck = version
+        }
+        WCService.checkSoftwareVersion(version: versionToCheck, completion: { (status, title, msg, version) in
             if status == "AppUpdate" {
                 let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
                 alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
-                    print(version)
+                    SGDatabase.setParam(named: "suppressedVersion", withValue: version)
                 }))
                 self.present(alert, animated: true, completion: nil)
             }else if status == "Ok"{
                 if let password = SGDatabase.getParam(named: "password") {
                     if password != "" {
-                        
+                        WCUserManager.loginUser(withUsername: "synfm123@gmail.com",
+                                                andPassword: WCUtil.md5("flash" + "SSSSSSSSSAAAAAAAAAALLLLLLLLLLLLLLLT"),
+                                                completion: { (error, user) in
+                                                    //
+                        })
                     }
                 }
             }else{
@@ -77,6 +85,11 @@ class SGViewController: UIViewController {
         WCUserManager.getSaltForUser(withUsername: "synfm123@gmail.com") { (test) in
             print(test.1)
             print(WCUtil.md5("flash" + test.1))
+            WCUserManager.loginUser(withUsername: "synfm123@gmail.com",
+                                    andPassword: WCUtil.md5("flash" + test.1),
+                                    completion: { (error, user) in
+                                        //
+            })
         }
         
     }

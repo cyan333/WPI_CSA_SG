@@ -37,6 +37,13 @@
 		87C14A4C1EBE321B0031E20A /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C14A4B1EBE321B0031E20A /* ReportViewController.swift */; };
 		87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CD3A491E8494E900C9E5F3 /* Menu.swift */; };
 		87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC11EC41DF800BB49EB /* WCUser.swift */; };
+		87DE3FC71EC62EB500BB49EB /* Base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC41EC62EB500BB49EB /* Base64.swift */; };
+		87DE3FC81EC62EB500BB49EB /* Claims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC51EC62EB500BB49EB /* Claims.swift */; };
+		87DE3FC91EC62EB500BB49EB /* ClaimSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC61EC62EB500BB49EB /* ClaimSet.swift */; };
+		87DE3FCE1EC639A200BB49EB /* Decode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FCA1EC639A200BB49EB /* Decode.swift */; };
+		87DE3FCF1EC639A200BB49EB /* Encode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FCB1EC639A200BB49EB /* Encode.swift */; };
+		87DE3FD01EC639A200BB49EB /* JOSEHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FCC1EC639A200BB49EB /* JOSEHeader.swift */; };
+		87DE3FD11EC639A200BB49EB /* JWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FCD1EC639A200BB49EB /* JWT.swift */; };
 		910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDB41E80BF950005CC1D /* AppDelegate.swift */; };
 		910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDB81E80BF950005CC1D /* Main.storyboard */; };
 		910CFDBC1E80BF950005CC1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDBB1E80BF950005CC1D /* Assets.xcassets */; };
@@ -81,6 +88,13 @@
 		87C14A4B1EBE321B0031E20A /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportViewController.swift; path = ViewControllers/ReportViewController.swift; sourceTree = "<group>"; };
 		87CD3A491E8494E900C9E5F3 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Menu.swift; path = Objects/Menu.swift; sourceTree = "<group>"; };
 		87DE3FC11EC41DF800BB49EB /* WCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUser.swift; path = WebService/WCUser.swift; sourceTree = "<group>"; };
+		87DE3FC41EC62EB500BB49EB /* Base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base64.swift; sourceTree = "<group>"; };
+		87DE3FC51EC62EB500BB49EB /* Claims.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Claims.swift; sourceTree = "<group>"; };
+		87DE3FC61EC62EB500BB49EB /* ClaimSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClaimSet.swift; sourceTree = "<group>"; };
+		87DE3FCA1EC639A200BB49EB /* Decode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decode.swift; sourceTree = "<group>"; };
+		87DE3FCB1EC639A200BB49EB /* Encode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Encode.swift; sourceTree = "<group>"; };
+		87DE3FCC1EC639A200BB49EB /* JOSEHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JOSEHeader.swift; sourceTree = "<group>"; };
+		87DE3FCD1EC639A200BB49EB /* JWT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWT.swift; sourceTree = "<group>"; };
 		910CFDB11E80BF950005CC1D /* WPI_CSA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WPI_CSA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		910CFDB41E80BF950005CC1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		910CFDB91E80BF950005CC1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -110,6 +124,7 @@
 		871E35C21EBA5D5400EA483E /* WebService */ = {
 			isa = PBXGroup;
 			children = (
+				87DE3FC31EC62E9800BB49EB /* JWTHelper */,
 				871E35C31EBA5D6300EA483E /* HTTPHelper */,
 				8732FE021EBC1F6800B1CDB1 /* WCService.swift */,
 				87DE3FC11EC41DF800BB49EB /* WCUser.swift */,
@@ -205,6 +220,20 @@
 				87CD3A491E8494E900C9E5F3 /* Menu.swift */,
 			);
 			name = Objects;
+			sourceTree = "<group>";
+		};
+		87DE3FC31EC62E9800BB49EB /* JWTHelper */ = {
+			isa = PBXGroup;
+			children = (
+				87DE3FC41EC62EB500BB49EB /* Base64.swift */,
+				87DE3FC51EC62EB500BB49EB /* Claims.swift */,
+				87DE3FC61EC62EB500BB49EB /* ClaimSet.swift */,
+				87DE3FCA1EC639A200BB49EB /* Decode.swift */,
+				87DE3FCB1EC639A200BB49EB /* Encode.swift */,
+				87DE3FCC1EC639A200BB49EB /* JOSEHeader.swift */,
+				87DE3FCD1EC639A200BB49EB /* JWT.swift */,
+			);
+			name = JWTHelper;
 			sourceTree = "<group>";
 		};
 		910CFDA81E80BF950005CC1D = {
@@ -334,6 +363,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87DE3FD01EC639A200BB49EB /* JOSEHeader.swift in Sources */,
 				910CFDD51E80C1130005CC1D /* Interactor.swift in Sources */,
 				8732FE071EBD07A600B1CDB1 /* WCUtil.swift in Sources */,
 				910CFDD41E80C1130005CC1D /* DismissMenuAnimator.swift in Sources */,
@@ -342,15 +372,21 @@
 				910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */,
 				910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */,
 				8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */,
+				87DE3FC71EC62EB500BB49EB /* Base64.swift in Sources */,
+				87DE3FC91EC62EB500BB49EB /* ClaimSet.swift in Sources */,
 				877E61581E8C4DD100B88831 /* Article.swift in Sources */,
 				871E35CA1EBA73A400EA483E /* StatusCode.swift in Sources */,
+				87DE3FD11EC639A200BB49EB /* JWT.swift in Sources */,
 				910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */,
 				871E35D01EBAF14C00EA483E /* Request.swift in Sources */,
 				910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */,
 				871E35CE1EBAAEB300EA483E /* Operation.swift in Sources */,
+				87DE3FC81EC62EB500BB49EB /* Claims.swift in Sources */,
 				87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */,
 				87C14A4C1EBE321B0031E20A /* ReportViewController.swift in Sources */,
 				871E35CC1EBAA44B00EA483E /* HTTPSecurity.swift in Sources */,
+				87DE3FCE1EC639A200BB49EB /* Decode.swift in Sources */,
+				87DE3FCF1EC639A200BB49EB /* Encode.swift in Sources */,
 				910CFDD61E80C1130005CC1D /* SGViewController.swift in Sources */,
 				87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */,
 			);
