@@ -68,12 +68,15 @@ class SGViewController: UIViewController {
                 }))
                 self.present(alert, animated: true, completion: nil)
             }else if status == "Ok"{
-                if let password = SGDatabase.getParam(named: "password") {
-                    if password != "" {
-                        WCUserManager.loginUser(withUsername: "synfm123@gmail.com",
-                                                andPassword: WCUtil.md5("flash" + "SSSSSSSSSAAAAAAAAAALLLLLLLLLLLLLLLT"),
+                if let password = SGDatabase.getParam(named: "password"),
+                    let username = SGDatabase.getParam(named: "username"){
+                    if password != "" && username != ""{
+                        WCUserManager.loginUser(withUsername: username,
+                                                andPassword: password, //WCUtil.md5("flash" + "SSSSSSSSSAAAAAAAAAALLLLLLLLLLLLLLLT"),
                                                 completion: { (error, user) in
-                                                    //
+                                                    if error != "" {
+                                                        WCService.currentUser = user
+                                                    }
                         })
                     }
                 }
@@ -103,7 +106,20 @@ class SGViewController: UIViewController {
         
         let reportAction = UIAlertAction(title: "Report a problem", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            self.performSegue(withIdentifier: "SGReportSegue", sender: nil)
+            if WCService.currentUser == nil {
+                let alert = UIAlertController(title: nil, message: "No user logged in. Please login so that we can get back to you and keep track of reports.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Login & Register", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    self.tabBarController?.selectedIndex = 1
+                    
+                }))
+                alert.addAction(UIAlertAction(title: "Report anonymously", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }else{
+                self.performSegue(withIdentifier: "SGReportSegue", sender: nil)
+            }
+            
         })
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (alert: UIAlertAction!) -> Void in

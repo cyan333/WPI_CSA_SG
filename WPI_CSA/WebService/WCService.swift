@@ -11,7 +11,7 @@ import Foundation
 
 
 open class WCService {
-    static let currentUser: WCUser? = nil
+    static var currentUser: WCUser? = nil
     
     open class func checkSoftwareVersion(version: String, completion: @escaping (String, String, String, String) -> Void){
         do {
