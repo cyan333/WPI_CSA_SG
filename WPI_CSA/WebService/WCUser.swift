@@ -12,6 +12,7 @@ public class WCUser{
     var id: Int
     var username: String?
     var accessToken: String?
+    var emailConfirmed = true
     
     init(id: Int){
         self.id = id
@@ -66,6 +67,7 @@ open class WCUserManager{
                     let user = WCUser(id: dict!["userId"] as! Int,
                                       username: dict!["username"] as! String,
                                       accessToken: dict!["accessToken"] as! String)
+                    user.emailConfirmed = true//dict!["emailConfirmed"] as! Bool
                     completion("", user)
                 }
             }

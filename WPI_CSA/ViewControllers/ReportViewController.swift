@@ -17,7 +17,10 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     var menuId: Int?
     
     override func viewDidLoad() {
-        if let value = SGDatabase.getParam(named: "email") {
+        if let user = WCService.currentUser {
+            emailTxtField.text = user.username
+            reportTxtView.becomeFirstResponder()
+        }else if let value = SGDatabase.getParam(named: "email") {
             emailTxtField.text = value
             
             var attributes = reportTxtView.typingAttributes
@@ -38,18 +41,12 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         if reportTxtView.text.trimmingCharacters(in: .whitespacesAndNewlines) == ""{
             dismiss(animated: true, completion: nil)
         }else{
-            let confirm = UIAlertController(title: nil,
-                                            message: "Are you sure you want to cancel?",
-                                            preferredStyle: .alert)
-            
-            let reportAction = UIAlertAction(title: "Yes", style: .default, handler: {
+            let confirm = UIAlertController(title: nil, message: "Are you sure you want to cancel?", preferredStyle: .alert)
+            confirm.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
                 self.dismiss(animated: true, completion: nil)
-            })
-            let cancelAction = UIAlertAction(title: "No", style: .cancel, handler: nil)
-            
-            confirm.addAction(reportAction)
-            confirm.addAction(cancelAction)
+            }))
+            confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
             
             self.present(confirm, animated: true, completion: nil)
         }

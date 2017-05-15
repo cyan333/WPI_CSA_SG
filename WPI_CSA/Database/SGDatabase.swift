@@ -16,7 +16,7 @@ class SGDatabase {
     }
     
     deinit {
-        print("DB disconnected")
+        //print("DB disconnected")
         sqlite3_close(dbPointer)
     }
     
@@ -172,6 +172,26 @@ class SGDatabase {
         }catch {}
         
 
+    }
+    
+    open class func deleteParam(named key:String) {
+        do{
+            let db = try SGDatabase.connect()
+            
+            let query = "DELETE FROM PARAMS WHERE KEY = '\(key)'"
+            var queryStatement: OpaquePointer? = nil
+            
+            if sqlite3_prepare_v2(db.dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+                if sqlite3_step(queryStatement) != SQLITE_DONE {
+                    print("Cannot delete param \(key)")
+                }
+            } else {
+                print("SELECT statement could not be prepared")
+            }
+            sqlite3_finalize(queryStatement)
+        }catch {}
+        
+        
     }
     
     func printBtnList(query: String){

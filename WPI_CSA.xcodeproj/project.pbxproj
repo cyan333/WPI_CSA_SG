@@ -42,6 +42,8 @@
 		87DE400B1EC79FF700BB49EB /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE400A1EC79FF700BB49EB /* Facebook.png */; };
 		87DE400D1EC79FFF00BB49EB /* Instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE400C1EC79FFF00BB49EB /* Instagram.png */; };
 		87DE400F1EC7A00600BB49EB /* YouTube.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE400E1EC7A00600BB49EB /* YouTube.png */; };
+		87DE40121EC9420A00BB49EB /* verified.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40101EC9420A00BB49EB /* verified.png */; };
+		87DE40131EC9420A00BB49EB /* notVarified.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40111EC9420A00BB49EB /* notVarified.png */; };
 		910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDB41E80BF950005CC1D /* AppDelegate.swift */; };
 		910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDB81E80BF950005CC1D /* Main.storyboard */; };
 		910CFDBC1E80BF950005CC1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDBB1E80BF950005CC1D /* Assets.xcassets */; };
@@ -91,6 +93,8 @@
 		87DE400A1EC79FF700BB49EB /* Facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Facebook.png; sourceTree = "<group>"; };
 		87DE400C1EC79FFF00BB49EB /* Instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Instagram.png; sourceTree = "<group>"; };
 		87DE400E1EC7A00600BB49EB /* YouTube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YouTube.png; sourceTree = "<group>"; };
+		87DE40101EC9420A00BB49EB /* verified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = verified.png; sourceTree = "<group>"; };
+		87DE40111EC9420A00BB49EB /* notVarified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = notVarified.png; sourceTree = "<group>"; };
 		910CFDB11E80BF950005CC1D /* WPI_CSA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WPI_CSA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		910CFDB41E80BF950005CC1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		910CFDB91E80BF950005CC1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -180,6 +184,8 @@
 				87DE400C1EC79FFF00BB49EB /* Instagram.png */,
 				877FD5971E94300E00632887 /* menuCollapsed.png */,
 				877FD5961E94300E00632887 /* menuExpanded.png */,
+				87DE40101EC9420A00BB49EB /* verified.png */,
+				87DE40111EC9420A00BB49EB /* notVarified.png */,
 				87DE400E1EC7A00600BB49EB /* YouTube.png */,
 			);
 			name = Icons;
@@ -334,10 +340,12 @@
 				87DE40091EC7776200BB49EB /* defaultAvatar.png in Resources */,
 				871E35BB1EB19FF700EA483E /* cover.jpg in Resources */,
 				871E35C11EB6BBED00EA483E /* 85_1.jpg in Resources */,
+				87DE40131EC9420A00BB49EB /* notVarified.png in Resources */,
 				871E35BD1EB2B73D00EA483E /* 62_1.jpg in Resources */,
 				87DE400B1EC79FF700BB49EB /* Facebook.png in Resources */,
 				877FD5991E94300E00632887 /* menuCollapsed.png in Resources */,
 				871E35B31EB19FF700EA483E /* 1_3.jpg in Resources */,
+				87DE40121EC9420A00BB49EB /* verified.png in Resources */,
 				87DE400F1EC7A00600BB49EB /* YouTube.png in Resources */,
 				910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */,
 				871E35B51EB19FF700EA483E /* 1_5.jpg in Resources */,
