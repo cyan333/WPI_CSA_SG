@@ -132,11 +132,25 @@ extension SettingViewController : UITableViewDataSource {
                 return cell
             }else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingUserCell") as! SettingUserCell
-                let user = WCService.currentUser
-                cell.emailLabel.text = user!.username
+                
+                let user = WCService.currentUser!
+                if user.name == "" {
+                    WCUserManager.getCurrentUserDetails(completion: { (error) in
+                        if error != "" {
+                            user.name = "Unknown"
+                        }
+                        DispatchQueue.main.async {
+                            cell.nameLabel.text = user.name
+                        }
+                    })
+                }else{
+                    cell.nameLabel.text = user.name
+                }
+                
+                cell.emailLabel.text = user.username
                 
                 let statusImage = NSTextAttachment()
-                if user!.emailConfirmed {
+                if user.emailConfirmed {
                     statusImage.image = UIImage(named: "verified.png")
                     statusImage.bounds = CGRect(x: 0, y: -2, width: 13, height: 13)
                     let statusString = NSAttributedString(attachment: statusImage)
@@ -210,6 +224,8 @@ extension SettingViewController : UITableViewDelegate {
             default:
                 break
             }
+        } else if indexPath.section == 2 {
+            tableView.reloadData()
         } else if indexPath.section == 3 {
             let confirm = UIAlertController(title: "Are you sure", message: "Your credentials will be removed",
                                             preferredStyle: .alert)

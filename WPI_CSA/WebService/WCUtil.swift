@@ -13,6 +13,7 @@ let serviceBase = "http://wc.fmning.com/" //********************TEST
 
 let pathGetSalt = "login_for_salt"
 let pathLogin = "login"
+let pathUserDetails = "get_user_detail"
 
 let softwareVersion = "0.00"
 
