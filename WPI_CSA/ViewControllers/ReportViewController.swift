@@ -19,6 +19,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         if let user = WCService.currentUser {
             emailTxtField.text = user.username
+            emailTxtField.removeFromSuperview()
             reportTxtView.becomeFirstResponder()
         }else if let value = SGDatabase.getParam(named: "email") {
             emailTxtField.text = value
@@ -72,7 +73,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             return
         }
         
-        WCService.reportSGProblem(forMenu: menuId!, byUser: email, withReport: report) { (error) in
+        WCService.reportSGProblem(forMenu: menuId!, byUser: nil, andEmail: email, withReport: report) { (error) in
             if error != "" {
                 OperationQueue.main.addOperation{
                     let alert = UIAlertController(title: "Something goes wrong", message: error, preferredStyle: .alert)

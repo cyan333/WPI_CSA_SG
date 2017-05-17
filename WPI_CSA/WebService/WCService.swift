@@ -12,6 +12,7 @@ import Foundation
 
 open class WCService {
     static var currentUser: WCUser? = nil
+    static var appMode: AppMode = .Offline
     
     open class func checkSoftwareVersion(version: String, completion: @escaping (String, String, String, String) -> Void){
         do {
@@ -38,17 +39,18 @@ open class WCService {
                 completion(respondFormatError, "", "", "")
             }
         } catch{
-            completion(HTTPError, "", "", "")
+            completion(serverDown, "", "", "")
         }
         
     }
     
     open class func reportSGProblem(forMenu menuId: Int,
-                                    byUser email: String,
+                                    byUser userId: Int?,
+                                    andEmail email: String,
                                     withReport report: String,
                                     completion: @escaping (String) -> Void) {
         do {
-            let params = ["menuId": menuId, "email": email, "report": report] as [String : Any]
+            let params = ["menuId": menuId, "userId": userId as Any, "email": email, "report": report] as [String : Any]
             let opt = try HTTP.New(serviceBase + "add_sg_report", method: .POST, parameters: params, headers: nil, requestSerializer: JSONParameterSerializer(), isDownload: false)
             opt.start { response in
                 if response.error != nil {
@@ -71,7 +73,7 @@ open class WCService {
             }
         } catch let err{
             print(err)
-            
+            completion(serverDown)
         }
     }
     
@@ -85,4 +87,10 @@ open class WCService {
     }
     
     
+}
+
+enum AppMode{
+    case Offline
+    case Login
+    case LoggedOn
 }

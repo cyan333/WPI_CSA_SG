@@ -69,6 +69,10 @@ open class WCUserManager{
                                       username: dict!["username"] as! String,
                                       accessToken: dict!["accessToken"] as! String)
                     user.emailConfirmed = dict!["emailConfirmed"] as! Bool
+                    if let name = dict!["name"] as? String {
+                        user.name = name
+                    }
+                    if user.name == "" {user.name = "Unknown"}
                     completion("", user)
                 }
             }
@@ -78,11 +82,12 @@ open class WCUserManager{
         }
     }
     
+    
     open class func getCurrentUserDetails(completion: @escaping (_ error: String) -> Void){
         do {
             let params = ["accessToken": WCService.currentUser!.accessToken,
                           "userId": WCService.currentUser!.id] as [String : Any?]
-            let opt = try HTTP.POST(serviceBase + pathUserDetails, parameters: params)
+            let opt = try HTTP.POST(serviceBase + pathGetUserDetails, parameters: params)
             opt.start { response in
                 if response.error != nil {
                     completion(serverDown)
@@ -93,6 +98,29 @@ open class WCUserManager{
                     completion(dict!["error"]! as! String)
                 }else{
                     WCService.currentUser!.name = dict!["name"] as! String
+                    completion("")
+                }
+            }
+        } catch let error{
+            print (error.localizedDescription)
+            completion(serverDown)
+        }
+    }
+    
+    open class func saveCurrentUserDetails(realName name: String?, completion: @escaping (_ error: String) -> Void){
+        do {
+            let params = ["accessToken": WCService.currentUser!.accessToken,
+                          "name": name] as [String : Any?]
+            let opt = try HTTP.POST(serviceBase + pathSetUserDetails, parameters: params)
+            opt.start { response in
+                if response.error != nil {
+                    completion(serverDown)
+                    return
+                }
+                let dict = WCUtil.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String)
+                }else{
                     completion("")
                 }
             }

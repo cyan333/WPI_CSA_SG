@@ -93,6 +93,12 @@ class SGViewController: UIViewController {
     }
     
     @IBAction func action(_ sender: UIButton) {
+        if WCService.appMode == .Offline {
+            let alert = UIAlertController(title: nil, message: "This feature won't work in offline mode. Please go to setting and to check network status.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
         let reportAction = UIAlertAction(title: "Report a problem", style: .default, handler: {

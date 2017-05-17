@@ -13,12 +13,13 @@ let serviceBase = "http://wc.fmning.com/" //********************TEST
 
 let pathGetSalt = "login_for_salt"
 let pathLogin = "login"
-let pathUserDetails = "get_user_detail"
+let pathGetUserDetails = "get_user_detail"
+let pathSetUserDetails = "save_current_user_detail"
 
 let softwareVersion = "0.00"
 
 let serverDown = "Server down"
-let HTTPError = "Http API error"
+//let HTTPError = "Http API error"
 let respondFormatError = "Incorrect respond format"
 
 open class WCUtil{

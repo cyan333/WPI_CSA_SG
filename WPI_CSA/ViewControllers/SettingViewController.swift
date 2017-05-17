@@ -108,6 +108,13 @@ extension SettingViewController : UITableViewDataSource {
             return 1
         }else if section == 1{
             return 3
+        }else if section == 2{
+            if let user = WCService.currentUser {
+                if !user.emailConfirmed {
+                    return 2
+                }
+            }
+            return 1
         }else{
             return 1
         }
@@ -134,18 +141,7 @@ extension SettingViewController : UITableViewDataSource {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingUserCell") as! SettingUserCell
                 
                 let user = WCService.currentUser!
-                if user.name == "" {
-                    WCUserManager.getCurrentUserDetails(completion: { (error) in
-                        if error != "" {
-                            user.name = "Unknown"
-                        }
-                        DispatchQueue.main.async {
-                            cell.nameLabel.text = user.name
-                        }
-                    })
-                }else{
-                    cell.nameLabel.text = user.name
-                }
+                cell.nameLabel.text = user.name
                 
                 cell.emailLabel.text = user.username
                 
@@ -191,7 +187,11 @@ extension SettingViewController : UITableViewDataSource {
             return cell
         }else if indexPath.section == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SettingActionCell") as! SettingActionCell
-            cell.actionButton.setTitle("Change Password", for: .normal)
+            if indexPath.row == 0 {
+                cell.actionButton.setTitle("Change Password", for: .normal)
+            } else {
+                cell.actionButton.setTitle("Verify Email Address", for: .normal)
+            }
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "SettingActionCell") as! SettingActionCell
@@ -225,7 +225,16 @@ extension SettingViewController : UITableViewDelegate {
                 break
             }
         } else if indexPath.section == 2 {
-            tableView.reloadData()
+            if indexPath.row == 0 {
+                print("pwd")
+                WCUserManager.saveCurrentUserDetails(realName: "Fangming Ning", completion: { (error) in
+                    if error != "" {
+                        print(error)
+                    }
+                })
+            }else{
+                print("verufy")
+            }
         } else if indexPath.section == 3 {
             let confirm = UIAlertController(title: "Are you sure", message: "Your credentials will be removed",
                                             preferredStyle: .alert)
