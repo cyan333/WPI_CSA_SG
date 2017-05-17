@@ -38,7 +38,7 @@ open class WCUserManager{
                     completion(serverDown, "")
                     return
                 }
-                let dict = WCUtil.convertToDictionary(data: response.data)
+                let dict = WCUtils.convertToDictionary(data: response.data)
                 if dict!["error"] as! String != "" {
                     completion(dict!["error"]! as! String, "")
                 }else{
@@ -61,7 +61,7 @@ open class WCUserManager{
                     completion(serverDown, nil)
                     return
                 }
-                let dict = WCUtil.convertToDictionary(data: response.data)
+                let dict = WCUtils.convertToDictionary(data: response.data)
                 if dict!["error"] as! String != "" {
                     completion(dict!["error"]! as! String, nil)
                 }else{
@@ -93,7 +93,7 @@ open class WCUserManager{
                     completion(serverDown)
                     return
                 }
-                let dict = WCUtil.convertToDictionary(data: response.data)
+                let dict = WCUtils.convertToDictionary(data: response.data)
                 if dict!["error"] as! String != "" {
                     completion(dict!["error"]! as! String)
                 }else{
@@ -117,7 +117,7 @@ open class WCUserManager{
                     completion(serverDown)
                     return
                 }
-                let dict = WCUtil.convertToDictionary(data: response.data)
+                let dict = WCUtils.convertToDictionary(data: response.data)
                 if dict!["error"] as! String != "" {
                     completion(dict!["error"]! as! String)
                 }else{

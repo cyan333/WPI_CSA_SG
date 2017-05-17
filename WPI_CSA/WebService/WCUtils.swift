@@ -1,5 +1,5 @@
 //
-//  WCUtil.swift
+//  WCUtils.swift
 //  WPI_CSA
 //
 //  Created by NingFangming on 5/5/17.
@@ -22,7 +22,7 @@ let serverDown = "Server down"
 //let HTTPError = "Http API error"
 let respondFormatError = "Incorrect respond format"
 
-open class WCUtil{
+open class WCUtils{
     open class func convertToDictionary(data: Data) -> [String: Any]? {
         do {
             return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]

@@ -8,6 +8,10 @@
 
 import UIKit
 
+class SettingOfflineCell: UITableViewCell {
+    @IBOutlet weak var reconnectButton: UIButton!
+}
+
 class SettingLoginCell: UITableViewCell {
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -67,7 +71,7 @@ class SettingViewController: UIViewController {
                     return
                 }
                 WCUserManager.loginUser(withUsername: username,
-                                        andPassword: WCUtil.md5(password + salt),
+                                        andPassword: WCUtils.md5(password + salt),
                                         completion: { (error, user) in
                                             if error != "" {
                                                 self.showAlertOnMainThread(withErrorMessage: error)
@@ -75,12 +79,16 @@ class SettingViewController: UIViewController {
                                                 WCService.currentUser = user
                                                 
                                                 SGDatabase.setParam(named: "username", withValue: username)
-                                                SGDatabase.setParam(named: "password", withValue: WCUtil.md5(password + salt))
+                                                SGDatabase.setParam(named: "password", withValue: WCUtils.md5(password + salt))
                                                 self.reloadUserCell()
                                             }
                 })
             }
         }
+    }
+    
+    func reconnect(){
+        print("recon")
     }
     
     func showAlertOnMainThread(withErrorMessage errorMsg:String) {
@@ -133,7 +141,11 @@ extension SettingViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            if loginMode {
+            if WCService.appMode == .Offline{
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SettingOfflineCell") as! SettingOfflineCell
+                cell.reconnectButton.addTarget(self, action: #selector(reconnect), for: .touchUpInside)
+                return cell
+            }else if WCService.appMode == .Login {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingLoginCell") as! SettingLoginCell
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
                 return cell

@@ -22,7 +22,7 @@ open class WCService {
                     completion(serverDown, "", "", "")
                     return
                 }
-                let dict = WCUtil.convertToDictionary(data: response.data)
+                let dict = WCUtils.convertToDictionary(data: response.data)
                 if let dict = dict {
                     if let error = dict["error"] as? String {
                         if error != "" {
@@ -57,7 +57,7 @@ open class WCService {
                     completion(serverDown)
                     return
                 }
-                let dict = WCUtil.convertToDictionary(data: response.data)
+                let dict = WCUtils.convertToDictionary(data: response.data)
                 if let dict = dict {
                     if let error = dict["error"] as? String{
                         if error != "" {

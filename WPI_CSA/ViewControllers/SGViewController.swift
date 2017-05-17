@@ -1,6 +1,6 @@
 //
 //  MainViewController.swift
-//  WPI SG
+//  WPI_CSA
 //
 //  Created by NingFangming on 3/5/17.
 //  Copyright © 2017 fangming. All rights reserved.
@@ -68,6 +68,7 @@ class SGViewController: UIViewController {
                 }))
                 self.present(alert, animated: true, completion: nil)
             }else if status == "Ok"{
+                WCService.appMode = .Login
                 if let password = SGDatabase.getParam(named: "password"),
                     let username = SGDatabase.getParam(named: "username"){
                     if password != "" && username != ""{
@@ -81,8 +82,14 @@ class SGViewController: UIViewController {
                         })
                     }
                 }
-            }else{
+            }else if status == serverDown{
+                
+            }else {
                 print(status + title + msg)
+                let alert = UIAlertController(title: title, message: "Internal error. Please check app updates and contact admin@fmning.com", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                
             }
         })
         
@@ -103,7 +110,7 @@ class SGViewController: UIViewController {
         
         let reportAction = UIAlertAction(title: "Report a problem", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            if WCService.currentUser == nil {
+            if WCService.appMode == .Login {
                 let alert = UIAlertController(title: nil, message: "No user logged in. Please login so that we can get back to you and keep track of reports.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Login & Register", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
