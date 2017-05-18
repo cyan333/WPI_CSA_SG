@@ -12,7 +12,6 @@ import Foundation
 
 open class WCService {
     static var currentUser: WCUser? = nil
-    static var appMode: AppMode = .Offline
     
     open class func checkSoftwareVersion(version: String, completion: @escaping (String, String, String, String) -> Void){
         do {
@@ -89,8 +88,4 @@ open class WCService {
     
 }
 
-enum AppMode{
-    case Offline
-    case Login
-    case LoggedOn
-}
+

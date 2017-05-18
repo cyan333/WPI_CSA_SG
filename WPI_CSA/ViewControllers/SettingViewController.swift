@@ -39,22 +39,18 @@ class SettingActionCell: UITableViewCell {
 class SettingViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    var loginMode = true
+    //var loginMode = true
     
     override func viewDidLoad() {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
-        if WCService.currentUser != nil {loginMode = false}
         NotificationCenter.default.addObserver(self, selector: #selector(reloadUserCell),
                                                name: NSNotification.Name.init("reloadUserCell"), object: nil)
     }
     
     func reloadUserCell() {
-        if WCService.currentUser != nil {
-            self.loginMode = false
-            OperationQueue.main.addOperation{
-                self.tableView.reloadData()
-            }
+        OperationQueue.main.addOperation{
+            self.tableView.reloadData()
         }
     }
     
@@ -63,18 +59,16 @@ class SettingViewController: UIViewController {
             let username = cell.usernameField.text!
             let password = cell.passwordField.text!
             WCUserManager.getSaltForUser(withUsername: username) { (error, salt) in
-                if error == serverDown {
-                    self.showAlertOnMainThread(withErrorMessage: "The server is down. Please email admin@fmning.com for help")
-                    return
-                } else if error != "" {
-                    self.showAlertOnMainThread(withErrorMessage: error)
+                if error != serverDown {
+                    Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                     return
                 }
                 WCUserManager.loginUser(withUsername: username,
                                         andPassword: WCUtils.md5(password + salt),
                                         completion: { (error, user) in
                                             if error != "" {
-                                                self.showAlertOnMainThread(withErrorMessage: error)
+                                                Utils.process(errorMessage: error, onViewController: self,
+                                                              showingServerdownAlert: true)
                                             } else {
                                                 WCService.currentUser = user
                                                 
@@ -87,27 +81,23 @@ class SettingViewController: UIViewController {
         }
     }
     
+    
     func reconnect(){
-        print("recon")
+        Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: true)
     }
     
-    func showAlertOnMainThread(withErrorMessage errorMsg:String) {
-        OperationQueue.main.addOperation{
-            let alert = UIAlertController(title: "Something goes wrong", message: errorMsg, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
+    
     
 }
 
 
 extension SettingViewController : UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        if loginMode {
-            return 2
-        }else{
+        if Utils.appMode == .LoggedOn
+        {
             return 4
+        }else{
+            return 2
         }
     }
     
@@ -133,7 +123,7 @@ extension SettingViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         if indexPath.section == 0 {
-            return loginMode ? 120 : 100
+            return Utils.appMode == .Login ? 120 : 100
         }else{
             return 50
         }
@@ -141,11 +131,11 @@ extension SettingViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            if WCService.appMode == .Offline{
+            if Utils.appMode == .Offline{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingOfflineCell") as! SettingOfflineCell
                 cell.reconnectButton.addTarget(self, action: #selector(reconnect), for: .touchUpInside)
                 return cell
-            }else if WCService.appMode == .Login {
+            }else if Utils.appMode == .Login {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingLoginCell") as! SettingLoginCell
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
                 return cell
@@ -254,7 +244,7 @@ extension SettingViewController : UITableViewDelegate {
             confirm.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
                 WCService.currentUser = nil
-                self.loginMode = true
+                Utils.appMode = .Login
                 SGDatabase.deleteParam(named: "username")
                 SGDatabase.deleteParam(named: "password")
                 tableView.reloadData()
@@ -267,7 +257,7 @@ extension SettingViewController : UITableViewDelegate {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if loginMode {
+        if Utils.appMode == .Login {
             if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingLoginCell{
                 cell.usernameField.resignFirstResponder()
                 cell.passwordField.resignFirstResponder()

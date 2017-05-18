@@ -54,44 +54,7 @@ class SGViewController: UIViewController {
             }
             
         }
-        var versionToCheck = softwareVersion
-        if let version = SGDatabase.getParam(named: "suppressedVersion"){
-            versionToCheck = version
-        }
-        WCService.checkSoftwareVersion(version: versionToCheck, completion: { (status, title, msg, version) in
-            if status == "AppUpdate" {
-                let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
-                alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
-                    (alert: UIAlertAction!) -> Void in
-                    SGDatabase.setParam(named: "suppressedVersion", withValue: version)
-                }))
-                self.present(alert, animated: true, completion: nil)
-            }else if status == "Ok"{
-                WCService.appMode = .Login
-                if let password = SGDatabase.getParam(named: "password"),
-                    let username = SGDatabase.getParam(named: "username"){
-                    if password != "" && username != ""{
-                        WCUserManager.loginUser(withUsername: username,
-                                                andPassword: password,
-                                                completion: { (error, user) in
-                                                    if error == "" {
-                                                        WCService.currentUser = user
-                                                        NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                                    }
-                        })
-                    }
-                }
-            }else if status == serverDown{
-                
-            }else {
-                print(status + title + msg)
-                let alert = UIAlertController(title: title, message: "Internal error. Please check app updates and contact admin@fmning.com", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
-            }
-        })
+        Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
         
     }
     
@@ -100,8 +63,8 @@ class SGViewController: UIViewController {
     }
     
     @IBAction func action(_ sender: UIButton) {
-        if WCService.appMode == .Offline {
-            let alert = UIAlertController(title: nil, message: "This feature won't work in offline mode. Please go to setting and to check network status.", preferredStyle: .alert)
+        if Utils.appMode == .Offline {
+            let alert = UIAlertController(title: nil, message: "This feature won't work in offline mode. Please go to setting and check network status.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
@@ -110,7 +73,7 @@ class SGViewController: UIViewController {
         
         let reportAction = UIAlertAction(title: "Report a problem", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            if WCService.appMode == .Login {
+            if Utils.appMode == .Login {
                 let alert = UIAlertController(title: nil, message: "No user logged in. Please login so that we can get back to you and keep track of reports.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Login & Register", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
