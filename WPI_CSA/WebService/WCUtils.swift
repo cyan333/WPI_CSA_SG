@@ -15,6 +15,8 @@ let pathGetSalt = "login_for_salt"
 let pathLogin = "login"
 let pathGetUserDetails = "get_user_detail"
 let pathSetUserDetails = "save_current_user_detail"
+let pathEmailConfirmation = "send_email_confirmation"
+let pathChangePassword = "change_password"
 
 let softwareVersion = "0.00"
 

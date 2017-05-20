@@ -100,60 +100,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WPI_CSA/ViewControllers/SettingViewController.swift"
-            timestampString = "516771283.405889"
+            timestampString = "516948603.279015"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
             landmarkName = "reconnect()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WPI_CSA/Helpers/Utils.swift"
-            timestampString = "516771316.880027"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "checkVerisonInfoAndLoginUser(onViewController:showingServerdownAlert:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WPI_CSA/Helpers/Utils.swift"
-            timestampString = "516771342.807569"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
-            landmarkName = "checkVerisonInfoAndLoginUser(onViewController:showingServerdownAlert:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "WPI_CSA/Helpers/Utils.swift"
-            timestampString = "516771613.198845"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "checkVerisonInfoAndLoginUser(onViewController:showingServerdownAlert:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -81,6 +81,11 @@ open class Utils {
         
     }
     
+    open class func show(alertMessage alert: String, onViewController vc: UIViewController) {
+        let alert = UIAlertController(title: nil, message: alert, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        vc.present(alert, animated: true, completion: nil)
+    }
     
     
 }

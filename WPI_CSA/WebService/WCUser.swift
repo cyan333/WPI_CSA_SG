@@ -130,4 +130,48 @@ open class WCUserManager{
         }
     }
     
+    open class func sendEmailConfirmation(completion: @escaping(_ error: String) -> Void){
+        do {
+            let params = ["accessToken": WCService.currentUser!.accessToken]
+            let opt = try HTTP.POST(serviceBase + pathEmailConfirmation, parameters: params)
+            opt.start { response in
+                if response.error != nil {
+                    completion(serverDown)
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String)
+                }else{
+                    completion("")
+                }
+            }
+        } catch let error{
+            print (error.localizedDescription)
+            completion(serverDown)
+        }
+    }
+    
+    open class func changePassword(from oldPass: String, to newPass: String,
+                                   completion: @escaping(_ error: String, _ accessToken: String) -> Void){
+        do {
+            let params = ["accessToken": WCService.currentUser!.accessToken, "oldPwd": oldPass, "newPwd": newPass]
+            let opt = try HTTP.POST(serviceBase + pathChangePassword, parameters: params)
+            opt.start { response in
+                if response.error != nil {
+                    completion(serverDown, "")
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String, "")
+                }else{
+                    completion("", dict!["accessToken"]! as! String)
+                }
+            }
+        } catch let error{
+            print (error.localizedDescription)
+            completion(serverDown, "")
+        }
+    }
 }

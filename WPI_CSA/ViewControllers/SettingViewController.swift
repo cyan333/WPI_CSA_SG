@@ -39,13 +39,73 @@ class SettingActionCell: UITableViewCell {
 class SettingViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    //var loginMode = true
+    
+    var oldPass = ""
+    var newPass = ""
+    var confirmNewPass = ""
+    let changePwdController = UIAlertController(title: "Change password", message: "", preferredStyle: .alert)
+    var confirmButton: UIAlertAction? = nil
     
     override func viewDidLoad() {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadUserCell),
                                                name: NSNotification.Name.init("reloadUserCell"), object: nil)
+        
+        changePwdController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Enter current password"
+            textField.isSecureTextEntry = true
+            textField.tag = 1
+            textField.addTarget(self, action: #selector(self.textFieldDidChange(textField:)), for: .editingChanged)
+        }
+        changePwdController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Enter new password"
+            textField.isSecureTextEntry = true
+            textField.tag = 2
+            textField.addTarget(self, action: #selector(self.textFieldDidChange(textField:)), for: .editingChanged)
+        }
+        changePwdController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "Confirm new password"
+            textField.isSecureTextEntry = true
+            textField.tag = 3
+            textField.addTarget(self, action: #selector(self.textFieldDidChange(textField:)), for: .editingChanged)
+        }
+        
+        confirmButton = UIAlertAction(title: "Confirm", style: .default, handler: {
+            alert -> Void in
+            self.changePwdController.textFields![0].text = ""
+            self.changePwdController.textFields![1].text = ""
+            self.changePwdController.textFields![2].text = ""
+            
+            let username = WCService.currentUser!.username!
+            WCUserManager.getSaltForUser(withUsername: username) { (error, salt) in
+                if error == "" {
+                    let encryptedNewPwd = WCUtils.md5(self.newPass + salt)
+                    WCUserManager.changePassword(from: WCUtils.md5(self.oldPass + salt),
+                                                 to: encryptedNewPwd,
+                                                 completion: { (error, accessToken) in
+                                                    if error == ""{
+                                                        WCService.currentUser?.accessToken = accessToken
+                                                        SGDatabase.setParam(named: "password", withValue: encryptedNewPwd)
+                                                        Utils.show(alertMessage: "Done", onViewController: self)
+                                                    }else{
+                                                        Utils.process(errorMessage: error,
+                                                                      onViewController: self,
+                                                                      showingServerdownAlert: true)                                                    }
+                    })
+                } else {
+                    Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                }
+            }
+        })
+        confirmButton!.isEnabled = false
+        changePwdController.addAction(confirmButton!)
+        changePwdController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {
+            alert -> Void in
+            self.changePwdController.textFields![0].text = ""
+            self.changePwdController.textFields![1].text = ""
+            self.changePwdController.textFields![2].text = ""
+        }))
     }
     
     func reloadUserCell() {
@@ -59,24 +119,24 @@ class SettingViewController: UIViewController {
             let username = cell.usernameField.text!
             let password = cell.passwordField.text!
             WCUserManager.getSaltForUser(withUsername: username) { (error, salt) in
-                if error != serverDown {
+                if error == "" {
+                    WCUserManager.loginUser(withUsername: username,
+                                            andPassword: WCUtils.md5(password + salt),
+                                            completion: { (error, user) in
+                                                if error == "" {
+                                                    WCService.currentUser = user
+                                                    Utils.appMode = .LoggedOn
+                                                    SGDatabase.setParam(named: "username", withValue: username)
+                                                    SGDatabase.setParam(named: "password", withValue: WCUtils.md5(password + salt))
+                                                    self.reloadUserCell()
+                                                } else {
+                                                    Utils.process(errorMessage: error, onViewController: self,
+                                                                  showingServerdownAlert: true)
+                                                }
+                    })
+                } else {
                     Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
-                    return
                 }
-                WCUserManager.loginUser(withUsername: username,
-                                        andPassword: WCUtils.md5(password + salt),
-                                        completion: { (error, user) in
-                                            if error != "" {
-                                                Utils.process(errorMessage: error, onViewController: self,
-                                                              showingServerdownAlert: true)
-                                            } else {
-                                                WCService.currentUser = user
-                                                
-                                                SGDatabase.setParam(named: "username", withValue: username)
-                                                SGDatabase.setParam(named: "password", withValue: WCUtils.md5(password + salt))
-                                                self.reloadUserCell()
-                                            }
-                })
             }
         }
     }
@@ -87,6 +147,62 @@ class SettingViewController: UIViewController {
     }
     
     
+    func textFieldDidChange(textField: UITextField) {
+        switch textField.tag {
+        case 1:
+            oldPass = textField.text!
+            break
+        case 2:
+            newPass = textField.text!
+            break
+        case 3:
+            confirmNewPass = textField.text!
+            break
+        default:
+            break
+        }
+        var error = ""
+        if oldPass == "" {
+            error = "Enter current password"
+        }else{
+            error = checkPasswordStrength(password: newPass)
+            if error == "" && newPass != confirmNewPass {
+                error = "New passwords don't match."
+            }
+        }
+        //let paragraph = NSMutableParagraphStyle()
+        //paragraph.alignment = .right
+        let attributedString = NSAttributedString(string: error, attributes: [
+            //NSParagraphStyleAttributeName : paragraph,
+            NSForegroundColorAttributeName : UIColor.red
+            ])
+        changePwdController.setValue(attributedString, forKey: "attributedMessage")
+        if error == "" {
+            confirmButton!.isEnabled = true
+        }else{
+            confirmButton!.isEnabled = false
+        }
+    }
+    
+    func checkPasswordStrength(password: String) -> String{
+        if password.characters.count < 6 {
+            return "New password must contain at least 6 characters"
+        } else {
+            let letters = NSCharacterSet.letters
+            let range = password.rangeOfCharacter(from: letters)
+            if range != nil {
+                let ints = NSCharacterSet.decimalDigits
+                let intRange = password.rangeOfCharacter(from: ints)
+                if intRange != nil {
+                    return ""
+                } else {
+                    return "New password must contain at least one number"
+                }
+            } else {
+                return "New password must contain at least one letter"
+            }
+        }
+    }
     
 }
 
@@ -137,6 +253,8 @@ extension SettingViewController : UITableViewDataSource {
                 return cell
             }else if Utils.appMode == .Login {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingLoginCell") as! SettingLoginCell
+                cell.usernameField.text = "synfm123@gmail.com"
+                cell.passwordField.text = "flash"
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
                 return cell
             }else{
@@ -206,20 +324,18 @@ extension SettingViewController : UITableViewDataSource {
 
 extension SettingViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 1 {
             switch indexPath.row {
             case 0:
-                tableView.deselectRow(at: indexPath, animated: true)
                 UIApplication.shared.open(NSURL(string: "https://www.facebook.com/wpi.csa") as! URL,
                                           options: [:], completionHandler: nil)
                 break
             case 1:
-                tableView.deselectRow(at: indexPath, animated: true)
                 UIApplication.shared.open(NSURL(string: "https://www.instagram.com/wpicsa") as! URL,
                                           options: [:], completionHandler: nil)
                 break
             case 2:
-                tableView.deselectRow(at: indexPath, animated: true)
                 UIApplication.shared.open(NSURL(string: "https://www.youtube.com/user/CSAWPI") as! URL,
                                           options: [:], completionHandler: nil)
                 break
@@ -228,14 +344,18 @@ extension SettingViewController : UITableViewDelegate {
             }
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {
-                print("pwd")
-                WCUserManager.saveCurrentUserDetails(realName: "Fangming Ning", completion: { (error) in
-                    if error != "" {
-                        print(error)
+                self.present(changePwdController, animated: true, completion: nil)
+            }else{
+                WCUserManager.sendEmailConfirmation(completion: { (error) in
+                    if error == "" {
+                        Utils.show(alertMessage: "An email has been sent to " + WCService.currentUser!.username! +
+                                    " with a link to confirm your email. Please click on the link in 24 hours. " +
+                                    "Please check your junk folder if you cannot see the email.",
+                                   onViewController: self)
+                    }else{
+                        Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                     }
                 })
-            }else{
-                print("verufy")
             }
         } else if indexPath.section == 3 {
             let confirm = UIAlertController(title: "Are you sure", message: "Your credentials will be removed",
@@ -251,8 +371,6 @@ extension SettingViewController : UITableViewDelegate {
             }))
             confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
             self.present(confirm, animated: true, completion: nil)
-            
-            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
@@ -264,6 +382,4 @@ extension SettingViewController : UITableViewDelegate {
             }
         }
     }
-    
-    
 }
