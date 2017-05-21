@@ -11,15 +11,27 @@ import UIKit
 class ReportViewController: UIViewController, UITextViewDelegate {
     
     @IBOutlet weak var emailTxtField: UITextField!
+    @IBOutlet weak var separatorView: UIView!
     @IBOutlet weak var reportTxtView: UITextView!
     @IBOutlet weak var placeHolder: UILabel!
     
     var menuId: Int?
+    var reportHeightOffset: CGFloat = 120.0
     
     override func viewDidLoad() {
-        if let user = WCService.currentUser {
-            emailTxtField.text = user.username
+        if Utils.appMode == .LoggedOn {
             emailTxtField.removeFromSuperview()
+            separatorView.removeFromSuperview()
+            reportHeightOffset -= 35
+            let reportTxtViewTop = self.view.constraints.filter { $0.identifier == "reportTxtViewTop" }
+            if let reportTxtViewTop = reportTxtViewTop.first {
+                reportTxtViewTop.constant = 10
+            }
+            let reportPlaceHolderTop = self.view.constraints.filter { $0.identifier == "reportPlaceHolderTop" }
+            if let reportPlaceHolderTop = reportPlaceHolderTop.first {
+                reportPlaceHolderTop.constant = 16
+            }
+            
             reportTxtView.becomeFirstResponder()
         }else if let value = SGDatabase.getParam(named: "email") {
             emailTxtField.text = value
@@ -54,16 +66,24 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func doneClicked(_ sender: UIBarButtonItem) {
-        let email = emailTxtField.text!.trimmingCharacters(in: .whitespaces)
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
-        if email != "" && emailTest.evaluate(with: email) {
-            SGDatabase.setParam(named: "email", withValue: email)
-        }else if email != "" {
-            let alert = UIAlertController(title: nil, message: "Please check email format", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            return
+        var userId: Int?
+        var email: String
+        
+        if Utils.appMode == .LoggedOn {
+            userId = WCService.currentUser!.id
+            email = WCService.currentUser!.username!
+        } else {
+            email = emailTxtField.text!.trimmingCharacters(in: .whitespaces)
+            if email != "" && Utils.isEmailAddress(email: email) {
+                SGDatabase.setParam(named: "email", withValue: email)
+            }else if email != "" {
+                let alert = UIAlertController(title: nil, message: "Please check email format", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
         }
+        
         
         let report = reportTxtView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         if report == "" {
@@ -73,7 +93,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             return
         }
         
-        WCService.reportSGProblem(forMenu: menuId!, byUser: nil, andEmail: email, withReport: report) { (error) in
+        WCService.reportSGProblem(forMenu: menuId!, byUser: userId, andEmail: email, withReport: report) { (error) in
             if error != "" {
                 OperationQueue.main.addOperation{
                     let alert = UIAlertController(title: "Something goes wrong", message: error, preferredStyle: .alert)
@@ -93,7 +113,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             
             let heightConstraint = reportTxtView.constraints.filter { $0.identifier == "reportTxtViewHeight" }
             if let heightConstraint = heightConstraint.first {
-                heightConstraint.constant = UIScreen.main.bounds.height - (keyboardFrame?.height)! - 120
+                heightConstraint.constant = UIScreen.main.bounds.height - (keyboardFrame?.height)! - reportHeightOffset
             }
         }
     }

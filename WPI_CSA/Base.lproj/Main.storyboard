@@ -46,7 +46,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K2f-GJ-jiS">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K2f-GJ-jiS" userLabel="Separator">
                                 <rect key="frame" x="10" y="109" width="355" height="1"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -67,11 +67,11 @@
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="5kg-sz-laV" secondAttribute="trailing" constant="10" id="17M-Ae-oEt"/>
                             <constraint firstItem="K2f-GJ-jiS" firstAttribute="top" secondItem="Vlv-ux-Svd" secondAttribute="bottom" constant="45" id="3jX-UF-wMp"/>
-                            <constraint firstItem="Ncb-Bz-w6d" firstAttribute="top" secondItem="Vlv-ux-Svd" secondAttribute="bottom" constant="45" id="52z-bS-Ihx"/>
+                            <constraint firstItem="Ncb-Bz-w6d" firstAttribute="top" secondItem="Vlv-ux-Svd" secondAttribute="bottom" constant="45" identifier="reportTxtViewTop" id="52z-bS-Ihx"/>
                             <constraint firstAttribute="trailing" secondItem="mH1-DQ-m6A" secondAttribute="trailing" constant="10" id="547-4d-AsT"/>
                             <constraint firstItem="mH1-DQ-m6A" firstAttribute="leading" secondItem="lLw-ZH-ohg" secondAttribute="leading" constant="15" id="KTy-V6-INT"/>
                             <constraint firstItem="5kg-sz-laV" firstAttribute="leading" secondItem="lLw-ZH-ohg" secondAttribute="leadingMargin" constant="-1" id="LuJ-xw-Nwf"/>
-                            <constraint firstItem="5kg-sz-laV" firstAttribute="top" secondItem="Vlv-ux-Svd" secondAttribute="bottom" constant="51" id="NrJ-1A-Kcj"/>
+                            <constraint firstItem="5kg-sz-laV" firstAttribute="top" secondItem="Vlv-ux-Svd" secondAttribute="bottom" constant="51" identifier="reportPlaceHolderTop" id="NrJ-1A-Kcj"/>
                             <constraint firstAttribute="trailing" secondItem="Ncb-Bz-w6d" secondAttribute="trailing" constant="10" id="Oyn-Si-UGX"/>
                             <constraint firstItem="K2f-GJ-jiS" firstAttribute="leading" secondItem="lLw-ZH-ohg" secondAttribute="leading" constant="10" id="YkN-Qr-rPW"/>
                             <constraint firstAttribute="trailing" secondItem="K2f-GJ-jiS" secondAttribute="trailing" constant="10" id="bvy-dB-pqP"/>
@@ -97,6 +97,7 @@
                         <outlet property="emailTxtField" destination="mH1-DQ-m6A" id="obn-OZ-85d"/>
                         <outlet property="placeHolder" destination="5kg-sz-laV" id="4Pi-rN-RIf"/>
                         <outlet property="reportTxtView" destination="Ncb-Bz-w6d" id="9eW-Qh-fXY"/>
+                        <outlet property="separatorView" destination="K2f-GJ-jiS" id="Xtr-jg-ABA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pZd-VL-bz5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -476,6 +477,9 @@
                                                         <constraint firstAttribute="width" constant="60" id="u1i-yr-Kw1"/>
                                                     </constraints>
                                                     <state key="normal" title="Register"/>
+                                                    <connections>
+                                                        <segue destination="PBu-Sd-YFH" kind="presentation" id="SLZ-hR-T7Z"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0VB-Zr-ivk">
                                                     <rect key="frame" x="227" y="82" width="46" height="30"/>
@@ -658,6 +662,28 @@
             </objects>
             <point key="canvasLocation" x="1728.8" y="653.52323838080963"/>
         </scene>
+        <!--Register-->
+        <scene sceneID="6Pg-Cp-9KN">
+            <objects>
+                <viewController id="7ob-Xc-fRC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="M9n-Zt-uYB"/>
+                        <viewControllerLayoutGuide type="bottom" id="WhQ-Of-KEs"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3TC-qM-4wS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Register" id="A2m-gy-cxQ">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="ap5-ge-Sqf"/>
+                        <barButtonItem key="rightBarButtonItem" title="Create" id="yLd-IY-fj9"/>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="btg-6b-LUP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3424.8000000000002" y="653.52323838080963"/>
+        </scene>
         <!--Main Tab Bar-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
@@ -732,6 +758,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I8v-Ga-FKy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="789.60000000000002" y="653.52323838080963"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="6DP-NA-CAP">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="PBu-Sd-YFH" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="GbJ-Ak-CxA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="7ob-Xc-fRC" kind="relationship" relationship="rootViewController" id="F6S-02-gjn"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VTa-Dh-PhO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2485.5999999999999" y="653.52323838080963"/>
         </scene>
     </scenes>
     <resources>

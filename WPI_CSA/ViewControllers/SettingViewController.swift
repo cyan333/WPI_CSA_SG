@@ -141,6 +141,10 @@ class SettingViewController: UIViewController {
         }
     }
     
+    func register(){
+        print("regi")
+    }
+    
     
     func reconnect(){
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: true)
@@ -256,6 +260,7 @@ extension SettingViewController : UITableViewDataSource {
                 cell.usernameField.text = "synfm123@gmail.com"
                 cell.passwordField.text = "flash"
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
+                cell.registerButton.addTarget(self, action: #selector(register), for: .touchUpInside)
                 return cell
             }else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingUserCell") as! SettingUserCell

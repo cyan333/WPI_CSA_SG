@@ -55,7 +55,7 @@ class SGViewController: UIViewController {
             
         }
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
-        
+        print(NSTimeZone.local.secondsFromGMT()/3600)
     }
     
     @IBAction func openMenu(_ sender: UIButton) {
@@ -71,7 +71,7 @@ class SGViewController: UIViewController {
         }
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
-        let reportAction = UIAlertAction(title: "Report a problem", style: .default, handler: {
+        let reportAction = UIAlertAction(title: "Report a problem on this page", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             if Utils.appMode == .Login {
                 let alert = UIAlertController(title: nil, message: "No user logged in. Please login so that we can get back to you and keep track of reports.", preferredStyle: .alert)

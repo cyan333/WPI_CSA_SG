@@ -82,6 +82,27 @@ open class WCUserManager{
         }
     }
     
+    open class func regesterSalt(forUsername username: String, completion: @escaping(_ error: String, _ salt: String) -> Void){
+        do {
+            let params = ["username": username, "offset": NSTimeZone.local.secondsFromGMT() / 3600] as [String : Any]
+            let opt = try HTTP.POST(serviceBase + pathRegisterSalt, parameters: params)
+            opt.start { response in
+                if response.error != nil {
+                    completion(serverDown, "")
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String, "")
+                }else{
+                    completion("", dict!["salt"]! as! String)
+                }
+            }
+        } catch let error{
+            print (error.localizedDescription)
+            completion(serverDown, "")
+        }
+    }
     
     open class func getCurrentUserDetails(completion: @escaping (_ error: String) -> Void){
         do {
