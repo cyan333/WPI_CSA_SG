@@ -92,6 +92,26 @@ open class Utils {
         return emailPredicate.evaluate(with: email)
     }
     
+    open class func checkPasswordStrength(password: String) -> String{
+        if password.characters.count < 6 {
+            return "Password must contain at least 6 chars"
+        } else {
+            let letters = NSCharacterSet.letters
+            let range = password.rangeOfCharacter(from: letters)
+            if range != nil {
+                let ints = NSCharacterSet.decimalDigits
+                let intRange = password.rangeOfCharacter(from: ints)
+                if intRange != nil {
+                    return ""
+                } else {
+                    return "Password must have at least 1 number"
+                }
+            } else {
+                return "Password must have at least 1 letter"
+            }
+        }
+    }
+    
 }
 
 enum AppMode{

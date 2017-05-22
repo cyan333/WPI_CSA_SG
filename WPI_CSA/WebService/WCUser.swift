@@ -104,6 +104,34 @@ open class WCUserManager{
         }
     }
     
+    open class func register(forUsername username: String,
+                             andEncryptedPassword password: String,
+                             completion: @escaping(_ error: String, _ user: WCUser?) -> Void){
+        do {
+            let params = ["username" : username, "password" : password]
+            let opt = try HTTP.POST(serviceBase + pathRegister, parameters: params)
+            opt.start { response in
+                if response.error != nil {
+                    completion(serverDown, nil)
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String, nil)
+                }else{
+                    let user = WCUser(id: dict!["userId"] as! Int,
+                                      username: dict!["username"] as! String,
+                                      accessToken: dict!["accessToken"] as! String)
+                    user.emailConfirmed = false
+                    completion("", user)
+                }
+            }
+        } catch let error{
+            print (error.localizedDescription)
+            completion(serverDown, nil)
+        }
+    }
+    
     open class func getCurrentUserDetails(completion: @escaping (_ error: String) -> Void){
         do {
             let params = ["accessToken": WCService.currentUser!.accessToken,

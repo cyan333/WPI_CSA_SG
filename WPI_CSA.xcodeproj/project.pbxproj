@@ -45,6 +45,7 @@
 		87DE40131EC9420A00BB49EB /* notVarified.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40111EC9420A00BB49EB /* notVarified.png */; };
 		87E5D3171ECCCCEB004E1F84 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E5D3161ECCCCEB004E1F84 /* Utils.swift */; };
 		87E5D3191ECCD009004E1F84 /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E5D3181ECCD009004E1F84 /* Facebook.png */; };
+		87E5D31B1ED1FEFA004E1F84 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E5D31A1ED1FEFA004E1F84 /* RegisterViewController.swift */; };
 		910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDB41E80BF950005CC1D /* AppDelegate.swift */; };
 		910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDB81E80BF950005CC1D /* Main.storyboard */; };
 		910CFDBC1E80BF950005CC1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 910CFDBB1E80BF950005CC1D /* Assets.xcassets */; };
@@ -97,6 +98,7 @@
 		87DE40111EC9420A00BB49EB /* notVarified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = notVarified.png; path = Icons/notVarified.png; sourceTree = "<group>"; };
 		87E5D3161ECCCCEB004E1F84 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Helpers/Utils.swift; sourceTree = "<group>"; };
 		87E5D3181ECCD009004E1F84 /* Facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Facebook.png; path = Icons/Facebook.png; sourceTree = "<group>"; };
+		87E5D31A1ED1FEFA004E1F84 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegisterViewController.swift; path = ViewControllers/RegisterViewController.swift; sourceTree = "<group>"; };
 		910CFDB11E80BF950005CC1D /* WPI_CSA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WPI_CSA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		910CFDB41E80BF950005CC1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		910CFDB91E80BF950005CC1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 			children = (
 				910CFDD31E80C1130005CC1D /* MenuViewController.swift */,
 				87C14A4B1EBE321B0031E20A /* ReportViewController.swift */,
+				87E5D31A1ED1FEFA004E1F84 /* RegisterViewController.swift */,
 				87DE40041EC765C800BB49EB /* SettingViewController.swift */,
 				910CFDD01E80C1130005CC1D /* SGViewController.swift */,
 			);
@@ -365,6 +368,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				910CFDD51E80C1130005CC1D /* Interactor.swift in Sources */,
+				87E5D31B1ED1FEFA004E1F84 /* RegisterViewController.swift in Sources */,
 				8732FE071EBD07A600B1CDB1 /* WCUtils.swift in Sources */,
 				910CFDD41E80C1130005CC1D /* DismissMenuAnimator.swift in Sources */,
 				871E35C71EBA67CB00EA483E /* Upload.swift in Sources */,

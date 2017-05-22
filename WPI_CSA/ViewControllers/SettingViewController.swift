@@ -15,7 +15,6 @@ class SettingOfflineCell: UITableViewCell {
 class SettingLoginCell: UITableViewCell {
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
 }
 
@@ -141,11 +140,6 @@ class SettingViewController: UIViewController {
         }
     }
     
-    func register(){
-        print("regi")
-    }
-    
-    
     func reconnect(){
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: true)
     }
@@ -169,7 +163,7 @@ class SettingViewController: UIViewController {
         if oldPass == "" {
             error = "Enter current password"
         }else{
-            error = checkPasswordStrength(password: newPass)
+            error = Utils.checkPasswordStrength(password: newPass)
             if error == "" && newPass != confirmNewPass {
                 error = "New passwords don't match."
             }
@@ -185,26 +179,6 @@ class SettingViewController: UIViewController {
             confirmButton!.isEnabled = true
         }else{
             confirmButton!.isEnabled = false
-        }
-    }
-    
-    func checkPasswordStrength(password: String) -> String{
-        if password.characters.count < 6 {
-            return "New password must contain at least 6 characters"
-        } else {
-            let letters = NSCharacterSet.letters
-            let range = password.rangeOfCharacter(from: letters)
-            if range != nil {
-                let ints = NSCharacterSet.decimalDigits
-                let intRange = password.rangeOfCharacter(from: ints)
-                if intRange != nil {
-                    return ""
-                } else {
-                    return "New password must contain at least one number"
-                }
-            } else {
-                return "New password must contain at least one letter"
-            }
         }
     }
     
@@ -260,7 +234,6 @@ extension SettingViewController : UITableViewDataSource {
                 cell.usernameField.text = "synfm123@gmail.com"
                 cell.passwordField.text = "flash"
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
-                cell.registerButton.addTarget(self, action: #selector(register), for: .touchUpInside)
                 return cell
             }else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingUserCell") as! SettingUserCell
