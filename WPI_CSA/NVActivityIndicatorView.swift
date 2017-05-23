@@ -88,10 +88,12 @@ public final class NVActivityIndicatorView: UIView {
     public static var DEFAULT_TEXT_COLOR = UIColor.white
 
     /// Default padding. Default value is 0.
-    public static var DEFAULT_PADDING: CGFloat = 0
+    public static var DEFAULT_PADDING: CGFloat = 25
+    
+    public static var DEFAULT_INDICATOR_BACKGROUND_COLOR = UIColor.gray
 
     /// Default size of activity indicator view in UI blocker. Default value is 60x60.
-    public static var DEFAULT_BLOCKER_SIZE = CGSize(width: 60, height: 60)
+    public static var DEFAULT_BLOCKER_SIZE = CGSize(width: 80, height: 80)
 
     /// Default display time threshold to actually display UI blocker. Default value is 0 ms.
     public static var DEFAULT_BLOCKER_DISPLAY_TIME_THRESHOLD = 0
@@ -106,7 +108,7 @@ public final class NVActivityIndicatorView: UIView {
     public static var DEFAULT_BLOCKER_MESSAGE_FONT = UIFont.boldSystemFont(ofSize: 20)
 
     /// Default background color of UI blocker. Default value is UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-    public static var DEFAULT_BLOCKER_BACKGROUND_COLOR = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
+    public static var DEFAULT_BLOCKER_BACKGROUND_COLOR = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
 
     /// Animation type.
     public var type: NVActivityIndicatorType = NVActivityIndicatorView.DEFAULT_TYPE
@@ -165,6 +167,8 @@ public final class NVActivityIndicatorView: UIView {
         self.color = color ?? NVActivityIndicatorView.DEFAULT_COLOR
         self.padding = padding ?? NVActivityIndicatorView.DEFAULT_PADDING
         super.init(frame: frame)
+        self.layer.cornerRadius = 8.0
+        self.backgroundColor = NVActivityIndicatorView.DEFAULT_INDICATOR_BACKGROUND_COLOR
         isHidden = true
     }
 

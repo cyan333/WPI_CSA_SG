@@ -24,17 +24,18 @@ class RegisterViewController: UIViewController {
         passwordField.isSecureTextEntry = true
         passwordConfirmField.isSecureTextEntry = true
         
-        self.view.backgroundColor = UIColor.black
-        let indi = NVActivityIndicatorView(frame: CGRect(x: 100, y: 200, width: 30, height: 30))
-        indi.padding = 20
-        self.view.addSubview(indi)
-        indi.startAnimating()
+        let activityData = ActivityData()
         
+        NVActivityIndicatorPresenter.sharedInstance.startAnimating(activityData)
+        
+        let when = DispatchTime.now() + 4 // change 2 to desired number of seconds
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
+        }
     }
     
     @IBAction func cancelClicked(_ sender: Any) {
-        //self.dismiss(animated: true, completion: nil)
-        
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func registerClicked(_ sender: Any) {
