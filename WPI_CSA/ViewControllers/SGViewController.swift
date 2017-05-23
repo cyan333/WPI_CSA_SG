@@ -55,7 +55,6 @@ class SGViewController: UIViewController {
             
         }
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
-        print(NSTimeZone.local.secondsFromGMT()/3600)
     }
     
     @IBAction func openMenu(_ sender: UIButton) {

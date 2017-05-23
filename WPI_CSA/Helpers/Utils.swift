@@ -18,6 +18,7 @@ open class Utils {
             versionToCheck = version
         }
         WCService.checkSoftwareVersion(version: versionToCheck, completion: { (status, title, msg, version) in
+            appMode = .Login
             if status == "AppUpdate" {
                 let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
@@ -27,7 +28,6 @@ open class Utils {
                 }))
                 vc.present(alert, animated: true, completion: nil)
             }else if status == "Ok"{
-                appMode = .Login
                 if let password = SGDatabase.getParam(named: "password"),
                     let username = SGDatabase.getParam(named: "username"){
                     if password != "" && username != ""{
@@ -82,9 +82,11 @@ open class Utils {
     }
     
     open class func show(alertMessage alert: String, onViewController vc: UIViewController) {
-        let alert = UIAlertController(title: nil, message: alert, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        vc.present(alert, animated: true, completion: nil)
+        OperationQueue.main.addOperation{
+            let alert = UIAlertController(title: nil, message: alert, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            vc.present(alert, animated: true, completion: nil)
+        }
     }
     
     open class func isEmailAddress(email: String) -> Bool {

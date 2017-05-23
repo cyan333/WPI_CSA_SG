@@ -35,6 +35,10 @@
 		87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ADA8281E8227C300EF81A4 /* SGDatabase.swift */; };
 		87ADA82C1E82300800EF81A4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */; };
 		87C14A4C1EBE321B0031E20A /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C14A4B1EBE321B0031E20A /* ReportViewController.swift */; };
+		87CAC3961ED3D61D004D0A97 /* NVActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */; };
+		87CAC3981ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */; };
+		87CAC39A1ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CAC3991ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift */; };
+		87CAC39C1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CAC39B1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift */; };
 		87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CD3A491E8494E900C9E5F3 /* Menu.swift */; };
 		87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC11EC41DF800BB49EB /* WCUser.swift */; };
 		87DE40051EC765C800BB49EB /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE40041EC765C800BB49EB /* SettingViewController.swift */; };
@@ -88,6 +92,10 @@
 		87ADA8281E8227C300EF81A4 /* SGDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SGDatabase.swift; path = Database/SGDatabase.swift; sourceTree = "<group>"; };
 		87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		87C14A4B1EBE321B0031E20A /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportViewController.swift; path = ViewControllers/ReportViewController.swift; sourceTree = "<group>"; };
+		87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorView.swift; sourceTree = "<group>"; };
+		87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationBallPulseSync.swift; sourceTree = "<group>"; };
+		87CAC3991ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationDelegate.swift; sourceTree = "<group>"; };
+		87CAC39B1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorShape.swift; sourceTree = "<group>"; };
 		87CD3A491E8494E900C9E5F3 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Menu.swift; path = Objects/Menu.swift; sourceTree = "<group>"; };
 		87DE3FC11EC41DF800BB49EB /* WCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUser.swift; path = WebService/WCUser.swift; sourceTree = "<group>"; };
 		87DE40041EC765C800BB49EB /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingViewController.swift; path = ViewControllers/SettingViewController.swift; sourceTree = "<group>"; };
@@ -151,6 +159,7 @@
 		8732FE081EBD628500B1CDB1 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				87CAC3941ED3D5A4004D0A97 /* ActivityIndicator */,
 				910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */,
 				910CFDCF1E80C1130005CC1D /* Interactor.swift */,
 				910CFDD11E80C1130005CC1D /* MenuHelper.swift */,
@@ -223,6 +232,17 @@
 				910CFDD01E80C1130005CC1D /* SGViewController.swift */,
 			);
 			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		87CAC3941ED3D5A4004D0A97 /* ActivityIndicator */ = {
+			isa = PBXGroup;
+			children = (
+				87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */,
+				87CAC39B1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift */,
+				87CAC3991ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift */,
+				87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */,
+			);
+			name = ActivityIndicator;
 			sourceTree = "<group>";
 		};
 		87CD3A481E8494A400C9E5F3 /* Objects */ = {
@@ -374,6 +394,7 @@
 				871E35C71EBA67CB00EA483E /* Upload.swift in Sources */,
 				87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */,
 				910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */,
+				87CAC3961ED3D61D004D0A97 /* NVActivityIndicatorView.swift in Sources */,
 				910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */,
 				8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */,
 				877E61581E8C4DD100B88831 /* Article.swift in Sources */,
@@ -383,10 +404,13 @@
 				910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */,
 				871E35CE1EBAAEB300EA483E /* Operation.swift in Sources */,
 				87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */,
+				87CAC3981ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */,
 				87DE40051EC765C800BB49EB /* SettingViewController.swift in Sources */,
 				87C14A4C1EBE321B0031E20A /* ReportViewController.swift in Sources */,
+				87CAC39C1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift in Sources */,
 				87E5D3171ECCCCEB004E1F84 /* Utils.swift in Sources */,
 				871E35CC1EBAA44B00EA483E /* HTTPSecurity.swift in Sources */,
+				87CAC39A1ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift in Sources */,
 				910CFDD61E80C1130005CC1D /* SGViewController.swift in Sources */,
 				87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */,
 			);

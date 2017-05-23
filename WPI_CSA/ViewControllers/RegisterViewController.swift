@@ -16,13 +16,25 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var passwordConfirmField: UITextField!
     
     override func viewDidLoad() {
-        usernameField.becomeFirstResponder()
+        //usernameField.becomeFirstResponder()
+        usernameField.text = "fning@wpi.edu"
+        nameField.text = "derek"
+        passwordField.text = "flashvb6"
+        passwordConfirmField.text = "flashvb6"
         passwordField.isSecureTextEntry = true
         passwordConfirmField.isSecureTextEntry = true
+        
+        self.view.backgroundColor = UIColor.black
+        let indi = NVActivityIndicatorView(frame: CGRect(x: 100, y: 200, width: 30, height: 30))
+        indi.padding = 20
+        self.view.addSubview(indi)
+        indi.startAnimating()
+        
     }
     
     @IBAction func cancelClicked(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        //self.dismiss(animated: true, completion: nil)
+        
     }
     
     @IBAction func registerClicked(_ sender: Any) {
@@ -52,9 +64,55 @@ class RegisterViewController: UIViewController {
         
         WCUserManager.regesterSalt(forUsername: username) { (error, salt) in
             if error == "" {
-                
+                WCUserManager.register(forUsername: username,
+                                       andEncryptedPassword: WCUtils.md5(self.passwordField.text! + salt),
+                                       completion: { (error, user) in
+                                        if error == "" {
+                                            WCService.currentUser = user
+                                            Utils.appMode = .LoggedOn
+                                            WCUserManager.saveCurrentUserDetails(realName: name, completion: { (error) in
+                                                if error == "" {
+                                                    WCService.currentUser!.name = name
+                                                    SGDatabase.setParam(named: "username", withValue: username)
+                                                    SGDatabase.setParam(named: "password",
+                                                                        withValue: WCUtils.md5(self.passwordField.text! + salt))
+                                                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                                                    OperationQueue.main.addOperation{
+                                                        let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
+                                                            " with a link to confirm your email. Please click on the link in 24 hours. " +
+                                                            "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
+                                                        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                                                            self.dismiss(animated: true, completion: nil)
+                                                        }))
+                                                        self.present(alert, animated: true, completion: nil)
+                                                    }
+                                                }else{
+                                                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                                                    OperationQueue.main.addOperation{
+                                                        let alert = UIAlertController(title: nil, message: "User created but name is not stored correctly. " + error, preferredStyle: .alert)
+                                                        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                                                            self.dismiss(animated: true, completion: nil)
+                                                        }))
+                                                        self.present(alert, animated: true, completion: nil)
+                                                    }
+                                                }
+                                                
+                                            })
+                                        }else{
+                                            Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                                        }
+                })
             } else {
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                OperationQueue.main.addOperation{
+                    self.dismiss(animated: true, completion: nil)
+                    let alert = UIAlertController(title: nil, message: "wtf", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                        //self.dismiss(animated: true, completion: nil)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
             }
         }
     }
