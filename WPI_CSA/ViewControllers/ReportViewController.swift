@@ -93,16 +93,14 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             return
         }
         
+        Utils.showLoadingIndicator()
         WCService.reportSGProblem(forMenu: menuId!, byUser: userId, andEmail: email, withReport: report) { (error) in
-            if error != "" {
-                OperationQueue.main.addOperation{
-                    let alert = UIAlertController(title: "Something goes wrong", message: error, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                }
-                
-            }else{
+            if error == "" {
+                Utils.dismissIndicator()
                 self.dismiss(animated: true, completion: nil)
+            }else{
+                Utils.dismissIndicator()
+                Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
             }
         }
     }

@@ -24,12 +24,11 @@ class RegisterViewController: UIViewController {
         passwordField.isSecureTextEntry = true
         passwordConfirmField.isSecureTextEntry = true
         
-        let activityData = ActivityData()
-        
-        NVActivityIndicatorPresenter.sharedInstance.startAnimating(activityData)
+        NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
         
         let when = DispatchTime.now() + 4 // change 2 to desired number of seconds
         DispatchQueue.main.asyncAfter(deadline: when) {
+            NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
             NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
         }
     }
@@ -63,6 +62,7 @@ class RegisterViewController: UIViewController {
         }
         errorLabel.text = ""
         
+        Utils.showLoadingIndicator()
         WCUserManager.regesterSalt(forUsername: username) { (error, salt) in
             if error == "" {
                 WCUserManager.register(forUsername: username,
@@ -78,6 +78,7 @@ class RegisterViewController: UIViewController {
                                                     SGDatabase.setParam(named: "password",
                                                                         withValue: WCUtils.md5(self.passwordField.text! + salt))
                                                     NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                                                    Utils.dismissIndicator()
                                                     OperationQueue.main.addOperation{
                                                         let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
                                                             " with a link to confirm your email. Please click on the link in 24 hours. " +
@@ -89,6 +90,7 @@ class RegisterViewController: UIViewController {
                                                     }
                                                 }else{
                                                     NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                                                    Utils.dismissIndicator()
                                                     OperationQueue.main.addOperation{
                                                         let alert = UIAlertController(title: nil, message: "User created but name is not stored correctly. " + error, preferredStyle: .alert)
                                                         alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
@@ -100,20 +102,13 @@ class RegisterViewController: UIViewController {
                                                 
                                             })
                                         }else{
+                                            Utils.dismissIndicator()
                                             Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                                         }
                 })
             } else {
+                Utils.dismissIndicator()
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
-                OperationQueue.main.addOperation{
-                    self.dismiss(animated: true, completion: nil)
-                    let alert = UIAlertController(title: nil, message: "wtf", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
-                        //self.dismiss(animated: true, completion: nil)
-                    }))
-                    self.present(alert, animated: true, completion: nil)
-                }
-                
             }
         }
     }

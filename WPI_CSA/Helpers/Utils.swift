@@ -17,6 +17,9 @@ open class Utils {
         if let version = SGDatabase.getParam(named: "suppressedVersion"){
             versionToCheck = version
         }
+        if showAlert {
+            showLoadingIndicator()
+        }
         WCService.checkSoftwareVersion(version: versionToCheck, completion: { (status, title, msg, version) in
             appMode = .Login
             if status == "AppUpdate" {
@@ -26,7 +29,9 @@ open class Utils {
                     (alert: UIAlertAction!) -> Void in
                     SGDatabase.setParam(named: "suppressedVersion", withValue: version)
                 }))
+                dismissIndicator()
                 vc.present(alert, animated: true, completion: nil)
+                //Do not login user because http request updates may break login process
             }else if status == "Ok"{
                 if let password = SGDatabase.getParam(named: "password"),
                     let username = SGDatabase.getParam(named: "username"){
@@ -37,8 +42,10 @@ open class Utils {
                                                     if error == "" {
                                                         appMode = .LoggedOn
                                                         WCService.currentUser = user
+                                                        dismissIndicator()
                                                         NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
                                                     }else{
+                                                        dismissIndicator()
                                                         process(errorMessage: error,
                                                                 onViewController: vc,
                                                                 showingServerdownAlert: showAlert)
@@ -46,9 +53,11 @@ open class Utils {
                         })
                     }
                 }else{
+                    dismissIndicator()
                     NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
                 }
             }else {
+                dismissIndicator()
                 process(errorMessage: status, onViewController: vc, showingServerdownAlert: showAlert)
             }
         })
@@ -86,6 +95,18 @@ open class Utils {
             let alert = UIAlertController(title: nil, message: alert, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             vc.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    open class func showLoadingIndicator(){
+        OperationQueue.main.addOperation{
+            NVActivityIndicatorPresenter.sharedInstance.startAnimating()
+        }
+    }
+    
+    open class func dismissIndicator(){
+        OperationQueue.main.addOperation{
+            NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
         }
     }
     

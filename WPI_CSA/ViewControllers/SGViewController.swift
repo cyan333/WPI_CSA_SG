@@ -70,16 +70,15 @@ class SGViewController: UIViewController {
         }
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
-        let reportAction = UIAlertAction(title: "Report a problem on this page", style: .default, handler: {
+        optionMenu.addAction(UIAlertAction(title: "Report a problem on this page", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             if Utils.appMode == .Login {
                 let alert = UIAlertController(title: nil, message: "No user logged in. Please login so that we can get back to you and keep track of reports.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Login & Register", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
                     self.tabBarController?.selectedIndex = 1
-                    
                 }))
-                alert.addAction(UIAlertAction(title: "Report anonymously", style: .default, handler: {
+                alert.addAction(UIAlertAction(title: "Report anyway", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
                     self.performSegue(withIdentifier: "SGReportSegue", sender: nil)
                 }))
@@ -89,14 +88,19 @@ class SGViewController: UIViewController {
                 self.performSegue(withIdentifier: "SGReportSegue", sender: nil)
             }
             
-        })
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+        }))
+        optionMenu.addAction(UIAlertAction(title: "Create artile after this page", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
-            print("Cancelled")
-        })
-        
-        optionMenu.addAction(reportAction)
-        optionMenu.addAction(cancelAction)
+            if Utils.appMode == .Login {
+                let alert = UIAlertController(title: nil, message: "No user logged in. This feature is only available after logging in", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }else{
+                self.performSegue(withIdentifier: "SGCreateArticleSegue", sender: nil)
+            }
+            
+        }))
+        optionMenu.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(optionMenu, animated: true, completion: nil)
         

@@ -77,6 +77,7 @@ class SettingViewController: UIViewController {
             self.changePwdController.textFields![2].text = ""
             
             let username = WCService.currentUser!.username!
+            Utils.showLoadingIndicator()
             WCUserManager.getSaltForUser(withUsername: username) { (error, salt) in
                 if error == "" {
                     let encryptedNewPwd = WCUtils.md5(self.newPass + salt)
@@ -86,13 +87,16 @@ class SettingViewController: UIViewController {
                                                     if error == ""{
                                                         WCService.currentUser?.accessToken = accessToken
                                                         SGDatabase.setParam(named: "password", withValue: encryptedNewPwd)
+                                                        Utils.dismissIndicator()
                                                         Utils.show(alertMessage: "Done", onViewController: self)
                                                     }else{
+                                                        Utils.dismissIndicator()
                                                         Utils.process(errorMessage: error,
                                                                       onViewController: self,
                                                                       showingServerdownAlert: true)                                                    }
                     })
                 } else {
+                    Utils.dismissIndicator()
                     Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                 }
             }
@@ -117,6 +121,7 @@ class SettingViewController: UIViewController {
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingLoginCell{
             let username = cell.usernameField.text!
             let password = cell.passwordField.text!
+            Utils.showLoadingIndicator()
             WCUserManager.getSaltForUser(withUsername: username) { (error, salt) in
                 if error == "" {
                     WCUserManager.loginUser(withUsername: username,
@@ -127,13 +132,16 @@ class SettingViewController: UIViewController {
                                                     Utils.appMode = .LoggedOn
                                                     SGDatabase.setParam(named: "username", withValue: username)
                                                     SGDatabase.setParam(named: "password", withValue: WCUtils.md5(password + salt))
+                                                    Utils.dismissIndicator()
                                                     self.reloadUserCell()
                                                 } else {
+                                                    Utils.dismissIndicator()
                                                     Utils.process(errorMessage: error, onViewController: self,
                                                                   showingServerdownAlert: true)
                                                 }
                     })
                 } else {
+                    Utils.dismissIndicator()
                     Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                 }
             }
@@ -233,6 +241,7 @@ extension SettingViewController : UITableViewDataSource {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingLoginCell") as! SettingLoginCell
                 cell.usernameField.text = "synfm123@gmail.com"
                 cell.passwordField.text = "flash"
+                cell.passwordField.isSecureTextEntry = true
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
                 return cell
             }else{
@@ -337,7 +346,7 @@ extension SettingViewController : UITableViewDelegate {
             }
         } else if indexPath.section == 3 {
             let confirm = UIAlertController(title: "Are you sure", message: "Your credentials will be removed",
-                                            preferredStyle: .alert)
+                                            preferredStyle: .actionSheet)
             
             confirm.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in

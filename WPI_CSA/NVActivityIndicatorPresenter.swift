@@ -134,19 +134,20 @@ public final class NVActivityIndicatorPresenter {
 
      - parameter data: Information package used to display UI blocker.
      */
-    public final func startAnimating(_ data: ActivityData) {
+    public final func startAnimating(_ data: ActivityData? = nil) {
         guard state == .hidden else { return }
 
         state = .waitingToShow
         startAnimatingGroup.enter()
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(data.displayTimeThreshold)) {
+        let activityData = data ?? ActivityData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(activityData.displayTimeThreshold)) {
             guard self.state == .waitingToShow else {
                 self.startAnimatingGroup.leave()
 
                 return
             }
 
-            self.show(with: data)
+            self.show(with: activityData)
             self.startAnimatingGroup.leave()
         }
     }
