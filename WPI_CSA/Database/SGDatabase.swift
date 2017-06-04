@@ -151,7 +151,6 @@ class SGDatabase {
         }catch{
             return nil
         }
-        
     }
     
     open class func setParam(named key:String, withValue value:String) {
@@ -170,8 +169,6 @@ class SGDatabase {
             }
             sqlite3_finalize(queryStatement)
         }catch {}
-        
-
     }
     
     open class func deleteParam(named key:String) {
@@ -190,8 +187,23 @@ class SGDatabase {
             }
             sqlite3_finalize(queryStatement)
         }catch {}
-        
-        
+    }
+    
+    open class func run(queries: String){
+        do{
+            let db = try SGDatabase.connect()
+            
+            var errMsg: UnsafeMutablePointer<Int8>? = nil
+            
+            if sqlite3_exec(db.dbPointer, queries, nil, nil, &errMsg) != SQLITE_OK {
+                print("Cannot execute query")
+                if let errMsg = errMsg {
+                    print(String(cString: errMsg))
+                }
+            }else{
+                print("ok")
+            }
+        }catch {}
     }
     
     func printBtnList(query: String){

@@ -13,32 +13,33 @@ import Foundation
 open class WCService {
     static var currentUser: WCUser? = nil
     
-    open class func checkSoftwareVersion(version: String, completion: @escaping (String, String, String, String) -> Void){
+    open class func checkSoftwareVersion(version: String, completion: @escaping (_ status: String, _ title: String,
+        _ msg: String, _ updates: String, _ version: String) -> Void){
         do {
             let opt = try HTTP.GET(serviceBase + "get_version_info?version=" + version)
             opt.start{ response in
                 if response.error != nil {
-                    completion(serverDown, "", "", "")
+                    completion(serverDown, "", "", "", "")
                     return
                 }
                 let dict = WCUtils.convertToDictionary(data: response.data)
                 if let dict = dict {
                     if let error = dict["error"] as? String {
                         if error != "" {
-                            completion(error, "", "", "")
+                            completion(error, "", "", "", "")
                             return
                         }
                     }
-                    if let status = dict["status"] as? String, let title = dict["title"] as? String,
-                        let msg = dict["msg"] as? String, let version = dict["version"] as? String{
-                        completion(status, title, msg, version)
+                    if let status = dict["status"] as? String {
+                        completion(status, dict["title"] as? String ?? "", dict["message"] as? String ?? "",
+                                   dict["updates"] as? String ?? "", dict["newVersion"] as? String ?? "")
                         return
                     }
                 }
-                completion(respondFormatError, "", "", "")
+                completion(respondFormatError, "", "", "", "")
             }
         } catch{
-            completion(serverDown, "", "", "")
+            completion(serverDown, "", "", "", "")
         }
         
     }

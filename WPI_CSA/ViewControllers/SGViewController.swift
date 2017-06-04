@@ -45,6 +45,11 @@ class SGViewController: UIViewController {
     var article: Article?
     
     override func viewDidLoad() {
+        /*let a = "INSERT OR REPLACE INTO PARAMS VALUES ('appStatus', 'OK');"
+        let a = "INSERT OR REPLACE INTO PARAMS VALUES ('appVersion', '1.00.001');"
+        SGDatabase.run(queries: a)*/
+        //print(SGDatabase.getParam(named: "test1"))
+        //print(SGDatabase.getParam(named: "test2"))
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         DispatchQueue.global(qos: .background).async {
             self.article = Article(content: coverImg)
@@ -52,7 +57,6 @@ class SGViewController: UIViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: need some tweak here
             }
-            
         }
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
     }

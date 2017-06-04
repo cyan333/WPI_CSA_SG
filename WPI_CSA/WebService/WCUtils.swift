@@ -20,7 +20,6 @@ let pathChangePassword = "change_password"
 let pathRegisterSalt = "register_for_salt"
 let pathRegister = "register"
 
-let softwareVersion = "0.00"
 
 let serverDown = "Server down"
 //let HTTPError = "Http API error"

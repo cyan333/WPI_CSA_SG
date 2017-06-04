@@ -13,54 +13,73 @@ open class Utils {
     static var appMode: AppMode = .Offline
     
     open class func checkVerisonInfoAndLoginUser(onViewController vc: UIViewController, showingServerdownAlert showAlert: Bool) {
-        var versionToCheck = softwareVersion
-        if let version = SGDatabase.getParam(named: "suppressedVersion"){
-            versionToCheck = version
-        }
-        if showAlert {
+        if showAlert {//Manully click the login button
             showLoadingIndicator()
-        }
-        WCService.checkSoftwareVersion(version: versionToCheck, completion: { (status, title, msg, version) in
-            appMode = .Login
-            if status == "AppUpdate" {
-                let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
-                alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
-                    (alert: UIAlertAction!) -> Void in
-                    SGDatabase.setParam(named: "suppressedVersion", withValue: version)
-                }))
-                dismissIndicator()
-                vc.present(alert, animated: true, completion: nil)
-                //Do not login user because http request updates may break login process
-            }else if status == "Ok"{
-                if let password = SGDatabase.getParam(named: "password"),
-                    let username = SGDatabase.getParam(named: "username"){
-                    if password != "" && username != ""{
-                        WCUserManager.loginUser(withUsername: username,
-                                                andPassword: password,
-                                                completion: { (error, user) in
-                                                    if error == "" {
-                                                        appMode = .LoggedOn
-                                                        WCService.currentUser = user
-                                                        dismissIndicator()
-                                                        NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                                    }else{
-                                                        dismissIndicator()
-                                                        process(errorMessage: error,
-                                                                onViewController: vc,
-                                                                showingServerdownAlert: showAlert)
-                                                    }
-                        })
-                    }
-                }else{
-                    dismissIndicator()
-                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+        } else {//Automatically called when app starts
+            if let appStatus = SGDatabase.getParam(named: "appStatus"){
+                if appStatus != "OK"{
+                    return
                 }
-            }else {
-                dismissIndicator()
-                process(errorMessage: status, onViewController: vc, showingServerdownAlert: showAlert)
             }
-        })
+        }
+        if let version = SGDatabase.getParam(named: "appVersion") {
+            if version == "" {
+                dismissIndicator()
+                return
+            }else{
+                WCService.checkSoftwareVersion(version: SGDatabase.getParam(named: "appVersion")!,
+                                               completion: { (status, title, msg, updates, version) in
+                    appMode = .Login
+                    if status == "OK"{
+                        if let password = SGDatabase.getParam(named: "password"),
+                            let username = SGDatabase.getParam(named: "username"){
+                            if password != "" && username != ""{
+                                WCUserManager.loginUser(withUsername: username, andPassword: password, completion: { (error, user) in
+                                    if error == "" {
+                                        appMode = .LoggedOn
+                                        WCService.currentUser = user
+                                        dismissIndicator()
+                                        NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
+                                                                        object: nil)
+                                    }else{
+                                        dismissIndicator()
+                                        process(errorMessage: error,
+                                                onViewController: vc,
+                                                showingServerdownAlert: showAlert)
+                                    }
+                                })
+                            }
+                        }else{
+                            dismissIndicator()
+                            NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                        }
+                    } else if status == "CU" {
+                        SGDatabase.setParam(named: "appStatus", withValue: version)
+                        SGDatabase.run(queries: updates)
+                        dismissIndicator()
+                    } else if status == "BM" {
+                        
+                    } else if status == "AU" {
+                        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
+                        alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
+                            (alert: UIAlertAction!) -> Void in
+                            SGDatabase.setParam(named: "appStatus", withValue: "")
+                        }))
+                        dismissIndicator()
+                        vc.present(alert, animated: true, completion: nil)
+                        //Do not login user because http request updates may break login process
+                    } else {
+                        dismissIndicator()
+                        process(errorMessage: status, onViewController: vc, showingServerdownAlert: showAlert)
+                    }
+                
+                })
+            }
+        }else{
+            dismissIndicator()
+        }
+        
     }
     
     open class func process(errorMessage errorMsg: String, onViewController vc: UIViewController,
