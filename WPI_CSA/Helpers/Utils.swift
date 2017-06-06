@@ -31,34 +31,34 @@ open class Utils {
                                                completion: { (status, title, msg, updates, version) in
                     appMode = .Login
                     if status == "OK"{
-                        if let password = SGDatabase.getParam(named: "password"),
-                            let username = SGDatabase.getParam(named: "username"){
-                            if password != "" && username != ""{
-                                WCUserManager.loginUser(withUsername: username, andPassword: password, completion: { (error, user) in
-                                    if error == "" {
-                                        appMode = .LoggedOn
-                                        WCService.currentUser = user
-                                        dismissIndicator()
-                                        NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
-                                                                        object: nil)
-                                    }else{
-                                        dismissIndicator()
-                                        process(errorMessage: error,
-                                                onViewController: vc,
-                                                showingServerdownAlert: showAlert)
-                                    }
-                                })
-                            }
-                        }else{
-                            dismissIndicator()
-                            NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                        }
+                        dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
                     } else if status == "CU" {
-                        SGDatabase.setParam(named: "appStatus", withValue: version)
+                        SGDatabase.setParam(named: "appVersion", withValue: version)
                         SGDatabase.run(queries: updates)
-                        dismissIndicator()
+                        dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
                     } else if status == "BM" {
-                        
+                        if updates != "" {
+                            SGDatabase.run(queries: updates)
+                        }
+                        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: {
+                            (alert: UIAlertAction!) -> Void in
+                            let ind = version.index(version.endIndex, offsetBy: -3)
+                            if let prevVersion = Int(version.substring(from: ind)) {
+                                let prevVersionStr = version.substring(to: ind) + String(format: "%03d", prevVersion - 1)
+                                SGDatabase.setParam(named: "appVersion", withValue: prevVersionStr)
+                            }else{
+                                SGDatabase.setParam(named: "appVersion", withValue: version)//TODO: Do something here
+                            }
+                        }))
+                        alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
+                            (alert: UIAlertAction!) -> Void in
+                            SGDatabase.setParam(named: "appVersion", withValue: version)
+                        }))
+                        dismissIndicator()
+                        vc.present(alert, animated: true, completion: nil)
+                        print("haha")
+                        dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
                     } else if status == "AU" {
                         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
@@ -80,6 +80,35 @@ open class Utils {
             dismissIndicator()
         }
         
+    }
+    
+    open class func dismissIndicatorAndTryLogin(vc: UIViewController, showAlert: Bool){
+        if let password = SGDatabase.getParam(named: "password"),
+            let username = SGDatabase.getParam(named: "username"){
+            if password != "" && username != ""{
+                WCUserManager.loginUser(withUsername: username, andPassword: password, completion: {
+                    (error, user) in
+                    if error == "" {
+                        appMode = .LoggedOn
+                        WCService.currentUser = user
+                        dismissIndicator()
+                        NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
+                                                        object: nil)
+                    }else{
+                        dismissIndicator()
+                        process(errorMessage: error,
+                                onViewController: vc,
+                                showingServerdownAlert: showAlert)
+                    }
+                })
+            }else{
+                dismissIndicator()
+                NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+            }
+        }else{
+            dismissIndicator()
+            NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+        }
     }
     
     open class func process(errorMessage errorMsg: String, onViewController vc: UIViewController,

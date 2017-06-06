@@ -196,7 +196,7 @@ class SGDatabase {
             var errMsg: UnsafeMutablePointer<Int8>? = nil
             
             if sqlite3_exec(db.dbPointer, queries, nil, nil, &errMsg) != SQLITE_OK {
-                print("Cannot execute query")
+                print("Cannot execute query")//TODO: Do somethere here
                 if let errMsg = errMsg {
                     print(String(cString: errMsg))
                 }

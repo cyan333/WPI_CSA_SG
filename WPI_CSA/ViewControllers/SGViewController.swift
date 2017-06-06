@@ -45,9 +45,15 @@ class SGViewController: UIViewController {
     var article: Article?
     
     override func viewDidLoad() {
-        /*let a = "INSERT OR REPLACE INTO PARAMS VALUES ('appStatus', 'OK');"
-        let a = "INSERT OR REPLACE INTO PARAMS VALUES ('appVersion', '1.00.001');"
-        SGDatabase.run(queries: a)*/
+        print("CURRENTVERSION: " + SGDatabase.getParam(named: "appVersion")!)
+        /*let haha = "1.00.345"
+        let ind = haha.index(haha.endIndex, offsetBy: -3)
+        let subVersion = haha.substring(from: ind)
+        let subVer = Int(subVersion)! - 1
+        print(haha.substring(to: ind) + String(format: "%03d", subVer))*/
+        //let a = "INSERT OR REPLACE INTO PARAMS VALUES ('appStatus', 'OK');"
+        //let a = "INSERT OR REPLACE INTO PARAMS VALUES ('appVersion', '1.00.001');"
+        //SGDatabase.run(queries: a)
         //print(SGDatabase.getParam(named: "test1"))
         //print(SGDatabase.getParam(named: "test2"))
         tableView.tableFooterView = UIView(frame: CGRect.zero)

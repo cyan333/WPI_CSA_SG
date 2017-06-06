@@ -131,12 +131,28 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WPI_CSA/Helpers/Utils.swift"
-            timestampString = "518191353.637636"
+            filePath = "WPI_CSA/WebService/WCService.swift"
+            timestampString = "518023926.415018"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "checkSoftwareVersion(version:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WPI_CSA/Helpers/Utils.swift"
+            timestampString = "518319455.628519"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
             landmarkName = "checkVerisonInfoAndLoginUser(onViewController:showingServerdownAlert:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -147,13 +163,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WPI_CSA/WebService/WCService.swift"
-            timestampString = "518023926.415018"
+            filePath = "WPI_CSA/Helpers/Utils.swift"
+            timestampString = "518319476.147375"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
-            landmarkName = "checkSoftwareVersion(version:completion:)"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "checkVerisonInfoAndLoginUser(onViewController:showingServerdownAlert:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
