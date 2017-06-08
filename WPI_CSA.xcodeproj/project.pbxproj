@@ -26,6 +26,7 @@
 		871E35CC1EBAA44B00EA483E /* HTTPSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871E35CB1EBAA44B00EA483E /* HTTPSecurity.swift */; };
 		871E35CE1EBAAEB300EA483E /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871E35CD1EBAAEB300EA483E /* Operation.swift */; };
 		871E35D01EBAF14C00EA483E /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871E35CF1EBAF14C00EA483E /* Request.swift */; };
+		8721CB571EE651D80023152A /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8721CB561EE651D80023152A /* EditorViewController.swift */; };
 		8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE021EBC1F6800B1CDB1 /* WCService.swift */; };
 		8732FE071EBD07A600B1CDB1 /* WCUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE061EBD07A600B1CDB1 /* WCUtils.swift */; };
 		877E61581E8C4DD100B88831 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877E61571E8C4DD100B88831 /* Article.swift */; };
@@ -83,6 +84,7 @@
 		871E35CB1EBAA44B00EA483E /* HTTPSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HTTPSecurity.swift; path = WebService/HTTPHelper/HTTPSecurity.swift; sourceTree = "<group>"; };
 		871E35CD1EBAAEB300EA483E /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Operation.swift; path = WebService/HTTPHelper/Operation.swift; sourceTree = "<group>"; };
 		871E35CF1EBAF14C00EA483E /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Request.swift; path = WebService/HTTPHelper/Request.swift; sourceTree = "<group>"; };
+		8721CB561EE651D80023152A /* EditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditorViewController.swift; path = ViewControllers/EditorViewController.swift; sourceTree = "<group>"; };
 		8732FE021EBC1F6800B1CDB1 /* WCService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCService.swift; path = WebService/WCService.swift; sourceTree = "<group>"; };
 		8732FE061EBD07A600B1CDB1 /* WCUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUtils.swift; path = WebService/WCUtils.swift; sourceTree = "<group>"; };
 		877E61571E8C4DD100B88831 /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Article.swift; path = Objects/Article.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 		87C14A4A1EBE2F070031E20A /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				8721CB561EE651D80023152A /* EditorViewController.swift */,
 				910CFDD31E80C1130005CC1D /* MenuViewController.swift */,
 				87C14A4B1EBE321B0031E20A /* ReportViewController.swift */,
 				87E5D31A1ED1FEFA004E1F84 /* RegisterViewController.swift */,
@@ -417,6 +420,7 @@
 				87CAC39A1ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift in Sources */,
 				910CFDD61E80C1130005CC1D /* SGViewController.swift in Sources */,
 				87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */,
+				8721CB571EE651D80023152A /* EditorViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
