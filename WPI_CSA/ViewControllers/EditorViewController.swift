@@ -29,8 +29,15 @@ class EditorViewController: UIViewController {
     var currentFontStyle = "noremal"
     var currentAlignment = "left"
     
+    //var articleCellHeight: CGFloat = 300
+    let placeHolderText = ["Enter title here", "Enter article here"]
+    
     override func viewDidLoad() {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillChangeFrame,
+                                               object: nil)
     }
     
     @IBAction func cancelClicked(_ sender: Any) {
@@ -50,9 +57,32 @@ class EditorViewController: UIViewController {
         return  "Text Style: " + currentFontSize + "px, " + currentFontColor + ", "
             + currentFontStyle + ", " + currentAlignment
     }
+    
+    func keyboardNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            print(keyboardFrame?.height)
+            let newCellHeight = UIScreen.main.bounds.height - (keyboardFrame?.height)! - 100
+            
+            /*if articleCellHeight != newCellHeight {
+                print("reloaded")
+                articleCellHeight = newCellHeight
+                if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? EditorTextCell {
+                    let heightConstraint = cell.textView.constraints.filter { $0.identifier == "editorTxtViewHeight" }
+                    if let heightConstraint = heightConstraint.first {
+                        heightConstraint.constant = UIScreen.main.bounds.height - (keyboardFrame?.height)! - reportHeightOffset
+                    }
+                }
+            }*/
+            
+            
+            
+            
+        }
+    }
 }
 
-extension EditorViewController : UITableViewDataSource {
+extension EditorViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -61,18 +91,6 @@ extension EditorViewController : UITableViewDataSource {
         return 3
     }
     
-    
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
-        if indexPath.row == 0 {
-            return 44
-        }else if indexPath.row == 1 {
-            return 75
-        }else{
-            return 300
-        }
-    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
@@ -87,7 +105,12 @@ extension EditorViewController : UITableViewDataSource {
             
             return cell
         }else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "EditorCell")!
+            let cell = tableView.dequeueReusableCell(withIdentifier: "EditorTextCell") as! EditorTextCell
+            cell.placeHolder.text = placeHolderText[indexPath.row - 1]
+            cell.textView.tag = indexPath.row
+            cell.textView.delegate = self
+            cell.textView.layer.borderWidth = 1
+            cell.textView.layer.borderColor = UIColor.gray.cgColor
             return cell
         }
         
@@ -95,15 +118,16 @@ extension EditorViewController : UITableViewDataSource {
 }
 
 extension EditorViewController: UITableViewDelegate {
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if Utils.appMode == .Login {
-            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingLoginCell{
-                cell.usernameField.resignFirstResponder()
-                cell.passwordField.resignFirstResponder()
-            }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        if indexPath.row == 0 {
+            return 44
+        }else if indexPath.row == 1 {
+            return 60
+        }else{
+            return UIScreen.main.bounds.height - 360
         }
     }
-    
 }
 
 extension EditorViewController: UIPickerViewDataSource {
@@ -164,6 +188,18 @@ extension EditorViewController: UIPickerViewDelegate {
         }else{
             //print(self.view.bounds.width)//320
             return 85
+        }
+    }
+}
+
+extension EditorViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        if let cell = tableView.cellForRow(at: IndexPath(row: textView.tag, section: 0)) as? EditorTextCell {
+            if cell.textView.text == "" {
+                cell.placeHolder.text = placeHolderText[textView.tag - 1]
+            }else{
+                cell.placeHolder.text = ""
+            }
         }
     }
 }
