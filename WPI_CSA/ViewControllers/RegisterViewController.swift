@@ -74,8 +74,8 @@ class RegisterViewController: UIViewController {
                                             WCUserManager.saveCurrentUserDetails(realName: name, completion: { (error) in
                                                 if error == "" {
                                                     WCService.currentUser!.name = name
-                                                    SGDatabase.setParam(named: "username", withValue: username)
-                                                    SGDatabase.setParam(named: "password",
+                                                    SGDatabase.setParam(named: savedUsername, withValue: username)
+                                                    SGDatabase.setParam(named: savedPassword,
                                                                         withValue: WCUtils.md5(self.passwordField.text! + salt))
                                                     NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
                                                     Utils.dismissIndicator()

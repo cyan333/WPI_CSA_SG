@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+//All application parameters are declared here
+let appStatus = "appStatus"
+let appVersion = "appVersion"
+let reportEmail = "email"
+let savedUsername = "username"
+let savedPassword = "password"
+
 open class Utils {
     static var appMode: AppMode = .Offline
     
@@ -16,24 +23,24 @@ open class Utils {
         if showAlert {//Manully click the login button
             showLoadingIndicator()
         } else {//Automatically called when app starts
-            if let appStatus = SGDatabase.getParam(named: "appStatus"){
+            if let appStatus = SGDatabase.getParam(named: appStatus){
                 if appStatus != "OK"{
                     return
                 }
             }
         }
-        if let version = SGDatabase.getParam(named: "appVersion") {
+        if let version = SGDatabase.getParam(named: appVersion) {
             if version == "" {
                 dismissIndicator()
                 return
             }else{
-                WCService.checkSoftwareVersion(version: SGDatabase.getParam(named: "appVersion")!,
+                WCService.checkSoftwareVersion(version: SGDatabase.getParam(named: appVersion)!,
                                                completion: { (status, title, msg, updates, version) in
                     appMode = .Login
                     if status == "OK"{
                         dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
                     } else if status == "CU" {
-                        SGDatabase.setParam(named: "appVersion", withValue: version)
+                        SGDatabase.setParam(named: appVersion, withValue: version)
                         SGDatabase.run(queries: updates)
                         dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
                     } else if status == "BM" {
@@ -46,14 +53,14 @@ open class Utils {
                             let ind = version.index(version.endIndex, offsetBy: -3)
                             if let prevVersion = Int(version.substring(from: ind)) {
                                 let prevVersionStr = version.substring(to: ind) + String(format: "%03d", prevVersion - 1)
-                                SGDatabase.setParam(named: "appVersion", withValue: prevVersionStr)
+                                SGDatabase.setParam(named: appVersion, withValue: prevVersionStr)
                             }else{
-                                SGDatabase.setParam(named: "appVersion", withValue: version)//TODO: Do something here
+                                SGDatabase.setParam(named: appVersion, withValue: version)//TODO: Do something here
                             }
                         }))
                         alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
                             (alert: UIAlertAction!) -> Void in
-                            SGDatabase.setParam(named: "appVersion", withValue: version)
+                            SGDatabase.setParam(named: appVersion, withValue: version)
                         }))
                         dismissIndicator()
                         vc.present(alert, animated: true, completion: nil)
@@ -64,7 +71,7 @@ open class Utils {
                         alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
                         alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
                             (alert: UIAlertAction!) -> Void in
-                            SGDatabase.setParam(named: "appStatus", withValue: "")
+                            SGDatabase.setParam(named: appStatus, withValue: "")
                         }))
                         dismissIndicator()
                         vc.present(alert, animated: true, completion: nil)
@@ -83,8 +90,8 @@ open class Utils {
     }
     
     open class func dismissIndicatorAndTryLogin(vc: UIViewController, showAlert: Bool){
-        if let password = SGDatabase.getParam(named: "password"),
-            let username = SGDatabase.getParam(named: "username"){
+        if let password = SGDatabase.getParam(named: savedPassword),
+            let username = SGDatabase.getParam(named: savedUsername){
             if password != "" && username != ""{
                 WCUserManager.loginUser(withUsername: username, andPassword: password, completion: {
                     (error, user) in

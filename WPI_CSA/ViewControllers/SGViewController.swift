@@ -45,7 +45,7 @@ class SGViewController: UIViewController {
     var article: Article?
     
     override func viewDidLoad() {
-        print("CURRENTVERSION: " + SGDatabase.getParam(named: "appVersion")!)
+        print("CURRENTVERSION: " + SGDatabase.getParam(named: appVersion)!)
         /*let haha = "1.00.345"
         let ind = haha.index(haha.endIndex, offsetBy: -3)
         let subVersion = haha.substring(from: ind)

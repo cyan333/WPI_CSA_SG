@@ -86,7 +86,7 @@ class SettingViewController: UIViewController {
                                                  completion: { (error, accessToken) in
                                                     if error == ""{
                                                         WCService.currentUser?.accessToken = accessToken
-                                                        SGDatabase.setParam(named: "password", withValue: encryptedNewPwd)
+                                                        SGDatabase.setParam(named: savedPassword, withValue: encryptedNewPwd)
                                                         Utils.dismissIndicator()
                                                         Utils.show(alertMessage: "Done", onViewController: self)
                                                     }else{
@@ -130,8 +130,8 @@ class SettingViewController: UIViewController {
                                                 if error == "" {
                                                     WCService.currentUser = user
                                                     Utils.appMode = .LoggedOn
-                                                    SGDatabase.setParam(named: "username", withValue: username)
-                                                    SGDatabase.setParam(named: "password", withValue: WCUtils.md5(password + salt))
+                                                    SGDatabase.setParam(named: savedUsername, withValue: username)
+                                                    SGDatabase.setParam(named: savedPassword, withValue: WCUtils.md5(password + salt))
                                                     Utils.dismissIndicator()
                                                     self.reloadUserCell()
                                                 } else {
@@ -346,8 +346,8 @@ extension SettingViewController : UITableViewDelegate {
                 (alert: UIAlertAction!) -> Void in
                 WCService.currentUser = nil
                 Utils.appMode = .Login
-                SGDatabase.deleteParam(named: "username")
-                SGDatabase.deleteParam(named: "password")
+                SGDatabase.deleteParam(named: savedUsername)
+                SGDatabase.deleteParam(named: savedPassword)
                 tableView.reloadData()
             }))
             confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))

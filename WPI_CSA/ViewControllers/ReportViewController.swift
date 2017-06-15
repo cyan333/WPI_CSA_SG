@@ -33,7 +33,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             }
             
             reportTxtView.becomeFirstResponder()
-        }else if let value = SGDatabase.getParam(named: "email") {
+        }else if let value = SGDatabase.getParam(named: reportEmail) {
             emailTxtField.text = value
             reportTxtView.becomeFirstResponder()
         }else{
@@ -71,7 +71,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         } else {
             email = emailTxtField.text!.trimmingCharacters(in: .whitespaces)
             if email != "" && Utils.isEmailAddress(email: email) {
-                SGDatabase.setParam(named: "email", withValue: email)
+                SGDatabase.setParam(named: reportEmail, withValue: email)
             }else if email != "" {
                 let alert = UIAlertController(title: nil, message: "Please check email format", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))

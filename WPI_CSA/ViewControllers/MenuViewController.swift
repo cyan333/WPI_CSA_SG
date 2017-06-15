@@ -37,8 +37,8 @@ class MenuViewController : UIViewController {
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
         
-        if let keywrd = keyword{
-            searchController.searchBar.text = keywrd
+        if let keyword = keyword{
+            searchController.searchBar.text = keyword
         }
         
         do{
