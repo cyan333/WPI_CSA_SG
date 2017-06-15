@@ -176,13 +176,7 @@ class SettingViewController: UIViewController {
                 error = "New passwords don't match."
             }
         }
-        //let paragraph = NSMutableParagraphStyle()
-        //paragraph.alignment = .right
-        let attributedString = NSAttributedString(string: error, attributes: [
-            //NSParagraphStyleAttributeName : paragraph,
-            NSForegroundColorAttributeName : UIColor.red
-            ])
-        changePwdController.setValue(attributedString, forKey: "attributedMessage")
+        
         if error == "" {
             confirmButton!.isEnabled = true
         }else{

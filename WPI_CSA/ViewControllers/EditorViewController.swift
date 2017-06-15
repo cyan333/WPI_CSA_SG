@@ -19,14 +19,14 @@ class EditorTextCell: UITableViewCell {
 
 class EditorViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-    let editorFontSize = ["10", "11", "12", "13", "14", "15", "16", "18", "20", "22", "25", "30", "35", "40", "45", "50", "60"]
-    let editorFontColor = ["black", "red", "blue", "yellow", "grey", "green"]
-    let editorFontStyle = ["notmal", "bold"]
+    let editorFontSize = ["15", "17", "20", "22", "25", "30", "35", "40", "48", "56", "72"]
+    let editorFontColor = ["black", "red", "blue", "yellow", "gray", "green"]
+    let editorFontStyle = ["thin", "normal", "medium", "bold", "heavy"]
     let editorAlignment = ["left", "center", "right"]
     
-    var currentFontSize = "10"
+    var currentFontSize = "17"
     var currentFontColor = "black"
-    var currentFontStyle = "noremal"
+    var currentFontStyle = "normal"
     var currentAlignment = "left"
     
     //var articleCellHeight: CGFloat = 300
@@ -34,19 +34,35 @@ class EditorViewController: UIViewController {
     
     override func viewDidLoad() {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
+        tableView.contentInset = UIEdgeInsetsMake(0, 0, 25, 0)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)),
+        /*NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)),
                                                name: NSNotification.Name.UIKeyboardWillChangeFrame,
-                                               object: nil)
+                                               object: nil)*/
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
     @IBAction func cancelClicked(_ sender: Any) {
-        if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? EditorFontCell {
-            if cell.input.isFirstResponder {
-                print(333)
+        if let titleCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? EditorTextCell,
+            let articleCell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? EditorTextCell{
+            if titleCell.textView.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" ||
+                articleCell.textView.text.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+                let confirm = UIAlertController(title: nil, message: "Are you sure you want to cancel?", preferredStyle: .alert)
+                confirm.addAction(UIAlertAction(title: "Yes, discard article", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    self.dismiss(animated: true, completion: nil)
+                }))
+                confirm.addAction(UIAlertAction(title: "Yes, save article locally", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    print("saving")
+                }))
+                confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                
+                self.present(confirm, animated: true, completion: nil)
+                return
             }
         }
-        print(1)
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func createClicked(_ sender: Any) {
@@ -54,31 +70,16 @@ class EditorViewController: UIViewController {
     }
     
     func getTextStyleString() -> String {
-        return  "Text Style: " + currentFontSize + "px, " + currentFontColor + ", "
+        return  "Text Style: " + currentFontSize + ", " + currentFontColor + ", "
             + currentFontStyle + ", " + currentAlignment
     }
     
-    func keyboardNotification(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-            print(keyboardFrame?.height)
-            let newCellHeight = UIScreen.main.bounds.height - (keyboardFrame?.height)! - 100
-            
-            /*if articleCellHeight != newCellHeight {
-                print("reloaded")
-                articleCellHeight = newCellHeight
-                if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? EditorTextCell {
-                    let heightConstraint = cell.textView.constraints.filter { $0.identifier == "editorTxtViewHeight" }
-                    if let heightConstraint = heightConstraint.first {
-                        heightConstraint.constant = UIScreen.main.bounds.height - (keyboardFrame?.height)! - reportHeightOffset
-                    }
-                }
-            }*/
-            
-            
-            
-            
-        }
+    func applicationWillResignActive() {
+        print("ending")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
 }
 
@@ -98,6 +99,8 @@ extension EditorViewController: UITableViewDataSource {
             let pickerView = UIPickerView()
             pickerView.delegate = self
             pickerView.dataSource = self
+            pickerView.selectRow(1, inComponent: 0, animated: false)
+            pickerView.selectRow(1, inComponent: 2, animated: false)
             cell.input.tintColor = .clear
             cell.input.inputView = pickerView
             cell.input.text = getTextStyleString()
@@ -109,8 +112,9 @@ extension EditorViewController: UITableViewDataSource {
             cell.placeHolder.text = placeHolderText[indexPath.row - 1]
             cell.textView.tag = indexPath.row
             cell.textView.delegate = self
-            cell.textView.layer.borderWidth = 1
-            cell.textView.layer.borderColor = UIColor.gray.cgColor
+            //cell.textView.layer.borderWidth = 1
+            //cell.textView.layer.borderColor = UIColor.gray.cgColor
+            print("loading cell")
             return cell
         }
         
@@ -180,14 +184,14 @@ extension EditorViewController: UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         if component == 0 {
-            return 35
+            return 40
         }else if component == 1 {
-            return 70
+            return 80
         }else if component == 2 {
-            return 85
+            return 90
         }else{
             //print(self.view.bounds.width)//320
-            return 85
+            return 80
         }
     }
 }
@@ -200,6 +204,74 @@ extension EditorViewController: UITextViewDelegate {
             }else{
                 cell.placeHolder.text = ""
             }
+        }
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if let cell = tableView.cellForRow(at: IndexPath(row: textView.tag, section: 0)) as? EditorTextCell {
+            var textAttributes = cell.textView.typingAttributes
+            
+            let fontSize = CGFloat(NumberFormatter().number(from: currentFontSize)!)
+            //["thin", "normal", "medium", "bold"]
+            switch currentFontStyle {
+            case "thin":
+                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                             weight: UIFontWeightThin)
+                break
+            case "medium":
+                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                             weight: UIFontWeightMedium)
+                break
+            case "bold":
+                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                             weight: UIFontWeightBold)
+                break
+            case "heavy":
+                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                             weight: UIFontWeightHeavy)
+                break
+            default:
+                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                             weight: UIFontWeightRegular)
+                break
+            }
+            
+            switch currentFontColor {
+            case "red":
+                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.red
+                break
+            case "blue":
+                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.blue
+                break
+            case "yellow":
+                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.yellow
+                break
+            case "gray":
+                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.gray
+                break
+            case "green":
+                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.green
+                break
+            default:
+                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.black
+                break
+            }
+            
+            //let editorAlignment = ["left", "center", "right"]
+            let paragraphStyle = NSMutableParagraphStyle()
+            switch currentAlignment {
+            case "center":
+                paragraphStyle.alignment = .center
+                break
+            case "right":
+                paragraphStyle.alignment = .right
+                break
+            default:
+                paragraphStyle.alignment = .left
+                break
+            }
+            textAttributes["\(NSParagraphStyleAttributeName)"] = paragraphStyle
+            cell.textView.typingAttributes = textAttributes
         }
     }
 }

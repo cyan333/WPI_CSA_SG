@@ -35,10 +35,6 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             reportTxtView.becomeFirstResponder()
         }else if let value = SGDatabase.getParam(named: "email") {
             emailTxtField.text = value
-            
-            var attributes = reportTxtView.typingAttributes
-            attributes["\(NSForegroundColorAttributeName)"] = UIColor.red
-            reportTxtView.typingAttributes = attributes
             reportTxtView.becomeFirstResponder()
         }else{
             emailTxtField.becomeFirstResponder()
