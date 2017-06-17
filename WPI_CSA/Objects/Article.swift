@@ -232,27 +232,4 @@ enum SeparatorType{
     case Normal
 }
 
-extension String {
-    func htmlAttributedString() -> NSAttributedString? {
-        guard let data = self.data(using: String.Encoding.utf16, allowLossyConversion: false) else { return nil }
-        guard let html = try? NSMutableAttributedString(
-            data: data,
-            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
-            documentAttributes: nil) else { return nil }
-        return html
-    }
-}
 
-extension NSAttributedString {
-    func htmlString() -> String? {
-        let documentAttributes = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType]
-        do {
-            let htmlData = try self.data(from: NSMakeRange(0, self.length), documentAttributes:documentAttributes)
-            if let htmlString = String(data:htmlData, encoding:String.Encoding.utf8) {
-                return htmlString
-            }
-        }
-        catch {}
-        return nil
-    }
-}

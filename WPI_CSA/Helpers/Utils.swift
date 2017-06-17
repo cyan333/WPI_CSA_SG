@@ -15,6 +15,8 @@ let appVersion = "appVersion"
 let reportEmail = "email"
 let savedUsername = "username"
 let savedPassword = "password"
+let localTitle = "title"
+let localArticle = "article"
 
 open class Utils {
     static var appMode: AppMode = .Offline
@@ -196,4 +198,40 @@ enum AppMode{
     case Offline
     case Login
     case LoggedOn
+}
+
+extension String {
+    func htmlAttributedString() -> NSAttributedString? {
+        guard let data = self.data(using: String.Encoding.utf16, allowLossyConversion: false) else { return nil }
+        guard let html = try? NSMutableAttributedString(
+            data: data,
+            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
+            documentAttributes: nil) else { return nil }
+        html.beginEditing()
+        html.enumerateAttribute(NSFontAttributeName, in: NSMakeRange(0, html.length), options: .init(rawValue: 0)) {
+            (value, range, stop) in
+            if let font = value as? UIFont {
+                let resizedFont = font.withSize(font.pointSize * 0.75)
+                html.addAttribute(NSFontAttributeName,
+                                         value: resizedFont,
+                                         range: range)
+            }
+        }
+        html.endEditing()
+        return html
+    }
+}
+
+extension NSAttributedString {
+    func htmlString() -> String? {
+        let documentAttributes = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType]
+        do {
+            let htmlData = try self.data(from: NSMakeRange(0, self.length), documentAttributes:documentAttributes)
+            if let htmlString = String(data:htmlData, encoding:String.Encoding.utf8) {
+                return htmlString
+            }
+        }
+        catch {}
+        return nil
+    }
 }

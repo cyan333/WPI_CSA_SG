@@ -156,16 +156,15 @@ class SGDatabase {
     open class func setParam(named key:String, withValue value:String) {
         do{
             let db = try SGDatabase.connect()
-            
-            let query = "INSERT OR REPLACE INTO PARAMS VALUES ('\(key)', '\(value)')"
+            let processedValue = value.replacingOccurrences(of: "'", with: "''")
+            let query = "INSERT OR REPLACE INTO PARAMS VALUES ('\(key)', '\(processedValue)')"
             var queryStatement: OpaquePointer? = nil
-            
             if sqlite3_prepare_v2(db.dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
                 if sqlite3_step(queryStatement) != SQLITE_DONE {
                     print("Cannot update param \(key) with value \(value)")
                 }
             } else {
-                print("SELECT statement could not be prepared")
+                print("INSERT statement could not be prepared")
             }
             sqlite3_finalize(queryStatement)
         }catch {}

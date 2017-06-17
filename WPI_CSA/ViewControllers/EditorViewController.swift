@@ -29,16 +29,20 @@ class EditorViewController: UIViewController {
     var currentFontStyle = "normal"
     var currentAlignment = "left"
     
-    //var articleCellHeight: CGFloat = 300
     let placeHolderText = ["Enter title here", "Enter article here"]
+    var savedArticle = ["", ""]
     
     override func viewDidLoad() {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 25, 0)
         
-        /*NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)),
-                                               name: NSNotification.Name.UIKeyboardWillChangeFrame,
-                                               object: nil)*/
+        if let title = SGDatabase.getParam(named: localTitle) {
+            savedArticle[0] = title
+        }
+        if let article = SGDatabase.getParam(named: localArticle) {
+            savedArticle[1] = article
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(applicationWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
@@ -54,7 +58,26 @@ class EditorViewController: UIViewController {
                 }))
                 confirm.addAction(UIAlertAction(title: "Yes, save article locally", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
-                    print("saving")
+                    
+                    if let title = titleCell.textView.attributedText.htmlString() {
+                        if titleCell.textView.attributedText.length > 0 {
+                            SGDatabase.setParam(named: localTitle, withValue: title)
+                        }else{
+                            SGDatabase.setParam(named: localTitle, withValue: "")
+                        }
+                    }
+                    if let article = articleCell.textView.attributedText.htmlString() {
+                        if articleCell.textView.attributedText.length > 0 {
+                            print(article)
+                            let a = article.htmlAttributedString()?.htmlString()
+                            print("============")
+                            print(a!)
+                            SGDatabase.setParam(named: localArticle, withValue: article)
+                        }else{
+                            SGDatabase.setParam(named: localArticle, withValue: "")
+                        }
+                    }
+                    self.dismiss(animated: true, completion: nil)
                 }))
                 confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
                 
@@ -109,12 +132,14 @@ extension EditorViewController: UITableViewDataSource {
             return cell
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "EditorTextCell") as! EditorTextCell
-            cell.placeHolder.text = placeHolderText[indexPath.row - 1]
             cell.textView.tag = indexPath.row
             cell.textView.delegate = self
             //cell.textView.layer.borderWidth = 1
             //cell.textView.layer.borderColor = UIColor.gray.cgColor
-            print("loading cell")
+            cell.textView.attributedText = savedArticle[indexPath.row - 1].htmlAttributedString()
+            if savedArticle[indexPath.row - 1] == "" {
+                cell.placeHolder.text = placeHolderText[indexPath.row - 1]
+            }
             return cell
         }
         
