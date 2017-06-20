@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebKit
 
 let padding: CGFloat = 10
 let imgViewWidth: Int = 130
@@ -56,8 +57,9 @@ class SGViewController: UIViewController {
         //SGDatabase.run(queries: a)
         //print(SGDatabase.getParam(named: "test1"))
         //print(SGDatabase.getParam(named: "test2"))
-        let a = "<font size=\"6\">This is some text!</font><font size=\"16\">This</font>"
-        print(a.htmlAttributedString()!.htmlString()!)
+        //let htmlStr: String = "<font size=\"6\">This is some text!</font><font size=\"16\">This</font>"
+        //let attriStr: NSAttributedString? = htmlStr.htmlAttributedString()
+        //print(a.htmlAttributedString()!.htmlString()!)
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         DispatchQueue.global(qos: .background).async {
             self.article = Article(content: coverImg)

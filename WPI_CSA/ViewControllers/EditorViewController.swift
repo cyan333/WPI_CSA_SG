@@ -34,7 +34,7 @@ class EditorViewController: UIViewController {
     
     override func viewDidLoad() {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, 25, 0)
+        tableView.contentInset = UIEdgeInsetsMake(0, 0, 250, 0)
         
         if let title = SGDatabase.getParam(named: localTitle) {
             savedArticle[0] = title
@@ -58,25 +58,7 @@ class EditorViewController: UIViewController {
                 }))
                 confirm.addAction(UIAlertAction(title: "Yes, save article locally", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
-                    
-                    if let title = titleCell.textView.attributedText.htmlString() {
-                        if titleCell.textView.attributedText.length > 0 {
-                            SGDatabase.setParam(named: localTitle, withValue: title)
-                        }else{
-                            SGDatabase.setParam(named: localTitle, withValue: "")
-                        }
-                    }
-                    if let article = articleCell.textView.attributedText.htmlString() {
-                        if articleCell.textView.attributedText.length > 0 {
-                            print(article)
-                            let a = article.htmlAttributedString()?.htmlString()
-                            print("============")
-                            print(a!)
-                            SGDatabase.setParam(named: localArticle, withValue: article)
-                        }else{
-                            SGDatabase.setParam(named: localArticle, withValue: "")
-                        }
-                    }
+                    self.saveArticle(title: titleCell.textView.attributedText, article: articleCell.textView.attributedText)
                     self.dismiss(animated: true, completion: nil)
                 }))
                 confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
@@ -88,17 +70,44 @@ class EditorViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func createClicked(_ sender: Any) {
-        print(2)
-    }
-    
     func getTextStyleString() -> String {
         return  "Text Style: " + currentFontSize + ", " + currentFontColor + ", "
             + currentFontStyle + ", " + currentAlignment
     }
     
+    func saveArticle(title: NSAttributedString, article: NSAttributedString) {
+        if title.length > 0 {
+            if let title = title.htmlString() {
+                SGDatabase.setParam(named: localTitle, withValue: title)
+            }
+        }else{
+            SGDatabase.setParam(named: localTitle, withValue: "")
+        }
+        if article.length > 0 {
+            if let article = article.htmlString() {
+                SGDatabase.setParam(named: localArticle, withValue: article)
+            }
+        }else{
+            SGDatabase.setParam(named: localArticle, withValue: "")
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let titleCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? EditorTextCell,
+            let articleCell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? EditorTextCell{
+            self.saveArticle(title: titleCell.textView.attributedText, article: articleCell.textView.attributedText)
+            if let destinationViewController = segue.destination as? PreviewViewController {
+                destinationViewController.attributedTitle = titleCell.textView.attributedText
+                destinationViewController.attributedArtile = articleCell.textView.attributedText
+            }
+        }
+    }
+    
     func applicationWillResignActive() {
-        print("ending")
+        if let titleCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? EditorTextCell,
+            let articleCell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? EditorTextCell{
+            self.saveArticle(title: titleCell.textView.attributedText, article: articleCell.textView.attributedText)
+        }
     }
     
     deinit {
@@ -134,8 +143,8 @@ extension EditorViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "EditorTextCell") as! EditorTextCell
             cell.textView.tag = indexPath.row
             cell.textView.delegate = self
-            //cell.textView.layer.borderWidth = 1
-            //cell.textView.layer.borderColor = UIColor.gray.cgColor
+            cell.textView.layer.borderWidth = 1
+            cell.textView.layer.borderColor = UIColor.gray.cgColor
             cell.textView.attributedText = savedArticle[indexPath.row - 1].htmlAttributedString()
             if savedArticle[indexPath.row - 1] == "" {
                 cell.placeHolder.text = placeHolderText[indexPath.row - 1]
@@ -215,7 +224,6 @@ extension EditorViewController: UIPickerViewDelegate {
         }else if component == 2 {
             return 90
         }else{
-            //print(self.view.bounds.width)//320
             return 80
         }
     }
@@ -237,7 +245,7 @@ extension EditorViewController: UITextViewDelegate {
             var textAttributes = cell.textView.typingAttributes
             
             let fontSize = CGFloat(NumberFormatter().number(from: currentFontSize)!)
-            //["thin", "normal", "medium", "bold"]
+            
             switch currentFontStyle {
             case "thin":
                 textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
