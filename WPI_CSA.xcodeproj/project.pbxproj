@@ -30,6 +30,7 @@
 		8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE021EBC1F6800B1CDB1 /* WCService.swift */; };
 		8732FE071EBD07A600B1CDB1 /* WCUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE061EBD07A600B1CDB1 /* WCUtils.swift */; };
 		874F3D3B1EF6F4B100B47492 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */; };
+		874F3D3D1EF9AAE500B47492 /* WCArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874F3D3C1EF9AAE500B47492 /* WCArticle.swift */; };
 		877E61581E8C4DD100B88831 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877E61571E8C4DD100B88831 /* Article.swift */; };
 		877FD5981E94300E00632887 /* menuExpanded.png in Resources */ = {isa = PBXBuildFile; fileRef = 877FD5961E94300E00632887 /* menuExpanded.png */; };
 		877FD5991E94300E00632887 /* menuCollapsed.png in Resources */ = {isa = PBXBuildFile; fileRef = 877FD5971E94300E00632887 /* menuCollapsed.png */; };
@@ -89,6 +90,7 @@
 		8732FE021EBC1F6800B1CDB1 /* WCService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCService.swift; path = WebService/WCService.swift; sourceTree = "<group>"; };
 		8732FE061EBD07A600B1CDB1 /* WCUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUtils.swift; path = WebService/WCUtils.swift; sourceTree = "<group>"; };
 		874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreviewViewController.swift; path = ViewControllers/PreviewViewController.swift; sourceTree = "<group>"; };
+		874F3D3C1EF9AAE500B47492 /* WCArticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCArticle.swift; path = WebService/WCArticle.swift; sourceTree = "<group>"; };
 		877E61571E8C4DD100B88831 /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Article.swift; path = Objects/Article.swift; sourceTree = "<group>"; };
 		877FD5961E94300E00632887 /* menuExpanded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuExpanded.png; path = Icons/menuExpanded.png; sourceTree = "<group>"; };
 		877FD5971E94300E00632887 /* menuCollapsed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuCollapsed.png; path = Icons/menuCollapsed.png; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				8732FE021EBC1F6800B1CDB1 /* WCService.swift */,
 				87DE3FC11EC41DF800BB49EB /* WCUser.swift */,
 				8732FE061EBD07A600B1CDB1 /* WCUtils.swift */,
+				874F3D3C1EF9AAE500B47492 /* WCArticle.swift */,
 			);
 			name = WebService;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 				87CAC3981ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */,
 				87DE40051EC765C800BB49EB /* SettingViewController.swift in Sources */,
 				87C14A4C1EBE321B0031E20A /* ReportViewController.swift in Sources */,
+				874F3D3D1EF9AAE500B47492 /* WCArticle.swift in Sources */,
 				87CAC39C1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift in Sources */,
 				87E5D3171ECCCCEB004E1F84 /* Utils.swift in Sources */,
 				871E35CC1EBAA44B00EA483E /* HTTPSecurity.swift in Sources */,

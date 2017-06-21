@@ -31,6 +31,7 @@ class EditorViewController: UIViewController {
     
     let placeHolderText = ["Enter title here", "Enter article here"]
     var savedArticle = ["", ""]
+    var menuId: Int?    
     
     override func viewDidLoad() {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
@@ -42,7 +43,6 @@ class EditorViewController: UIViewController {
         if let article = SGDatabase.getParam(named: localArticle) {
             savedArticle[1] = article
         }
-        
         NotificationCenter.default.addObserver(self, selector: #selector(applicationWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
     }
     
@@ -54,6 +54,8 @@ class EditorViewController: UIViewController {
                 let confirm = UIAlertController(title: nil, message: "Are you sure you want to cancel?", preferredStyle: .alert)
                 confirm.addAction(UIAlertAction(title: "Yes, discard article", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
+                    SGDatabase.setParam(named: localTitle, withValue: "")
+                    SGDatabase.setParam(named: localArticle, withValue: "")
                     self.dismiss(animated: true, completion: nil)
                 }))
                 confirm.addAction(UIAlertAction(title: "Yes, save article locally", style: .default, handler: {
@@ -99,6 +101,7 @@ class EditorViewController: UIViewController {
             if let destinationViewController = segue.destination as? PreviewViewController {
                 destinationViewController.attributedTitle = titleCell.textView.attributedText
                 destinationViewController.attributedArtile = articleCell.textView.attributedText
+                destinationViewController.menuId = menuId
             }
         }
     }
@@ -143,8 +146,8 @@ extension EditorViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "EditorTextCell") as! EditorTextCell
             cell.textView.tag = indexPath.row
             cell.textView.delegate = self
-            cell.textView.layer.borderWidth = 1
-            cell.textView.layer.borderColor = UIColor.gray.cgColor
+            //cell.textView.layer.borderWidth = 1
+            //cell.textView.layer.borderColor = UIColor.gray.cgColor
             cell.textView.attributedText = savedArticle[indexPath.row - 1].htmlAttributedString()
             if savedArticle[indexPath.row - 1] == "" {
                 cell.placeHolder.text = placeHolderText[indexPath.row - 1]
@@ -217,14 +220,17 @@ extension EditorViewController: UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        //minimum required width for each wheel is 40, 80, 100, 80 on a minimum screen witdh of 320 (iphone 5)
+        //So applying the offset 320 - 300 = 20 and then calculate width by the ratio
+        let screenWidth = UIScreen.main.bounds.width - 20
         if component == 0 {
-            return 40
+            return screenWidth * 2 / 15
         }else if component == 1 {
-            return 80
+            return screenWidth * 4 / 15
         }else if component == 2 {
-            return 90
+            return screenWidth * 5 / 15
         }else{
-            return 80
+            return screenWidth * 4 / 15
         }
     }
 }

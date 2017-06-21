@@ -19,6 +19,7 @@ let pathEmailConfirmation = "send_email_confirmation"
 let pathChangePassword = "change_password"
 let pathRegisterSalt = "register_for_salt"
 let pathRegister = "register"
+let pathSubmitArticle = "add_sg_article"
 
 
 let serverDown = "Server down"

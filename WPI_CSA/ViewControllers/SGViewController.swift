@@ -84,7 +84,7 @@ class SGViewController: UIViewController {
         }
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
-        optionMenu.addAction(UIAlertAction(title: "Report a problem on this page", style: .default, handler: {
+        optionMenu.addAction(UIAlertAction(title: "Report a problem", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             if Utils.appMode == .Login {
                 let alert = UIAlertController(title: nil, message: "No user logged in. Please login so that we can get back to you and keep track of reports.", preferredStyle: .alert)
@@ -103,7 +103,7 @@ class SGViewController: UIViewController {
             }
             
         }))
-        optionMenu.addAction(UIAlertAction(title: "Create artile after this page", style: .default, handler: {
+        optionMenu.addAction(UIAlertAction(title: "Create new artile", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             if Utils.appMode == .Login {
                 let alert = UIAlertController(title: nil, message: "No user logged in. This feature is only available after logging in", preferredStyle: .alert)
@@ -152,6 +152,12 @@ class SGViewController: UIViewController {
                     reportViewController.menuId = article.menuId
                 }else{
                     reportViewController.menuId = -1
+                }
+            }else if let editorViewController = destinationViewController.topViewController as? EditorViewController {
+                if let article = article {
+                    editorViewController.menuId = article.menuId
+                }else{
+                    editorViewController.menuId = -1
                 }
             }
             

@@ -18,6 +18,7 @@ class PreviewViewController: UIViewController {
     var attributedArtile: NSAttributedString?
     
     var cellHeighs: [CGFloat] = [60, 60]
+    var menuId: Int?     
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -25,7 +26,20 @@ class PreviewViewController: UIViewController {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
     @IBAction func submitClicked(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        Utils.showLoadingIndicator()
+        WCArticleManager.submitArticle(withTitle: SGDatabase.getParam(named: localTitle)!.replacingOccurrences(of: "\n", with: ""),
+                                       andArticle: SGDatabase.getParam(named: localArticle)!.replacingOccurrences(of: "\n", with: ""),
+                                       underMenu: menuId!) { (error) in
+            if error == "" {
+                Utils.dismissIndicator()
+                self.dismiss(animated: true, completion: nil)
+            }else{
+                SGDatabase.setParam(named: localTitle, withValue: "")
+                SGDatabase.setParam(named: localArticle, withValue: "")
+                Utils.dismissIndicator()
+                Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+            }
+        }
     }
     
     
@@ -58,7 +72,7 @@ extension PreviewViewController: UITableViewDataSource {
         let size = cell.textView.sizeThatFits(CGSize(width: cell.frame.width - 20,
                                                      height: .greatestFiniteMagnitude))
         cellHeighs[indexPath.row] = size.height
-        print(size.height)
+        
         let filteredConstraints = cell.textView.constraints.filter { $0.identifier == "previewCellTextHeight" }
         if let heightConstraint = filteredConstraints.first {
             heightConstraint.constant = size.height
