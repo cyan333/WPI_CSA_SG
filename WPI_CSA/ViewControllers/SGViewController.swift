@@ -69,6 +69,18 @@ class SGViewController: UIViewController {
             }
         }
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showToast(_:)),
+                                               name: NSNotification.Name.init("showToast"), object: nil)
+    }
+    
+    func showToast(_ notification: NSNotification) {
+        if let message = notification.userInfo?["message"] as? String {
+            var style = ToastStyle()
+            style.messageAlignment = .center
+            self.view.makeToast(message, duration: 3.0, position: .center, style: style)
+        }
+        
     }
     
     @IBAction func openMenu(_ sender: UIButton) {

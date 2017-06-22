@@ -26,6 +26,7 @@ class PreviewViewController: UIViewController {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
     @IBAction func submitClicked(_ sender: Any) {
+        
         Utils.showLoadingIndicator()
         WCArticleManager.submitArticle(withTitle: SGDatabase.getParam(named: localTitle)!.replacingOccurrences(of: "\n", with: ""),
                                        andArticle: SGDatabase.getParam(named: localArticle)!.replacingOccurrences(of: "\n", with: ""),
@@ -33,6 +34,8 @@ class PreviewViewController: UIViewController {
             if error == "" {
                 Utils.dismissIndicator()
                 self.dismiss(animated: true, completion: nil)
+                let messageDict = ["message": "Thank you for your contribution. We have received your article and it's under validation now."]
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToast"), object: nil, userInfo: messageDict)
             }else{
                 SGDatabase.setParam(named: localTitle, withValue: "")
                 SGDatabase.setParam(named: localArticle, withValue: "")

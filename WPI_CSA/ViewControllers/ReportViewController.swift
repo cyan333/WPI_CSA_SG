@@ -94,6 +94,14 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             if error == "" {
                 Utils.dismissIndicator()
                 self.dismiss(animated: true, completion: nil)
+                var toastMessage: String
+                if email != "" {
+                    toastMessage = "Thank you for your report. We will get back to you as soon as possible."
+                }else{
+                    toastMessage = "Thank you for your report. We will not get back to you since you do not have email on record."
+                }
+                let messageDict = ["message": toastMessage]
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToast"), object: nil, userInfo: messageDict)
             }else{
                 Utils.dismissIndicator()
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
