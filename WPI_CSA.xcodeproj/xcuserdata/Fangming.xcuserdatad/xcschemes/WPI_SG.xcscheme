@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "910CFDB01E80BF950005CC1D"
-            BuildableName = "WPI_SG.app"
-            BlueprintName = "WPI_SG"
-            ReferencedContainer = "container:WPI_SG.xcodeproj">
+            BuildableName = "WPI_CSA.app"
+            BlueprintName = "WPI_CSA"
+            ReferencedContainer = "container:WPI_CSA.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "910CFDB01E80BF950005CC1D"
-            BuildableName = "WPI_SG.app"
-            BlueprintName = "WPI_SG"
-            ReferencedContainer = "container:WPI_SG.xcodeproj">
+            BuildableName = "WPI_CSA.app"
+            BlueprintName = "WPI_CSA"
+            ReferencedContainer = "container:WPI_CSA.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
