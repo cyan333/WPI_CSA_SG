@@ -97,15 +97,15 @@
 		877FD5961E94300E00632887 /* menuExpanded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuExpanded.png; path = Icons/menuExpanded.png; sourceTree = "<group>"; };
 		877FD5971E94300E00632887 /* menuCollapsed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuCollapsed.png; path = Icons/menuCollapsed.png; sourceTree = "<group>"; };
 		877FD59A1E95CD0A00632887 /* SG.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = SG.sqlite; sourceTree = "<group>"; };
-		87ADA8241E82275000EF81A4 /* WPI_SG-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "WPI_SG-Bridging-Header.h"; path = "Database/WPI_SG-Bridging-Header.h"; sourceTree = "<group>"; };
+		87ADA8241E82275000EF81A4 /* WPI_CSA-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "WPI_CSA-Bridging-Header.h"; path = "Database/WPI_CSA-Bridging-Header.h"; sourceTree = "<group>"; };
 		87ADA8281E8227C300EF81A4 /* SGDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SGDatabase.swift; path = Database/SGDatabase.swift; sourceTree = "<group>"; };
 		87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		87C14A4B1EBE321B0031E20A /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportViewController.swift; path = ViewControllers/ReportViewController.swift; sourceTree = "<group>"; };
-		87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorView.swift; sourceTree = "<group>"; };
-		87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationBallPulseSync.swift; sourceTree = "<group>"; };
-		87CAC3991ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationDelegate.swift; sourceTree = "<group>"; };
-		87CAC39B1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorShape.swift; sourceTree = "<group>"; };
-		87CAC39D1ED3DF9F004D0A97 /* NVActivityIndicatorPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorPresenter.swift; sourceTree = "<group>"; };
+		87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NVActivityIndicatorView.swift; path = Helpers/ActivityIndicator/NVActivityIndicatorView.swift; sourceTree = "<group>"; };
+		87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NVActivityIndicatorAnimationBallPulseSync.swift; path = Helpers/ActivityIndicator/NVActivityIndicatorAnimationBallPulseSync.swift; sourceTree = "<group>"; };
+		87CAC3991ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NVActivityIndicatorAnimationDelegate.swift; path = Helpers/ActivityIndicator/NVActivityIndicatorAnimationDelegate.swift; sourceTree = "<group>"; };
+		87CAC39B1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NVActivityIndicatorShape.swift; path = Helpers/ActivityIndicator/NVActivityIndicatorShape.swift; sourceTree = "<group>"; };
+		87CAC39D1ED3DF9F004D0A97 /* NVActivityIndicatorPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NVActivityIndicatorPresenter.swift; path = Helpers/ActivityIndicator/NVActivityIndicatorPresenter.swift; sourceTree = "<group>"; };
 		87CD3A491E8494E900C9E5F3 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Menu.swift; path = Objects/Menu.swift; sourceTree = "<group>"; };
 		87DE3FC11EC41DF800BB49EB /* WCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUser.swift; path = WebService/WCUser.swift; sourceTree = "<group>"; };
 		87DE40041EC765C800BB49EB /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingViewController.swift; path = ViewControllers/SettingViewController.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		87ADA8231E82272300EF81A4 /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				87ADA8241E82275000EF81A4 /* WPI_SG-Bridging-Header.h */,
+				87ADA8241E82275000EF81A4 /* WPI_CSA-Bridging-Header.h */,
 				87ADA8281E8227C300EF81A4 /* SGDatabase.swift */,
 			);
 			name = Database;
@@ -251,11 +251,11 @@
 		87CAC3941ED3D5A4004D0A97 /* ActivityIndicator */ = {
 			isa = PBXGroup;
 			children = (
-				87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */,
-				87CAC39B1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift */,
+				87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */,
 				87CAC3991ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift */,
 				87CAC39D1ED3DF9F004D0A97 /* NVActivityIndicatorPresenter.swift */,
-				87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */,
+				87CAC39B1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift */,
+				87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */,
 			);
 			name = ActivityIndicator;
 			sourceTree = "<group>";
@@ -562,7 +562,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fmning.WPI-CSA";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "WPI_CSA/Database/WPI_SG-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "WPI_CSA/Database/WPI_CSA-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
@@ -578,7 +578,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.fmning.WPI-CSA";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "WPI_CSA/Database/WPI_SG-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "WPI_CSA/Database/WPI_CSA-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

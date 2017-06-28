@@ -826,7 +826,7 @@
         <scene sceneID="HJU-pI-jGi">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="X25-Xx-p7A" userLabel="SG Navigation" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Survival Guide" image="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="Survival Guide" image="SG" id="acW-dT-cKf"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Is3-Uw-U38">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -1106,8 +1106,8 @@
     <resources>
         <image name="Action" width="25" height="25"/>
         <image name="Menu" width="25" height="25"/>
+        <image name="SG" width="25" height="25"/>
         <image name="Setting" width="25" height="25"/>
         <image name="defaultAvatar.png" width="200" height="200"/>
-        <image name="first" width="30" height="30"/>
     </resources>
 </document>
