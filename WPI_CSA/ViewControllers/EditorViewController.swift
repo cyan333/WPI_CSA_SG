@@ -107,7 +107,6 @@ class EditorViewController: UIViewController {
     }
     
     func applicationWillResignActive() {
-        print("haha")
         if let titleCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? EditorTextCell,
             let articleCell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? EditorTextCell{
             self.saveArticle(title: titleCell.textView.attributedText, article: articleCell.textView.attributedText)

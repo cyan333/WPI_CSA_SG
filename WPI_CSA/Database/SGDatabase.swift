@@ -21,25 +21,8 @@ class SGDatabase {
     }
     
     static func connect() throws -> SGDatabase {
-        let fileManger = FileManager.default
-        var doumentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        let doumentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
         let dbPath = doumentDirectoryPath.appendingPathComponent("SG.sqlite")
-        if !fileManger.fileExists(atPath: dbPath){
-            let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
-            do{
-                try fileManger.copyItem(atPath: path!, toPath: dbPath)
-            }catch let error as NSError {
-                print("error occurred, here are the details:\n \(error)")
-            }
-            var dbPathUrl = URL(fileURLWithPath: dbPath)
-            do {
-                var resourceValues = URLResourceValues()
-                resourceValues.isExcludedFromBackup = true
-                try dbPathUrl.setResourceValues(resourceValues)
-                
-            } catch { print("failed to set resource value") }
-        }
-        
         
         var db: OpaquePointer? = nil
         if sqlite3_open_v2(dbPath, &db, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK {
@@ -128,6 +111,35 @@ class SGDatabase {
         sqlite3_finalize(queryStatement)
         article.menuId = menuId
         return article
+    }
+    
+    open class func copySgDbToDocumentFolder() {
+        let fileManger = FileManager.default
+        let doumentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        let dbPath = doumentDirectoryPath.appendingPathComponent("SG.sqlite")
+        if fileManger.fileExists(atPath: dbPath){
+            do{
+                try fileManger.removeItem(atPath: dbPath)
+            }catch let error {
+                print("error occurred, here are the details:\n \(error)")
+            }
+        }
+        
+        let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
+        do{
+            try fileManger.copyItem(atPath: path!, toPath: dbPath)
+        }catch let error as NSError {
+            print("error occurred, here are the details:\n \(error)")
+        }
+        var dbPathUrl = URL(fileURLWithPath: dbPath)
+        do {
+            var resourceValues = URLResourceValues()
+            resourceValues.isExcludedFromBackup = true
+            try dbPathUrl.setResourceValues(resourceValues)
+            
+        } catch {
+            print("failed to set resource value")
+        }
     }
     
     open class func getParam(named key: String) ->String? {

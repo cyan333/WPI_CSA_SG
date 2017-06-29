@@ -16,11 +16,11 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var passwordConfirmField: UITextField!
     
     override func viewDidLoad() {
-        //usernameField.becomeFirstResponder()
-        usernameField.text = "fning@wpi.edu"
+        usernameField.becomeFirstResponder()
+        /*usernameField.text = "fning@wpi.edu"
         nameField.text = "derek"
         passwordField.text = "flashvb6"
-        passwordConfirmField.text = "flashvb6"
+        passwordConfirmField.text = "flashvb6"*/
         passwordField.isSecureTextEntry = true
         passwordConfirmField.isSecureTextEntry = true
         

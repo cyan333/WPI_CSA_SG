@@ -66,7 +66,7 @@ open class Utils {
                         }))
                         dismissIndicator()
                         vc.present(alert, animated: true, completion: nil)
-                        print("haha")
+                        
                         dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
                     } else if status == "AU" {
                         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)

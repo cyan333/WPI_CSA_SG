@@ -60,9 +60,6 @@ class SGViewController: UIViewController {
         //let htmlStr: String = "<font size=\"6\">This is some text!</font><font size=\"16\">This</font>"
         //let attriStr: NSAttributedString? = htmlStr.htmlAttributedString()
         //print(a.htmlAttributedString()!.htmlString()!)
-        UserDefaults.standard.removeObject(forKey: "aaa")
-        
-        print(UserDefaults.standard.string(forKey: "aaa"))
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         DispatchQueue.global(qos: .background).async {
@@ -82,7 +79,9 @@ class SGViewController: UIViewController {
         if let message = notification.userInfo?["message"] as? String {
             var style = ToastStyle()
             style.messageAlignment = .center
-            self.view.makeToast(message, duration: 3.0, position: .center, style: style)
+            DispatchQueue.main.async {
+                self.view.makeToast(message, duration: 3.0, position: .center, style: style)
+            }
         }
         
     }
