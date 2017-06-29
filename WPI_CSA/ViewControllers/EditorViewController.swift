@@ -37,10 +37,10 @@ class EditorViewController: UIViewController {
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 250, 0)
         
-        if let title = SGDatabase.getParam(named: localTitle) {
+        if let title = Utils.getParam(named: localTitle) {
             savedArticle[0] = title
         }
-        if let article = SGDatabase.getParam(named: localArticle) {
+        if let article = Utils.getParam(named: localArticle) {
             savedArticle[1] = article
         }
         NotificationCenter.default.addObserver(self, selector: #selector(applicationWillResignActive), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
@@ -54,8 +54,8 @@ class EditorViewController: UIViewController {
                 let confirm = UIAlertController(title: nil, message: "Are you sure you want to cancel?", preferredStyle: .alert)
                 confirm.addAction(UIAlertAction(title: "Yes, discard article", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
-                    SGDatabase.setParam(named: localTitle, withValue: "")
-                    SGDatabase.setParam(named: localArticle, withValue: "")
+                    Utils.setParam(named: localTitle, withValue: "")
+                    Utils.setParam(named: localArticle, withValue: "")
                     self.dismiss(animated: true, completion: nil)
                 }))
                 confirm.addAction(UIAlertAction(title: "Yes, save article locally", style: .default, handler: {
@@ -80,17 +80,17 @@ class EditorViewController: UIViewController {
     func saveArticle(title: NSAttributedString, article: NSAttributedString) {
         if title.length > 0 {
             if let title = title.htmlString() {
-                SGDatabase.setParam(named: localTitle, withValue: title)
+                Utils.setParam(named: localTitle, withValue: title)
             }
         }else{
-            SGDatabase.setParam(named: localTitle, withValue: "")
+            Utils.setParam(named: localTitle, withValue: "")
         }
         if article.length > 0 {
             if let article = article.htmlString() {
-                SGDatabase.setParam(named: localArticle, withValue: article)
+                Utils.setParam(named: localArticle, withValue: article)
             }
         }else{
-            SGDatabase.setParam(named: localArticle, withValue: "")
+            Utils.setParam(named: localArticle, withValue: "")
         }
     }
     
@@ -107,6 +107,7 @@ class EditorViewController: UIViewController {
     }
     
     func applicationWillResignActive() {
+        print("haha")
         if let titleCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? EditorTextCell,
             let articleCell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? EditorTextCell{
             self.saveArticle(title: titleCell.textView.attributedText, article: articleCell.textView.attributedText)

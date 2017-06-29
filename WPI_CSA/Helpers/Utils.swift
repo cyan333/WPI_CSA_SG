@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 
 //All application parameters are declared here
-let appStatus = "appStatus"
 let appVersion = "appVersion"
+let appStatus = "appStatus"
 let reportEmail = "email"
 let savedUsername = "username"
 let savedPassword = "password"
@@ -92,8 +92,8 @@ open class Utils {
     }
     
     open class func dismissIndicatorAndTryLogin(vc: UIViewController, showAlert: Bool){
-        if let password = SGDatabase.getParam(named: savedPassword),
-            let username = SGDatabase.getParam(named: savedUsername){
+        if let password = Utils.getParam(named: savedPassword),
+            let username = Utils.getParam(named: savedUsername){
             if password != "" && username != ""{
                 WCUserManager.loginUser(withUsername: username, andPassword: password, completion: {
                     (error, user) in
@@ -190,6 +190,18 @@ open class Utils {
                 return "Password must have at least 1 letter"
             }
         }
+    }
+    
+    open class func getParam(named key: String) ->String? {
+        return UserDefaults.standard.string(forKey: key)
+    }
+    
+    open class func setParam(named key:String, withValue value:String) {
+        UserDefaults.standard.set(value, forKey: key)
+    }
+    
+    open class func deleteParam(named key:String) {
+        UserDefaults.standard.removeObject(forKey: key)
     }
     
 }
