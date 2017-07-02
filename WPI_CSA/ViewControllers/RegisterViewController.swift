@@ -8,7 +8,15 @@
 
 import UIKit
 
+class RegisterInputCell: UITableViewCell {
+    
+    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var textField: UITextField!
+}
+
 class RegisterViewController: UIViewController {
+    @IBOutlet weak var tableView: UITableView!
+    
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var nameField: UITextField!
@@ -16,21 +24,15 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var passwordConfirmField: UITextField!
     
     override func viewDidLoad() {
-        usernameField.becomeFirstResponder()
+        //usernameField.becomeFirstResponder()
         /*usernameField.text = "fning@wpi.edu"
         nameField.text = "derek"
         passwordField.text = "flashvb6"
         passwordConfirmField.text = "flashvb6"*/
-        passwordField.isSecureTextEntry = true
-        passwordConfirmField.isSecureTextEntry = true
+        //passwordField.isSecureTextEntry = true
+        //passwordConfirmField.isSecureTextEntry = true
+        tableView.tableFooterView = UIView(frame: CGRect.zero)
         
-        NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
-        
-        let when = DispatchTime.now() + 4 // change 2 to desired number of seconds
-        DispatchQueue.main.asyncAfter(deadline: when) {
-            NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
-            NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
-        }
     }
     
     @IBAction func cancelClicked(_ sender: Any) {
@@ -114,4 +116,68 @@ class RegisterViewController: UIViewController {
     }
     
     
+}
+
+extension RegisterViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
+        if indexPath.section == 0 {
+            return 80
+        }else{
+            return 50
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0{
+            return 20
+        } else if section == 1 {
+            return 35
+        } else {
+            return 20
+        }
+    }
+    
+}
+
+extension RegisterViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 1 {
+            return 4
+        } else {
+            return 1
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterLabelCell") as! UITableViewCell!
+            cell?.contentView.backgroundColor = .red
+            return cell!
+        }else{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterInputCell") as! UITableViewCell!
+            
+            return cell!
+        }
+        
+    }
+    /*
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 1 {
+            return "Account information"
+        }else{
+            return " "
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = .clear
+        
+        return view
+    }*/
 }
