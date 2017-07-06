@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WPI_CSA/ViewControllers/RegisterViewController.swift"
-            timestampString = "520520087.461157"
+            timestampString = "520983910.885719"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "registerClicked(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -228,11 +228,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WPI_CSA/ViewControllers/RegisterViewController.swift"
-            timestampString = "520520087.461157"
+            timestampString = "520999633.365448"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
             landmarkName = "RegisterViewController"
             landmarkType = "4">
          </BreakpointContent>
@@ -244,13 +244,29 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WPI_CSA/ViewControllers/RegisterViewController.swift"
-            timestampString = "520520087.461157"
+            timestampString = "520999633.365448"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "RegisterViewController"
             landmarkType = "4">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WPI_CSA/ViewControllers/RegisterViewController.swift"
+            timestampString = "520999633.365448"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "223"
+            endingLineNumber = "223"
+            landmarkName = "textFieldShouldReturn(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

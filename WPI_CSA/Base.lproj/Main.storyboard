@@ -678,35 +678,47 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RegisterLabelCell" rowHeight="80" id="vjU-q6-DEx">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RegisterLabelCell" rowHeight="80" id="vjU-q6-DEx">
                                         <rect key="frame" x="0.0" y="56" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vjU-q6-DEx" id="eyn-eo-Jkg">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Welcome to CSA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vKu-26-mMy">
-                                                    <rect key="frame" x="120" y="30" width="180" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to CSA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vKu-26-mMy">
+                                                    <rect key="frame" x="98" y="30" width="254" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="HuW-nD-iXg"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="defaultAvatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Jus-2E-97s">
-                                                    <rect key="frame" x="20" y="10" width="60" height="60"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultAvatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Jus-2E-97s">
+                                                    <rect key="frame" x="23" y="10" width="60" height="60"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="60" id="K8F-VE-uu2"/>
+                                                        <constraint firstAttribute="height" constant="60" id="ZpY-cJ-g5k"/>
+                                                    </constraints>
                                                 </imageView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="vKu-26-mMy" firstAttribute="leading" secondItem="Jus-2E-97s" secondAttribute="trailing" constant="15" id="3ka-bV-8PD"/>
+                                                <constraint firstItem="Jus-2E-97s" firstAttribute="centerY" secondItem="eyn-eo-Jkg" secondAttribute="centerY" id="J7b-Dx-u6Y"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="vKu-26-mMy" secondAttribute="trailing" constant="15" id="PmM-bS-shZ"/>
+                                                <constraint firstItem="Jus-2E-97s" firstAttribute="leading" secondItem="eyn-eo-Jkg" secondAttribute="leadingMargin" constant="15" id="wzA-uA-Rg0"/>
+                                                <constraint firstItem="vKu-26-mMy" firstAttribute="centerY" secondItem="eyn-eo-Jkg" secondAttribute="centerY" id="xgh-4F-Qz2"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RegisterInputCell" id="MPA-sL-bM9" customClass="RegisterInputCell" customModule="WPI_CSA" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RegisterInputCell" id="MPA-sL-bM9" customClass="RegisterInputCell" customModule="WPI_CSA" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="136" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="MPA-sL-bM9" id="5C1-ge-ykr">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="60" placeholderIntrinsicHeight="21" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jc4-RI-Wc3">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="60" placeholderIntrinsicHeight="21" text="label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jc4-RI-Wc3">
                                                     <rect key="frame" x="23" y="11.5" width="80" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="80" id="uEe-TK-Urc"/>
@@ -722,7 +734,7 @@
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                                 </textField>
                                             </subviews>
                                             <constraints>

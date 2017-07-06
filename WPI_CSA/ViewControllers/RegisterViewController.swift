@@ -23,6 +23,9 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var passwordConfirmField: UITextField!
     
+    let labelText = ["Username", "Name", "Password", "Confirm"]
+    let placeHolderText = ["Your email address", "Your name", "6 characters with number and letter", "Confirm your password"]
+    
     override func viewDidLoad() {
         //usernameField.becomeFirstResponder()
         /*usernameField.text = "fning@wpi.edu"
@@ -33,6 +36,8 @@ class RegisterViewController: UIViewController {
         //passwordConfirmField.isSecureTextEntry = true
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     @IBAction func cancelClicked(_ sender: Any) {
@@ -115,6 +120,21 @@ class RegisterViewController: UIViewController {
         }
     }
     
+    func keyboardWillShow(notification:NSNotification){
+        //give room at the bottom of the scroll view, so it doesn't cover up anything the user needs to tap
+        var userInfo = notification.userInfo!
+        var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+        
+        var contentInset:UIEdgeInsets = self.tableView.contentInset
+        contentInset.bottom = keyboardFrame.size.height
+        self.tableView.contentInset = contentInset
+    }
+    
+    func keyboardWillHide(notification:NSNotification){
+        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
+        self.tableView.contentInset = contentInset
+    }
     
 }
 
@@ -138,6 +158,12 @@ extension RegisterViewController: UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let cell = tableView.cellForRow(at: indexPath) as! RegisterInputCell
+            cell.textField.becomeFirstResponder()
+        }
+    }
 }
 
 extension RegisterViewController: UITableViewDataSource {
@@ -155,16 +181,26 @@ extension RegisterViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterLabelCell") as! UITableViewCell!
-            cell?.contentView.backgroundColor = .red
-            return cell!
-        }else{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterInputCell") as! UITableViewCell!
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterLabelCell")!
             
-            return cell!
+            return cell
+        }else{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterInputCell") as! RegisterInputCell
+            
+            cell.textField.tag = indexPath.row
+            cell.textField.delegate = self
+            cell.label.text = labelText[indexPath.row]
+            cell.textField.placeholder = placeHolderText[indexPath.row]
+            if indexPath.row == 3 {
+                cell.textField.returnKeyType = .done
+            }
+            return cell
         }
         
     }
+    
+    
+    
     /*
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 1 {
@@ -180,4 +216,11 @@ extension RegisterViewController: UITableViewDataSource {
         
         return view
     }*/
+}
+
+extension RegisterViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
