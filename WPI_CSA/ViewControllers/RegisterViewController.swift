@@ -17,11 +17,6 @@ class RegisterInputCell: UITableViewCell {
 class RegisterViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var errorLabel: UILabel!
-    @IBOutlet weak var usernameField: UITextField!
-    @IBOutlet weak var nameField: UITextField!
-    @IBOutlet weak var passwordField: UITextField!
-    @IBOutlet weak var passwordConfirmField: UITextField!
     
     let labelText = ["Username", "Name", "Password", "Confirm"]
     let placeHolderText = ["Your email address", "Your name", "6 characters with number and letter", "Confirm your password"]
@@ -44,36 +39,42 @@ class RegisterViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func registerClicked(_ sender: Any) {
-        let username = usernameField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        if username == "" || !Utils.isEmailAddress(email: username) {
-            errorLabel.text = "Username is not a well fomatted email"
-            return
+    func registerUser() {
+        guard let username = (tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? RegisterInputCell)?.textField.text?
+            .trimmingCharacters(in: .whitespacesAndNewlines), username != "", Utils.isEmailAddress(email: username) else{
+            Utils.show(alertMessage: "Username is not a well fomatted email", onViewController: self)
+                return
         }
         
-        let name = nameField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        if name == "" {
-            errorLabel.text = "You must enter your name"
-            return
+        guard let name = (tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as? RegisterInputCell)?.textField.text?
+            .trimmingCharacters(in: .whitespacesAndNewlines), name != "" else{
+                Utils.show(alertMessage: "You must enter your name", onViewController: self)
+                return
         }
         
-        let pwdStrengthCheck = Utils.checkPasswordStrength(password: passwordField.text!)
+        guard let password = (tableView.cellForRow(at: IndexPath(row: 2, section: 1)) as? RegisterInputCell)?
+            .textField.text else{
+                Utils.show(alertMessage: "Unknown error", onViewController: self)
+                return
+        }
+        
+        let pwdStrengthCheck = Utils.checkPasswordStrength(password: password)
         if pwdStrengthCheck != "" {
-            errorLabel.text = pwdStrengthCheck
+            Utils.show(alertMessage: pwdStrengthCheck, onViewController: self)
             return
         }
         
-        if passwordField.text! != passwordConfirmField.text! {
-            errorLabel.text = "Two passwords don't match"
-            return
+        guard let passwordConfirm = (tableView.cellForRow(at: IndexPath(row: 3, section: 1)) as? RegisterInputCell)?
+            .textField.text, passwordConfirm == password else{
+                Utils.show(alertMessage: "Two passwords don't match", onViewController: self)
+                return
         }
-        errorLabel.text = ""
         
         Utils.showLoadingIndicator()
         WCUserManager.regesterSalt(forUsername: username) { (error, salt) in
             if error == "" {
                 WCUserManager.register(forUsername: username,
-                                       andEncryptedPassword: WCUtils.md5(self.passwordField.text! + salt),
+                                       andEncryptedPassword: WCUtils.md5(password + salt),
                                        completion: { (error, user) in
                                         if error == "" {
                                             WCService.currentUser = user
@@ -83,7 +84,7 @@ class RegisterViewController: UIViewController {
                                                     WCService.currentUser!.name = name
                                                     Utils.setParam(named: savedUsername, withValue: username)
                                                     Utils.setParam(named: savedPassword,
-                                                                        withValue: WCUtils.md5(self.passwordField.text! + salt))
+                                                                        withValue: WCUtils.md5(password + salt))
                                                     NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
                                                     Utils.dismissIndicator()
                                                     OperationQueue.main.addOperation{
@@ -162,6 +163,9 @@ extension RegisterViewController: UITableViewDelegate {
         if indexPath.section == 1 {
             let cell = tableView.cellForRow(at: indexPath) as! RegisterInputCell
             cell.textField.becomeFirstResponder()
+        }else if indexPath.section == 2 {
+            tableView.deselectRow(at: indexPath, animated: true)
+            registerUser()
         }
     }
 }
@@ -184,6 +188,10 @@ extension RegisterViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterLabelCell")!
             
             return cell
+        }else if indexPath.section == 2 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterButtonCell")!
+            
+            return cell
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterInputCell") as! RegisterInputCell
             
@@ -191,36 +199,29 @@ extension RegisterViewController: UITableViewDataSource {
             cell.textField.delegate = self
             cell.label.text = labelText[indexPath.row]
             cell.textField.placeholder = placeHolderText[indexPath.row]
-            if indexPath.row == 3 {
+            if indexPath.row == 2 {
+                cell.textField.isSecureTextEntry = true
+            } else if indexPath.row == 3 {
                 cell.textField.returnKeyType = .done
+                cell.textField.isSecureTextEntry = true
             }
             return cell
         }
         
     }
     
-    
-    
-    /*
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 1 {
-            return "Account information"
-        }else{
-            return " "
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .clear
-        
-        return view
-    }*/
+ 
 }
 
 extension RegisterViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        if textField.tag == 3 {
+            textField.resignFirstResponder()
+            registerUser()
+        }else{
+            let cell = tableView.cellForRow(at: IndexPath(row: textField.tag + 1, section: 1)) as! RegisterInputCell
+            cell.textField.becomeFirstResponder()
+        }
         return true
     }
 }

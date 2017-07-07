@@ -233,8 +233,8 @@ extension SettingViewController : UITableViewDataSource {
                 return cell
             }else if Utils.appMode == .Login {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingLoginCell") as! SettingLoginCell
-                cell.usernameField.text = "synfm123@gmail.com"
-                cell.passwordField.text = "flash"
+                /*cell.usernameField.text = "synfm123@gmail.com"
+                cell.passwordField.text = "flash"*/
                 cell.passwordField.isSecureTextEntry = true
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
                 return cell
