@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+let baseVersion = "1.00.001"
+
 //All application parameters are declared here
 let appVersion = "appVersion"
 let appStatus = "appStatus"
@@ -24,71 +26,77 @@ open class Utils {
     open class func checkVerisonInfoAndLoginUser(onViewController vc: UIViewController, showingServerdownAlert showAlert: Bool) {
         if showAlert {//Manully click the login button
             showLoadingIndicator()
-        } else {//Automatically called when app starts
-            if let appStatus = SGDatabase.getParam(named: appStatus){
-                if appStatus != "OK"{
-                    return
-                }
-            }
-        }
-        if let version = SGDatabase.getParam(named: appVersion) {
-            if version == "" {
-                dismissIndicator()
-                return
-            }else{
-                WCService.checkSoftwareVersion(version: SGDatabase.getParam(named: appVersion)!,
-                                               completion: { (status, title, msg, updates, version) in
-                    appMode = .Login
-                    if status == "OK"{
-                        dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
-                    } else if status == "CU" {
-                        SGDatabase.setParam(named: appVersion, withValue: version)
-                        SGDatabase.run(queries: updates)
-                        dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
-                    } else if status == "BM" {
-                        if updates != "" {
-                            SGDatabase.run(queries: updates)
-                        }
-                        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: {
-                            (alert: UIAlertAction!) -> Void in
-                            let ind = version.index(version.endIndex, offsetBy: -3)
-                            if let prevVersion = Int(version.substring(from: ind)) {
-                                let prevVersionStr = version.substring(to: ind) + String(format: "%03d", prevVersion - 1)
-                                SGDatabase.setParam(named: appVersion, withValue: prevVersionStr)
-                            }else{
-                                SGDatabase.setParam(named: appVersion, withValue: version)//TODO: Do something here
-                            }
-                        }))
-                        alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
-                            (alert: UIAlertAction!) -> Void in
-                            SGDatabase.setParam(named: appVersion, withValue: version)
-                        }))
-                        dismissIndicator()
-                        vc.present(alert, animated: true, completion: nil)
-                        
-                        dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
-                    } else if status == "AU" {
-                        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
-                        alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
-                            (alert: UIAlertAction!) -> Void in
-                            SGDatabase.setParam(named: appStatus, withValue: "")
-                        }))
-                        dismissIndicator()
-                        vc.present(alert, animated: true, completion: nil)
-                        //Do not login user because http request updates may break login process
-                    } else {
-                        dismissIndicator()
-                        process(errorMessage: status, onViewController: vc, showingServerdownAlert: showAlert)
-                    }
-                
-                })
-            }
-        }else{
-            dismissIndicator()
         }
         
+        var versionToCheck = baseVersion
+        
+        if let version = Utils.getParam(named: appVersion) {
+            versionToCheck = version
+            let versionArr = version.components(separatedBy: ".")
+            if versionArr.count != 3 {                                              //Corrupted data
+                Utils.initiateApp()
+            } else if versionArr[1] != baseVersion.components(separatedBy: ".")[1]{ //Software version mismatch
+                Utils.initiateApp()// TODO: merge top if nothing special
+            }
+        }else{//First time install
+            Utils.initiateApp()
+        }
+        
+        WCService.checkSoftwareVersion(version: versionToCheck,
+           completion: { (status, title, msg, updates, version) in
+            appMode = .Login
+            if status == "OK"{
+                dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
+            } else if status == "CU" {
+                Utils.setParam(named: appVersion, withValue: version)
+                SGDatabase.run(queries: updates)
+                dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
+            } else if status == "BM" {
+                if updates != "" {
+                    SGDatabase.run(queries: updates)
+                }
+                let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    let ind = version.index(version.endIndex, offsetBy: -3)
+                    if let prevVersion = Int(version.substring(from: ind)) {
+                        let prevVersionStr = version.substring(to: ind) + String(format: "%03d", prevVersion - 1)
+                        Utils.setParam(named: appVersion, withValue: prevVersionStr)
+                    }else{
+                        Utils.setParam(named: appVersion, withValue: version)//TODO: Do something here
+                    }
+                }))
+                alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    Utils.setParam(named: appVersion, withValue: version)
+                }))
+                dismissIndicator()
+                vc.present(alert, animated: true, completion: nil)
+                
+                dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
+            } else if status == "AU" {
+                let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: nil))
+                alert.addAction(UIAlertAction(title: "Never show this again", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    Utils.setParam(named: appStatus, withValue: "")
+                }))
+                dismissIndicator()
+                vc.present(alert, animated: true, completion: nil)
+                //Do not login user because http request updates may break login process
+            } else {
+                dismissIndicator()
+                process(errorMessage: status, onViewController: vc, showingServerdownAlert: showAlert)
+            }
+            
+        })
+        
+    }
+    
+    open class func initiateApp() {
+        Utils.setParam(named: appStatus, withValue: "OK")
+        Utils.setParam(named: appVersion, withValue: baseVersion)
+        SGDatabase.copySgDbToDocumentFolder()
     }
     
     open class func dismissIndicatorAndTryLogin(vc: UIViewController, showAlert: Bool){

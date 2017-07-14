@@ -141,7 +141,7 @@ class SGDatabase {
             print("failed to set resource value")
         }
     }
-    
+    /*
     open class func getParam(named key: String) ->String? {
         do{
             let db = try SGDatabase.connect()
@@ -199,7 +199,7 @@ class SGDatabase {
             sqlite3_finalize(queryStatement)
         }catch {}
     }
-    
+    */
     open class func run(queries: String){
         do{
             let db = try SGDatabase.connect()
