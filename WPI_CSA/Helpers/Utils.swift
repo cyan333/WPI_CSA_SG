@@ -28,6 +28,8 @@ open class Utils {
             showLoadingIndicator()
         }
         
+        //if let
+        
         var versionToCheck = baseVersion
         
         if let version = Utils.getParam(named: appVersion) {
@@ -40,6 +42,10 @@ open class Utils {
             }
         }else{//First time install
             Utils.initiateApp()
+        }
+        
+        guard let status = Utils.getParam(named: appStatus), status == "OK" else {
+            return //TODO: Any friendly message?
         }
         
         WCService.checkSoftwareVersion(version: versionToCheck,
