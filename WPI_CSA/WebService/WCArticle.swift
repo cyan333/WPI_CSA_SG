@@ -45,7 +45,6 @@ open class WCArticleManager {
                 if dict!["error"] as! String != "" {
                     completion(dict!["error"]! as! String)
                 }else{
-                    WCService.currentUser!.name = dict!["name"] as! String
                     completion("")
                 }
             }

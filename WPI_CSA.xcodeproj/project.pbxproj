@@ -15,7 +15,6 @@
 		871E35B61EB19FF700EA483E /* 1_6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35AB1EB19FF700EA483E /* 1_6.jpg */; };
 		871E35B71EB19FF700EA483E /* 1_7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35AC1EB19FF700EA483E /* 1_7.jpg */; };
 		871E35B81EB19FF700EA483E /* 1_8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35AD1EB19FF700EA483E /* 1_8.jpg */; };
-		871E35B91EB19FF700EA483E /* 1_9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35AE1EB19FF700EA483E /* 1_9.jpg */; };
 		871E35BA1EB19FF700EA483E /* 28_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35AF1EB19FF700EA483E /* 28_1.jpg */; };
 		871E35BB1EB19FF700EA483E /* cover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35B01EB19FF700EA483E /* cover.jpg */; };
 		871E35BD1EB2B73D00EA483E /* 62_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35BC1EB2B73D00EA483E /* 62_1.jpg */; };
@@ -76,7 +75,6 @@
 		871E35AB1EB19FF700EA483E /* 1_6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 1_6.jpg; path = SGImages/1_6.jpg; sourceTree = "<group>"; };
 		871E35AC1EB19FF700EA483E /* 1_7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 1_7.jpg; path = SGImages/1_7.jpg; sourceTree = "<group>"; };
 		871E35AD1EB19FF700EA483E /* 1_8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 1_8.jpg; path = SGImages/1_8.jpg; sourceTree = "<group>"; };
-		871E35AE1EB19FF700EA483E /* 1_9.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 1_9.jpg; path = SGImages/1_9.jpg; sourceTree = "<group>"; };
 		871E35AF1EB19FF700EA483E /* 28_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 28_1.jpg; path = SGImages/28_1.jpg; sourceTree = "<group>"; };
 		871E35B01EB19FF700EA483E /* cover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = cover.jpg; path = SGImages/cover.jpg; sourceTree = "<group>"; };
 		871E35BC1EB2B73D00EA483E /* 62_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 62_1.jpg; path = SGImages/62_1.jpg; sourceTree = "<group>"; };
@@ -192,7 +190,6 @@
 				871E35AB1EB19FF700EA483E /* 1_6.jpg */,
 				871E35AC1EB19FF700EA483E /* 1_7.jpg */,
 				871E35AD1EB19FF700EA483E /* 1_8.jpg */,
-				871E35AE1EB19FF700EA483E /* 1_9.jpg */,
 				871E35BE1EB6BBDE00EA483E /* 11_1.jpg */,
 				871E35AF1EB19FF700EA483E /* 28_1.jpg */,
 				871E35BC1EB2B73D00EA483E /* 62_1.jpg */,
@@ -371,7 +368,6 @@
 				871E35BA1EB19FF700EA483E /* 28_1.jpg in Resources */,
 				871E35B21EB19FF700EA483E /* 1_2.jpg in Resources */,
 				871E35B81EB19FF700EA483E /* 1_8.jpg in Resources */,
-				871E35B91EB19FF700EA483E /* 1_9.jpg in Resources */,
 				87DE400D1EC79FFF00BB49EB /* Instagram.png in Resources */,
 				871E35BF1EB6BBDE00EA483E /* 11_1.jpg in Resources */,
 				871E35B71EB19FF700EA483E /* 1_7.jpg in Resources */,

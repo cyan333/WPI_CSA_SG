@@ -237,7 +237,7 @@ extension String {
         html.enumerateAttribute(NSFontAttributeName, in: NSMakeRange(0, html.length), options: .init(rawValue: 0)) {
             (value, range, stop) in
             if let font = value as? UIFont {
-                let resizedFont = font.withSize(font.pointSize * 0.75)
+                let resizedFont = font.withSize(font.pointSize * 1.25)
                 html.addAttribute(NSFontAttributeName,
                                          value: resizedFont,
                                          range: range)

@@ -8,8 +8,8 @@
 
 import Foundation
 
-let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
-//let serviceBase = "http://wc.fmning.com/" //********************TEST
+//let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
+let serviceBase = "http://wc.fmning.com/" //********************TEST
 
 let pathGetSalt = "login_for_salt"
 let pathLogin = "login"
