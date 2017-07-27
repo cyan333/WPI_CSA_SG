@@ -210,6 +210,7 @@ extension SGViewController : UITableViewDataSource {
         
         switch paragraph.type {
         case .Plain:
+            print()
             let cell = tableView.dequeueReusableCell(withIdentifier: "SGTextCell") as! SGTextCell
             
             if paragraph.cellHeight == 0 {
@@ -227,10 +228,12 @@ extension SGViewController : UITableViewDataSource {
                 heightConstraint.constant = paragraph.textViewHeight
             }
             
-            if(paragraph.separatorType == .Full){
+            if paragraph.separatorType == .Full {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            }else if (paragraph.separatorType == .None){
+            } else if paragraph.separatorType == .None{
                 cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            } else {
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
             }
             
             return cell
