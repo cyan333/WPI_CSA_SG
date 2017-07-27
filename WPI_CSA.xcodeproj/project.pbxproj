@@ -28,6 +28,7 @@
 		8721CB571EE651D80023152A /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8721CB561EE651D80023152A /* EditorViewController.swift */; };
 		8727796F1F2985D1009F83B7 /* 85_2.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 8727796D1F2985D1009F83B7 /* 85_2.JPG */; };
 		872779701F2985D1009F83B7 /* 85_3.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 8727796E1F2985D1009F83B7 /* 85_3.JPG */; };
+		872779721F2A1829009F83B7 /* separator.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 872779711F2A1829009F83B7 /* separator.JPG */; };
 		8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE021EBC1F6800B1CDB1 /* WCService.swift */; };
 		8732FE071EBD07A600B1CDB1 /* WCUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE061EBD07A600B1CDB1 /* WCUtils.swift */; };
 		874F3D3B1EF6F4B100B47492 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */; };
@@ -90,6 +91,7 @@
 		8721CB561EE651D80023152A /* EditorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditorViewController.swift; path = ViewControllers/EditorViewController.swift; sourceTree = "<group>"; };
 		8727796D1F2985D1009F83B7 /* 85_2.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 85_2.JPG; path = SGImages/85_2.JPG; sourceTree = "<group>"; };
 		8727796E1F2985D1009F83B7 /* 85_3.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 85_3.JPG; path = SGImages/85_3.JPG; sourceTree = "<group>"; };
+		872779711F2A1829009F83B7 /* separator.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = separator.JPG; path = SGImages/separator.JPG; sourceTree = "<group>"; };
 		8732FE021EBC1F6800B1CDB1 /* WCService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCService.swift; path = WebService/WCService.swift; sourceTree = "<group>"; };
 		8732FE061EBD07A600B1CDB1 /* WCUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUtils.swift; path = WebService/WCUtils.swift; sourceTree = "<group>"; };
 		874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreviewViewController.swift; path = ViewControllers/PreviewViewController.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				8727796D1F2985D1009F83B7 /* 85_2.JPG */,
 				8727796E1F2985D1009F83B7 /* 85_3.JPG */,
 				871E35B01EB19FF700EA483E /* cover.jpg */,
+				872779711F2A1829009F83B7 /* separator.JPG */,
 			);
 			name = SGImages;
 			sourceTree = "<group>";
@@ -379,6 +382,7 @@
 				871E35B71EB19FF700EA483E /* 1_7.jpg in Resources */,
 				877FD59B1E95CD0A00632887 /* SG.sqlite in Resources */,
 				910CFDBF1E80BF950005CC1D /* LaunchScreen.storyboard in Resources */,
+				872779721F2A1829009F83B7 /* separator.JPG in Resources */,
 				871E35B11EB19FF700EA483E /* 1_1.jpg in Resources */,
 				910CFDBC1E80BF950005CC1D /* Assets.xcassets in Resources */,
 				87DE40091EC7776200BB49EB /* defaultAvatar.png in Resources */,
