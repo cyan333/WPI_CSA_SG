@@ -14,6 +14,11 @@ class Article{
     var content: String
     var paragraphs: [Paragraph]
     
+    var prevMenuId: Int?
+    var prevMenuText: String?
+    var nextMenuId: Int?
+    var nextMenuText: String?
+    
     init(content: String){
         self.content = content
         paragraphs = [Paragraph]()

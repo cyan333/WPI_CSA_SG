@@ -9,6 +9,7 @@
 import Foundation
 
 class SGDatabase {
+    
     private let dbPointer: OpaquePointer
     
     private init(dbPointer: OpaquePointer) {
@@ -59,8 +60,12 @@ class SGDatabase {
                 var name = String(cString: sqlite3_column_text(queryStatement, 1)!) //Not null column
                 name = prefix + name
                 let menu = Menu(id: Int(id), name: name)
+                
                 menu.subMenus = self.getSubMenus(by: Int(id), withPrefix: prefix + "   ")
                 menu.isParentMenu = menu.subMenus.count > 0
+                if !menu.isParentMenu {
+                    Utils.menuOrderList.append(Int(id))
+                }
                 menuList.append(menu)
             }
         }else{
@@ -88,6 +93,24 @@ class SGDatabase {
         return menuList
     }
     
+    func getMenuTitle(byMenuId menuId: Int) -> String{
+        let query = "SELECT NAME FROM MENUS WHERE ID = \(menuId)"
+        var queryStatement: OpaquePointer? = nil
+        var name = ""
+        
+        if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+            if sqlite3_step(queryStatement) == SQLITE_ROW {
+                name = String(cString: sqlite3_column_text(queryStatement, 0)) //Not null column
+            }else{
+                print("Article not found")
+            }
+        }else{
+            print("query cannot be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        return name
+    }
+    
     func getArticle(byMenuId menuId: Int) -> Article{
         let query = "SELECT TITLE, CONTENT FROM ARTICLES WHERE MENU_ID = \(menuId)"
         var queryStatement: OpaquePointer? = nil
@@ -96,9 +119,7 @@ class SGDatabase {
         if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
             if sqlite3_step(queryStatement) == SQLITE_ROW {
                 let title = String(cString: sqlite3_column_text(queryStatement, 0)) //Not null column
-                //let title = "<span style=\"font-weight:bold;font-size:50px;color:grey;\">关于我们</span>"
                 let content = String(cString: sqlite3_column_text(queryStatement, 1)) //Not null column
-                //let content = "<span style=\"font-weight:bold;font-size:60px;color:purple;\">Test</span><span style=\"font-weight:bold;font-size:60px;color:#6633CC;\">Test</span>"
                 article = Article(title: title, content: content)
             }else{
                 print("Article not found")
@@ -110,6 +131,17 @@ class SGDatabase {
         }
         sqlite3_finalize(queryStatement)
         article.menuId = menuId
+        if let index = Utils.menuOrderList.index(of: menuId) {
+            if index != Utils.menuOrderList.count - 1 {
+                article.nextMenuId = Utils.menuOrderList[index + 1] //TODO: Check for index?
+                article.nextMenuText = getMenuTitle(byMenuId: Utils.menuOrderList[index + 1])
+            }
+            if index != 0 {
+                article.prevMenuId = Utils.menuOrderList[index - 1] //TODO: Check for index?
+                article.prevMenuText = getMenuTitle(byMenuId: Utils.menuOrderList[index - 1])
+            }
+            
+        }
         return article
     }
     
@@ -212,7 +244,7 @@ class SGDatabase {
                     print(String(cString: errMsg))
                 }
             }else{
-                print("ok")
+                print("Query is successfully executed")
             }
         }catch {}
     }

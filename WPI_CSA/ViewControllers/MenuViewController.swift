@@ -60,25 +60,16 @@ class MenuViewController : UIViewController {
             print(error)
         }
         if(menuList.count == 0){
-            if let db = sgDatabase{
-                menuList = db.getSubMenus(by: 0, withPrefix: "")
+            if let sgDatabase = sgDatabase{
+                Utils.menuOrderList = []
+                menuList = sgDatabase.getSubMenus(by: 0, withPrefix: "")
                 
-                self.priint(menuList: menuList)
             }
         }
         
         visibleCellCount = calculateVisibleCellNumber(menuList: menuList)
         tableView.reloadData();
         
-    }
-    
-    func priint (menuList: [Menu]) {
-        for m in menuList {
-            print(m.id)
-            if m.isParentMenu {
-                priint(menuList: m.subMenus)
-            }
-        }
     }
     
     @IBAction func handleGesture(sender: UIPanGestureRecognizer) {

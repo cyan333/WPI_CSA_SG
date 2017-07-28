@@ -22,6 +22,7 @@ let localArticle = "article"
 
 open class Utils {
     static var appMode: AppMode = .Offline
+    static var menuOrderList: [Int] = []
     
     open class func checkVerisonInfoAndLoginUser(onViewController vc: UIViewController, showingServerdownAlert showAlert: Bool) {
         if showAlert {//Manully click the login button

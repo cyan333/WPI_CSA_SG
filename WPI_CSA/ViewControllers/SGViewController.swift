@@ -33,6 +33,11 @@ class SGImgCell: UITableViewCell{
     @IBOutlet weak var imgView: UIImageView!
 }
 
+class SGNavCell: UITableViewCell{
+    @IBOutlet var prevBtn: UIButton!
+    @IBOutlet var nextBtn: UIButton!
+}
+
 class SGViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -85,6 +90,40 @@ class SGViewController: UIViewController {
             }
         }
         
+    }
+    
+    func goToPreviousArticle(){
+        do{
+            let sgDatabase = try SGDatabase.connect()
+            let newArticle = sgDatabase.getArticle(byMenuId: (article?.prevMenuId!)!)
+            newArticle.processContent()
+            
+            UIView.animate(withDuration: 0.5, animations: { 
+                self.tableView.setContentOffset(CGPoint.zero, animated: false)
+            }, completion: { _ in
+                self.article = newArticle
+                self.tableView.reloadData()
+            })
+            
+        }catch {
+            print(error)
+        }
+        
+    }
+    
+    func goToNextArticle(){
+        do{
+            let sgDatabase = try SGDatabase.connect()
+            article = sgDatabase.getArticle(byMenuId: (article?.nextMenuId!)!)
+            article?.processContent()
+            self.tableView.setContentOffset(CGPoint.zero, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+                print("executed")
+                self.tableView.reloadData()
+            }
+        }catch {
+            print(error)
+        }
     }
     
     @IBAction func openMenu(_ sender: UIButton) {
@@ -185,8 +224,8 @@ class SGViewController: UIViewController {
 
 extension SGViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let notNullArticle =  article {
-            return notNullArticle.paragraphs.count
+        if let article =  article {
+            return article.menuId == 0 ? article.paragraphs.count : article.paragraphs.count + 1 //Nav cell
         }else{
             return 0
         }
@@ -195,8 +234,12 @@ extension SGViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
-        if let notNullArticle =  article {
-            return notNullArticle.paragraphs[indexPath.row].cellHeight
+        if let article =  article {
+            if indexPath.row < article.paragraphs.count {
+                return article.paragraphs[indexPath.row].cellHeight
+            } else {
+                return 65 //Nav cell
+            }
         }else{
             return 0
         }
@@ -204,13 +247,53 @@ extension SGViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var paragraph = Paragraph()
-        if let notNullArticle =  article {
-            paragraph = notNullArticle.paragraphs[indexPath.row]
+        if let article =  article {
+            if indexPath.row == article.paragraphs.count {
+                let paragraph = NSMutableParagraphStyle()
+                paragraph.alignment = .center
+                let attributes: [String : Any] = [NSParagraphStyleAttributeName: paragraph]
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SGNavCell") as! SGNavCell
+                cell.prevBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 10)
+                cell.prevBtn.layer.borderWidth = 1
+                cell.prevBtn.layer.cornerRadius = 5
+                cell.prevBtn.layer.borderColor = self.view.tintColor.cgColor
+                cell.prevBtn.titleLabel?.numberOfLines = 2
+                cell.prevBtn.addTarget(self, action:#selector(goToPreviousArticle), for: .touchUpInside)
+                if let prevMenuText = article.prevMenuText {
+                    cell.prevBtn.setAttributedTitle(NSMutableAttributedString(string: "Previous\n" + prevMenuText, attributes: attributes), for: .normal)
+                    cell.prevBtn.isEnabled = true
+                    cell.prevBtn.alpha = 1
+                } else {
+                    cell.prevBtn.setAttributedTitle(NSMutableAttributedString(string: "Previous", attributes: attributes), for: .normal)
+                    cell.prevBtn.isEnabled = false
+                    cell.prevBtn.alpha = 0.5
+                }
+                
+                cell.nextBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 15)
+                cell.nextBtn.layer.borderWidth = 1
+                cell.nextBtn.layer.cornerRadius = 5
+                cell.nextBtn.layer.borderColor = self.view.tintColor.cgColor
+                cell.nextBtn.titleLabel?.numberOfLines = 2
+                cell.nextBtn.addTarget(self, action:#selector(goToNextArticle), for: .touchUpInside)
+                if let nextMenuText = article.nextMenuText {
+                    cell.nextBtn.setAttributedTitle(NSMutableAttributedString(string: "Next\n" + nextMenuText, attributes: attributes), for: .normal)
+                    cell.nextBtn.isEnabled = true
+                    cell.nextBtn.alpha = 1
+                } else {
+                    cell.nextBtn.setAttributedTitle(NSMutableAttributedString(string: "Next", attributes: attributes), for: .normal)
+                    cell.nextBtn.isEnabled = false
+                    cell.nextBtn.alpha = 0.5
+                }
+                
+                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+                return cell
+            }
+            paragraph = article.paragraphs[indexPath.row]
         }
         
         switch paragraph.type {
         case .Plain:
-            print()
             let cell = tableView.dequeueReusableCell(withIdentifier: "SGTextCell") as! SGTextCell
             
             if paragraph.cellHeight == 0 {
