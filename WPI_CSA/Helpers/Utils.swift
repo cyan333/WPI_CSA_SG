@@ -226,8 +226,13 @@ enum AppMode{
     case LoggedOn
 }
 
+enum FontRatio{
+    case Normal
+    case Enlarged
+}
+
 extension String {
-    func htmlAttributedString() -> NSAttributedString? {
+    func htmlAttributedString(ratio: FontRatio) -> NSAttributedString? {
         guard let data = self.data(using: String.Encoding.utf16, allowLossyConversion: false) else { return nil }
         guard let html = try? NSMutableAttributedString(
             data: data,
@@ -237,7 +242,8 @@ extension String {
         html.enumerateAttribute(NSFontAttributeName, in: NSMakeRange(0, html.length), options: .init(rawValue: 0)) {
             (value, range, stop) in
             if let font = value as? UIFont {
-                let resizedFont = font.withSize(font.pointSize * 1.25)
+                let fontRatio: CGFloat = ratio == .Normal ? 0.75 : 1.25
+                let resizedFont = font.withSize(font.pointSize * fontRatio)
                 html.addAttribute(NSFontAttributeName,
                                          value: resizedFont,
                                          range: range)

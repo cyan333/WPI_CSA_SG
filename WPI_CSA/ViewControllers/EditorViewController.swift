@@ -148,7 +148,7 @@ extension EditorViewController: UITableViewDataSource {
             cell.textView.delegate = self
             //cell.textView.layer.borderWidth = 1
             //cell.textView.layer.borderColor = UIColor.gray.cgColor
-            cell.textView.attributedText = savedArticle[indexPath.row - 1].htmlAttributedString()
+            cell.textView.attributedText = savedArticle[indexPath.row - 1].htmlAttributedString(ratio: .Normal)
             if savedArticle[indexPath.row - 1] == "" {
                 cell.placeHolder.text = placeHolderText[indexPath.row - 1]
             }

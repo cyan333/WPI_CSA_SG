@@ -32,13 +32,13 @@ class PreviewViewController: UIViewController {
                                        andArticle: Utils.getParam(named: localArticle)!.replacingOccurrences(of: "\n", with: ""),
                                        underMenu: menuId!) { (error) in
             if error == "" {
+                Utils.setParam(named: localTitle, withValue: "")
+                Utils.setParam(named: localArticle, withValue: "")
                 Utils.dismissIndicator()
                 self.dismiss(animated: true, completion: nil)
                 let messageDict = ["message": "Thank you for your contribution. We have received your article and it's under validation now."]
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToast"), object: nil, userInfo: messageDict)
             }else{
-                Utils.setParam(named: localTitle, withValue: "")
-                Utils.setParam(named: localArticle, withValue: "")
                 Utils.dismissIndicator()
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
             }
