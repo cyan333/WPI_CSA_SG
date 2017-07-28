@@ -1,13 +1,13 @@
 //
-//  StatusCode.swift
-//  WPI_CSA
+//  HTTPStatusCode.swift
+//  SwiftHTTP
 //
-//  Created by NingFangming on 5/3/17.
-//  Copyright © 2017 fangming. All rights reserved.
+//  Created by Yu Kadowaki on 7/12/15.
+//  Copyright (c) 2015 Vluxe. All rights reserved.
 //
-
 import Foundation
 
+/// HTTP Status Code (RFC 2616)
 public enum HTTPStatusCode: Int {
     case `continue` = 100,
     switchingProtocols = 101

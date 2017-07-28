@@ -309,16 +309,28 @@ extension SettingViewController : UITableViewDelegate {
         if indexPath.section == 1 {
             switch indexPath.row {
             case 0:
-                UIApplication.shared.open(NSURL(string: "https://www.facebook.com/wpi.csa") as! URL,
-                                          options: [:], completionHandler: nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: "https://www.facebook.com/wpi.csa")!,
+                                              options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: "https://www.facebook.com/wpi.csa")!)
+                }
                 break
             case 1:
-                UIApplication.shared.open(NSURL(string: "https://www.instagram.com/wpicsa") as! URL,
-                                          options: [:], completionHandler: nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: "https://www.instagram.com/wpicsa")!,
+                                              options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: "https://www.instagram.com/wpicsa")!)
+                }
                 break
             case 2:
-                UIApplication.shared.open(NSURL(string: "https://www.youtube.com/user/CSAWPI") as! URL,
-                                          options: [:], completionHandler: nil)
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(URL(string: "https://www.youtube.com/user/CSAWPI")!,
+                                              options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(URL(string: "https://www.youtube.com/user/CSAWPI")!)
+                }
                 break
             default:
                 break

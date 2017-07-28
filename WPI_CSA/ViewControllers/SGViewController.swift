@@ -95,34 +95,32 @@ class SGViewController: UIViewController {
     func goToPreviousArticle(){
         do{
             let sgDatabase = try SGDatabase.connect()
-            let newArticle = sgDatabase.getArticle(byMenuId: (article?.prevMenuId!)!)
-            newArticle.processContent()
-            
-            UIView.animate(withDuration: 0.5, animations: { 
-                self.tableView.setContentOffset(CGPoint.zero, animated: false)
-            }, completion: { _ in
-                self.article = newArticle
-                self.tableView.reloadData()
-            })
-            
+            self.article = sgDatabase.getArticle(byMenuId: (article?.prevMenuId!)!)
         }catch {
             print(error)
         }
         
+        DispatchQueue.global(qos: .background).async {
+            self.article?.processContent()
+            DispatchQueue.main.async {
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: MAY need some tweak here
+            }
+        }
     }
     
     func goToNextArticle(){
         do{
             let sgDatabase = try SGDatabase.connect()
-            article = sgDatabase.getArticle(byMenuId: (article?.nextMenuId!)!)
-            article?.processContent()
-            self.tableView.setContentOffset(CGPoint.zero, animated: true)
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-                print("executed")
-                self.tableView.reloadData()
-            }
+            self.article = sgDatabase.getArticle(byMenuId: (self.article?.nextMenuId!)!)
         }catch {
             print(error)
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            self.article?.processContent()
+            DispatchQueue.main.async {
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .left)//TODO: MAY need some tweak here
+            }
         }
     }
     

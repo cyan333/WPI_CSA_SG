@@ -254,24 +254,45 @@ extension EditorViewController: UITextViewDelegate {
             
             switch currentFontStyle {
             case "thin":
-                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                             weight: UIFontWeightThin)
+                if #available(iOS 8.2, *) {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFontWeightThin)
+                    
+                } else {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue-Thin", size: fontSize)
+                }
                 break
             case "medium":
-                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                             weight: UIFontWeightMedium)
+                if #available(iOS 8.2, *) {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFontWeightMedium)
+                } else {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue-Medium", size: fontSize)
+                }
                 break
             case "bold":
-                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                             weight: UIFontWeightBold)
+                if #available(iOS 8.2, *) {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFontWeightBold)
+                } else {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue-Bold", size: fontSize)
+                }
                 break
             case "heavy":
-                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                             weight: UIFontWeightHeavy)
+                if #available(iOS 8.2, *) {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFontWeightHeavy)
+                } else {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue-CondensedBlack", size: fontSize)
+                }
                 break
             default:
-                textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                             weight: UIFontWeightRegular)
+                if #available(iOS 8.2, *) {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFontWeightRegular)
+                } else {
+                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue", size: fontSize)
+                }
                 break
             }
             

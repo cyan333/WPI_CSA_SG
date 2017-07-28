@@ -1,9 +1,9 @@
 //
 //  HTTPSecurity.swift
-//  WPI_CSA
+//  SwiftHTTP
 //
-//  Created by NingFangming on 5/3/17.
-//  Copyright © 2017 fangming. All rights reserved.
+//  Created by Dalton Cherry on 5/16/15.
+//  Copyright (c) 2015 Vluxe. All rights reserved.
 //
 
 import Foundation

@@ -1,9 +1,9 @@
 //
 //  Operation.swift
-//  WPI_CSA
+//  SwiftHTTP
 //
-//  Created by NingFangming on 5/3/17.
-//  Copyright © 2017 fangming. All rights reserved.
+//  Created by Dalton Cherry on 8/2/15.
+//  Copyright © 2015 vluxe. All rights reserved.
 //
 
 import Foundation
