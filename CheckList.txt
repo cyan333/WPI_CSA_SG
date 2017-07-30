@@ -3,3 +3,4 @@ Check List:
 1. DB refresh should be removed on start of the app
 2. Connection URL in web utils should be pointing to production
 3. App base version number in util file should be updated
+4. App build version for the project

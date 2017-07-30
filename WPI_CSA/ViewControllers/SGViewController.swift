@@ -12,7 +12,7 @@ import Foundation
 let padding: CGFloat = 10
 let imgViewWidth: Int = 130
 let screenWidth: CGFloat = UIScreen.main.bounds.width
-let coverImg = "<img src=\"cover.jpg\" height=\"450\" width=\"450\"/>"
+let coverImg = "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>"
 
 protocol MenuActionDelegate {
     func openSegue(segueName: String, sender: AnyObject?)
@@ -52,20 +52,6 @@ class SGViewController: UIViewController {
     
     override func viewDidLoad() {
         SGDatabase.copySgDbToDocumentFolder()
-        //print("CURRENTVERSION: " + Utils.getParam(named: appVersion)!)
-        /*let haha = "1.00.345"
-        let ind = haha.index(haha.endIndex, offsetBy: -3)
-        let subVersion = haha.substring(from: ind)
-        let subVer = Int(subVersion)! - 1
-        print(haha.substring(to: ind) + String(format: "%03d", subVer))*/
-        //let a = "INSERT OR REPLACE INTO PARAMS VALUES ('appStatus', 'OK');"
-        //let a = "INSERT OR REPLACE INTO PARAMS VALUES ('appVersion', '1.00.001');"
-        //SGDatabase.run(queries: a)
-        //print(SGDatabase.getParam(named: "test1"))
-        //print(SGDatabase.getParam(named: "test2"))
-        //let htmlStr: String = "<font size=\"6\">This is some text!</font><font size=\"16\">This</font>"
-        //let attriStr: NSAttributedString? = htmlStr.htmlAttributedString()
-        //print(a.htmlAttributedString()!.htmlString()!)
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         DispatchQueue.global(qos: .background).async {
@@ -324,12 +310,11 @@ extension SGViewController : UITableViewDataSource {
             if paragraph.cellHeight == 0 {
                 if let imgWidth = paragraph.properties?["width"], let imgHeight = paragraph.properties?["height"] {
                     if let imgWidthInt = Int(imgWidth as! String), let imgHeightInt = Int(imgHeight as! String) {
-                        paragraph.imgViewHeight = CGFloat(Int(cell.imgView.frame.size.width) * imgHeightInt / imgWidthInt)
+                        
+                        paragraph.imgViewHeight = CGFloat(Int(screenWidth - padding * 2) * imgHeightInt / imgWidthInt)
                     }
                 }
-                paragraph.cellHeight = paragraph.textViewHeight > paragraph.imgViewHeight ?
-                    paragraph.textViewHeight + padding * 2 :
-                    paragraph.imgViewHeight + padding * 2
+                paragraph.cellHeight = paragraph.imgViewHeight + padding * 2
             }
             
             if let imgName = paragraph.properties?["src"] {
@@ -347,6 +332,8 @@ extension SGViewController : UITableViewDataSource {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             }else if (paragraph.separatorType == .None){
                 cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            } else {
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
             }
             
             return cell
@@ -388,6 +375,8 @@ extension SGViewController : UITableViewDataSource {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             }else if (paragraph.separatorType == .None){
                 cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            } else {
+                cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
             }
             
             return cell
