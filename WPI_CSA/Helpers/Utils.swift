@@ -37,8 +37,10 @@ open class Utils {
             versionToCheck = version
             let versionArr = version.components(separatedBy: ".")
             if versionArr.count != 3 {                                              //Corrupted data
+                versionToCheck = baseVersion
                 Utils.initiateApp()
             } else if versionArr[1] != baseVersion.components(separatedBy: ".")[1]{ //Software version mismatch
+                versionToCheck = baseVersion
                 Utils.initiateApp()// TODO: merge top if nothing special
             }
         }else{//First time install
