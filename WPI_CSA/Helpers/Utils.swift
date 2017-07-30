@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-let baseVersion = "1.00.001"
+let baseVersion = "1.01.001"
 
 //All application parameters are declared here
 let appVersion = "appVersion"
