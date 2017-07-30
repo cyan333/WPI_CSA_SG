@@ -29,6 +29,7 @@
 		8727796F1F2985D1009F83B7 /* 85_2.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 8727796D1F2985D1009F83B7 /* 85_2.JPG */; };
 		872779701F2985D1009F83B7 /* 85_3.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 8727796E1F2985D1009F83B7 /* 85_3.JPG */; };
 		872779721F2A1829009F83B7 /* separator.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 872779711F2A1829009F83B7 /* separator.JPG */; };
+		872779741F2D80B2009F83B7 /* appIcon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 872779731F2D80B2009F83B7 /* appIcon.jpg */; };
 		8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE021EBC1F6800B1CDB1 /* WCService.swift */; };
 		8732FE071EBD07A600B1CDB1 /* WCUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8732FE061EBD07A600B1CDB1 /* WCUtils.swift */; };
 		874F3D3B1EF6F4B100B47492 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */; };
@@ -92,6 +93,7 @@
 		8727796D1F2985D1009F83B7 /* 85_2.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 85_2.JPG; path = SGImages/85_2.JPG; sourceTree = "<group>"; };
 		8727796E1F2985D1009F83B7 /* 85_3.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 85_3.JPG; path = SGImages/85_3.JPG; sourceTree = "<group>"; };
 		872779711F2A1829009F83B7 /* separator.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = separator.JPG; path = SGImages/separator.JPG; sourceTree = "<group>"; };
+		872779731F2D80B2009F83B7 /* appIcon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = appIcon.jpg; path = SGImages/appIcon.jpg; sourceTree = "<group>"; };
 		8732FE021EBC1F6800B1CDB1 /* WCService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCService.swift; path = WebService/WCService.swift; sourceTree = "<group>"; };
 		8732FE061EBD07A600B1CDB1 /* WCUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUtils.swift; path = WebService/WCUtils.swift; sourceTree = "<group>"; };
 		874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreviewViewController.swift; path = ViewControllers/PreviewViewController.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				871E35C01EB6BBED00EA483E /* 85_1.jpg */,
 				8727796D1F2985D1009F83B7 /* 85_2.JPG */,
 				8727796E1F2985D1009F83B7 /* 85_3.JPG */,
+				872779731F2D80B2009F83B7 /* appIcon.jpg */,
 				871E35B01EB19FF700EA483E /* cover.jpg */,
 				872779711F2A1829009F83B7 /* separator.JPG */,
 			);
@@ -393,6 +396,7 @@
 				877FD5991E94300E00632887 /* menuCollapsed.png in Resources */,
 				871E35B31EB19FF700EA483E /* 1_3.jpg in Resources */,
 				87DE40121EC9420A00BB49EB /* verified.png in Resources */,
+				872779741F2D80B2009F83B7 /* appIcon.jpg in Resources */,
 				872779701F2985D1009F83B7 /* 85_3.JPG in Resources */,
 				87DE400F1EC7A00600BB49EB /* YouTube.png in Resources */,
 				910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */,
