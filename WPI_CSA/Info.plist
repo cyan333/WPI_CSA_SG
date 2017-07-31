@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.01</string>
 	<key>CFBundleVersion</key>
-	<string>1.01.3</string>
+	<string>1.01.4</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
