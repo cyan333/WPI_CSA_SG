@@ -160,7 +160,7 @@ open class WCUserManager{
         do {
             let params = ["accessToken": WCService.currentUser!.accessToken,
                           "name": name] as [String : Any?]
-            let opt = try HTTP.POST(serviceBase + pathSetUserDetails, parameters: params)
+            let opt = try HTTP.POST(serviceBase + pathCreateUserDetails, parameters: params)
             opt.start { response in
                 if response.error != nil {
                     completion(serverDown)
@@ -182,7 +182,7 @@ open class WCUserManager{
     open class func sendEmailConfirmation(completion: @escaping(_ error: String) -> Void){
         do {
             let params = ["accessToken": WCService.currentUser!.accessToken]
-            let opt = try HTTP.POST(serviceBase + pathEmailConfirmation, parameters: params)
+            let opt = try HTTP.POST(serviceBase + pathSendVerificationEmail, parameters: params)
             opt.start { response in
                 if response.error != nil {
                     completion(serverDown)

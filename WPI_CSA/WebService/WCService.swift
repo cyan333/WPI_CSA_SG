@@ -51,7 +51,7 @@ open class WCService {
                                     completion: @escaping (String) -> Void) {
         do {
             let params = ["menuId": menuId, "userId": userId as Any, "email": email, "report": report] as [String : Any]
-            let opt = try HTTP.New(serviceBase + "add_sg_report", method: .POST, parameters: params, headers: nil, requestSerializer: JSONParameterSerializer(), isDownload: false)
+            let opt = try HTTP.New(serviceBase + pathCreateReport, method: .POST, parameters: params, headers: nil, requestSerializer: JSONParameterSerializer(), isDownload: false)
             opt.start { response in
                 if response.error != nil {
                     completion(serverDown)

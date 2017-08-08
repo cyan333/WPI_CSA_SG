@@ -4,3 +4,4 @@ Check List:
 2. Connection URL in web utils should be pointing to production
 3. App base version number in util file should be updated
 4. App build version for the project
+5. Update versions on server

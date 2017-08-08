@@ -8,18 +8,19 @@
 
 import Foundation
 
-let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
-//let serviceBase = "http://wc.fmning.com/" //********************TEST
+//let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
+let serviceBase = "http://wc.fmning.com/" //********************TEST
 
 let pathGetSalt = "login_for_salt"
 let pathLogin = "login"
-let pathGetUserDetails = "get_user_detail"
-let pathSetUserDetails = "save_current_user_detail"
-let pathEmailConfirmation = "send_email_confirmation"
-let pathChangePassword = "change_password"
 let pathRegisterSalt = "register_for_salt"
 let pathRegister = "register"
-let pathSubmitArticle = "add_sg_article"
+let pathGetUserDetails = "get_user_detail"
+let pathCreateUserDetails = "create_user_detail"
+let pathSendVerificationEmail = "send_verification_email"
+let pathChangePassword = "change_password"
+let pathCreateReport = "create_sg_report"
+let pathCreateArticle = "create_sg_article"
 
 
 let serverDown = "Server down"

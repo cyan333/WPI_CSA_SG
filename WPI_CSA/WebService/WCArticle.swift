@@ -35,7 +35,7 @@ open class WCArticleManager {
         do {
             let params = ["accessToken": WCService.currentUser!.accessToken, "title": title,
                           "article": article, "menuId": menuId] as [String : Any?]
-            let opt = try HTTP.POST(serviceBase + pathSubmitArticle, parameters: params)
+            let opt = try HTTP.POST(serviceBase + pathCreateArticle, parameters: params)
             opt.start { response in
                 if response.error != nil {
                     completion(serverDown)
