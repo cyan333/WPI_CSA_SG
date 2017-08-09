@@ -41,6 +41,7 @@
 		877FD59B1E95CD0A00632887 /* SG.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 877FD59A1E95CD0A00632887 /* SG.sqlite */; };
 		87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ADA8281E8227C300EF81A4 /* SGDatabase.swift */; };
 		87ADA82C1E82300800EF81A4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */; };
+		87BB2BE41F3A905900083536 /* 35_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 87BB2BE31F3A905900083536 /* 35_1.jpg */; };
 		87C14A4C1EBE321B0031E20A /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C14A4B1EBE321B0031E20A /* ReportViewController.swift */; };
 		87CAC3961ED3D61D004D0A97 /* NVActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */; };
 		87CAC3981ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */; };
@@ -106,6 +107,7 @@
 		87ADA8241E82275000EF81A4 /* WPI_CSA-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "WPI_CSA-Bridging-Header.h"; path = "Database/WPI_CSA-Bridging-Header.h"; sourceTree = "<group>"; };
 		87ADA8281E8227C300EF81A4 /* SGDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SGDatabase.swift; path = Database/SGDatabase.swift; sourceTree = "<group>"; };
 		87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
+		87BB2BE31F3A905900083536 /* 35_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 35_1.jpg; path = SGImages/35_1.jpg; sourceTree = "<group>"; };
 		87C14A4B1EBE321B0031E20A /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReportViewController.swift; path = ViewControllers/ReportViewController.swift; sourceTree = "<group>"; };
 		87CAC3951ED3D61D004D0A97 /* NVActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NVActivityIndicatorView.swift; path = Helpers/ActivityIndicator/NVActivityIndicatorView.swift; sourceTree = "<group>"; };
 		87CAC3971ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NVActivityIndicatorAnimationBallPulseSync.swift; path = Helpers/ActivityIndicator/NVActivityIndicatorAnimationBallPulseSync.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				871E35AD1EB19FF700EA483E /* 1_8.jpg */,
 				871E35BE1EB6BBDE00EA483E /* 11_1.jpg */,
 				871E35AF1EB19FF700EA483E /* 28_1.jpg */,
+				87BB2BE31F3A905900083536 /* 35_1.jpg */,
 				871E35BC1EB2B73D00EA483E /* 62_1.jpg */,
 				871E35C01EB6BBED00EA483E /* 85_1.jpg */,
 				8727796D1F2985D1009F83B7 /* 85_2.jpg */,
@@ -393,6 +396,7 @@
 				871E35C11EB6BBED00EA483E /* 85_1.jpg in Resources */,
 				87DE40131EC9420A00BB49EB /* notVarified.png in Resources */,
 				871E35BD1EB2B73D00EA483E /* 62_1.jpg in Resources */,
+				87BB2BE41F3A905900083536 /* 35_1.jpg in Resources */,
 				877FD5991E94300E00632887 /* menuCollapsed.png in Resources */,
 				871E35B31EB19FF700EA483E /* 1_3.jpg in Resources */,
 				87DE40121EC9420A00BB49EB /* verified.png in Resources */,

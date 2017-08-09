@@ -233,8 +233,10 @@ extension SettingViewController : UITableViewDataSource {
                 return cell
             }else if Utils.appMode == .Login {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingLoginCell") as! SettingLoginCell
-                /*cell.usernameField.text = "synfm123@gmail.com"
-                cell.passwordField.text = "flash"*/
+                cell.usernameField.tag = 0
+                cell.usernameField.delegate = self
+                cell.passwordField.tag = 1
+                cell.passwordField.delegate = self
                 cell.passwordField.isSecureTextEntry = true
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
                 return cell
@@ -374,5 +376,19 @@ extension SettingViewController : UITableViewDelegate {
                 cell.passwordField.resignFirstResponder()
             }
         }
+    }
+}
+
+extension SettingViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.tag == 1 {
+            textField.resignFirstResponder()
+            login()
+        }else{
+            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingLoginCell {
+                cell.passwordField.becomeFirstResponder()
+            }
+        }
+        return true
     }
 }
