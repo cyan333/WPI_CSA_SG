@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+
+//Format: AppMajorVerion.AppSubVersion.ContentVersion
+//Update this number results server version update
 let baseVersion = "1.02.001"
 
 //All application parameters are declared here
