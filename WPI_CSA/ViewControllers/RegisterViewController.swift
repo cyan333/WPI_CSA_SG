@@ -199,7 +199,9 @@ extension RegisterViewController: UITableViewDataSource {
             cell.textField.delegate = self
             cell.label.text = labelText[indexPath.row]
             cell.textField.placeholder = placeHolderText[indexPath.row]
-            if indexPath.row == 2 {
+            if indexPath.row == 0 {
+                cell.textField.keyboardType = .emailAddress
+            } else if indexPath.row == 2 {
                 cell.textField.isSecureTextEntry = true
             } else if indexPath.row == 3 {
                 cell.textField.returnKeyType = .done
