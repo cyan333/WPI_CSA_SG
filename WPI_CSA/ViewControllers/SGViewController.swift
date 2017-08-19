@@ -154,7 +154,7 @@ class SGViewController: UIViewController {
             
         }))
         optionMenu.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        
+        optionMenu.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItem
         self.present(optionMenu, animated: true, completion: nil)
         
     }
