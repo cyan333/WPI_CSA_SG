@@ -1,2 +1,0 @@
-INSERT INTO PARAMS VALUES ('appVersion', '1.00.001');
-INSERT INTO PARAMS VALUES ('appStatus', 'OK');
