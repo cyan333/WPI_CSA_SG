@@ -52,6 +52,7 @@ class SGViewController: UIViewController {
     
     override func viewDidLoad() {
         //SGDatabase.copySgDbToDocumentFolder()
+        SGDatabase.migrationToVersion2()
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         DispatchQueue.global(qos: .background).async {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class SGDatabase {
     
@@ -145,13 +146,13 @@ class SGDatabase {
         return article
     }
     
-    open class func copySgDbToDocumentFolder() {
-        let fileManger = FileManager.default
+    open class func localDirInitiateSetup() {
+        let fileManager = FileManager.default
         let doumentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
         let dbPath = doumentDirectoryPath.appendingPathComponent("SG.sqlite")
-        if fileManger.fileExists(atPath: dbPath){
+        if fileManager.fileExists(atPath: dbPath){
             do{
-                try fileManger.removeItem(atPath: dbPath)
+                try fileManager.removeItem(atPath: dbPath)
             }catch let error {
                 print("error occurred, here are the details:\n \(error)")
             }
@@ -159,7 +160,7 @@ class SGDatabase {
         
         let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
         do{
-            try fileManger.copyItem(atPath: path!, toPath: dbPath)
+            try fileManager.copyItem(atPath: path!, toPath: dbPath)
         }catch let error as NSError {
             print("error occurred, here are the details:\n \(error)")
         }
@@ -171,6 +172,40 @@ class SGDatabase {
             
         } catch {
             print("failed to set resource value")
+        }
+    }
+    
+    open class func migrationToVersion2() {
+        let fileManager = FileManager.default
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        
+        let imageCacheDir = documentDirectoryPath.appendingPathComponent("imageCache")
+        do {
+            if !fileManager.fileExists(atPath: imageCacheDir) {
+                try fileManager.createDirectory(atPath: imageCacheDir,
+                                                withIntermediateDirectories: false, attributes: nil)
+            }
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        let pdfCacheDir = documentDirectoryPath.appendingPathComponent("pdfCache")
+        do {
+            if !fileManager.fileExists(atPath: pdfCacheDir) {
+                try fileManager.createDirectory(atPath: pdfCacheDir,
+                                                withIntermediateDirectories: false, attributes: nil)
+            }
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        let img = UIImage(named: "1_2.jpg")
+        let imgPath = URL(fileURLWithPath: documentDirectoryPath.appendingPathComponent("1.jpg"))
+        
+        do{
+            try UIImageJPEGRepresentation(img!, 1.0)?.write(to: imgPath, options: .atomic)
+        }catch let error{
+            print(error.localizedDescription)
         }
     }
     /*

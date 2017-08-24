@@ -41,13 +41,13 @@ open class Utils {
             let versionArr = version.components(separatedBy: ".")
             if versionArr.count != 3 {                                              //Corrupted data
                 versionToCheck = baseVersion
-                Utils.initiateApp()
+                Utils.initializeApp()
             } else if versionArr[1] != baseVersion.components(separatedBy: ".")[1]{ //Software version mismatch
                 versionToCheck = baseVersion
-                Utils.initiateApp()// TODO: merge top if nothing special
+                Utils.initializeApp()// TODO: merge top if nothing special
             }
         }else{//First time install
-            Utils.initiateApp()
+            Utils.initializeApp()
         }
         
         guard let status = Utils.getParam(named: appStatus), status == "OK" else {
@@ -105,10 +105,10 @@ open class Utils {
         
     }
     
-    open class func initiateApp() {
+    open class func initializeApp() {
         Utils.setParam(named: appStatus, withValue: "OK")
         Utils.setParam(named: appVersion, withValue: baseVersion)
-        SGDatabase.copySgDbToDocumentFolder()
+        SGDatabase.localDirInitiateSetup()
     }
     
     open class func dismissIndicatorAndTryLogin(vc: UIViewController, showAlert: Bool){
