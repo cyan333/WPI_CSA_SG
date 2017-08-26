@@ -61,11 +61,11 @@ open class Utils {
                 dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
             } else if status == "CU" {
                 Utils.setParam(named: appVersion, withValue: version)
-                SGDatabase.run(queries: updates)
+                Database.run(queries: updates)
                 dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
             } else if status == "BM" {
                 if updates != "" {
-                    SGDatabase.run(queries: updates)
+                    Database.run(queries: updates)
                 }
                 let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: {
@@ -108,7 +108,7 @@ open class Utils {
     open class func initializeApp() {
         Utils.setParam(named: appStatus, withValue: "OK")
         Utils.setParam(named: appVersion, withValue: baseVersion)
-        SGDatabase.localDirInitiateSetup()
+        Database.localDirInitiateSetup()
     }
     
     open class func dismissIndicatorAndTryLogin(vc: UIViewController, showAlert: Bool){

@@ -47,12 +47,20 @@ class SGViewController: UIViewController {
     var searchKeyword: String?
     var menuList = [Menu]()
     
-    var db: SGDatabase?
+    var db: Database?
     var article: Article?
     
     override func viewDidLoad() {
-        //SGDatabase.copySgDbToDocumentFolder()
-        SGDatabase.migrationToVersion2()
+        //Database.localDirInitiateSetup()
+        //Database.migrationToVersion2()
+        
+        let a = "<image hahahahah/> jshdskjadhkj <image 11/> wuwu  <imgtxt blue> </imgtxt> hu lala"
+        
+        
+        print(a.hasPrefix("<ima"))
+        print("a".hasPrefix("hahahhahaha"))
+        
+        
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         DispatchQueue.global(qos: .background).async {
@@ -81,8 +89,8 @@ class SGViewController: UIViewController {
     
     func goToPreviousArticle(){
         do{
-            let sgDatabase = try SGDatabase.connect()
-            self.article = sgDatabase.getArticle(byMenuId: (article?.prevMenuId!)!)
+            let database = try Database.connect()
+            self.article = database.getArticle(byMenuId: (article?.prevMenuId!)!)
         }catch {
             print(error)
         }
@@ -97,8 +105,8 @@ class SGViewController: UIViewController {
     
     func goToNextArticle(){
         do{
-            let sgDatabase = try SGDatabase.connect()
-            self.article = sgDatabase.getArticle(byMenuId: (self.article?.nextMenuId!)!)
+            let database = try Database.connect()
+            self.article = database.getArticle(byMenuId: (self.article?.nextMenuId!)!)
         }catch {
             print(error)
         }

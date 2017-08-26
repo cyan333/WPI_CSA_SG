@@ -29,7 +29,7 @@ class MenuViewController : UIViewController {
     
     var menuActionDelegate: MenuActionDelegate?
     
-    var sgDatabase: SGDatabase?
+    var database: Database?
     
     override func viewDidLoad() {
         searchController.searchResultsUpdater = self
@@ -42,7 +42,7 @@ class MenuViewController : UIViewController {
         }
         
         do{
-            sgDatabase = try SGDatabase.connect()
+            database = try Database.connect()
             
             /*json part
              var str = ""
@@ -60,9 +60,9 @@ class MenuViewController : UIViewController {
             print(error)
         }
         if(menuList.count == 0){
-            if let sgDatabase = sgDatabase{
+            if let database = database{
                 Utils.menuOrderList = []
-                menuList = sgDatabase.getSubMenus(by: 0, withPrefix: "")
+                menuList = database.getSubMenus(by: 0, withPrefix: "")
                 
             }
         }
@@ -167,7 +167,7 @@ class MenuViewController : UIViewController {
                     
                 }else{
                     var article: Article?
-                    if let db = sgDatabase {
+                    if let db = database {
                         article = db.getArticle(byMenuId: m.id)
                     }
                     let keywrd = searchController.searchBar.text
@@ -205,7 +205,7 @@ class MenuViewController : UIViewController {
     }
     
     func searchForArticles(keyword: String){
-        if let db = sgDatabase {
+        if let db = database {
             searchResults = db.searchArticles(withKeyword: keyword)
         }
         tableView.reloadData()

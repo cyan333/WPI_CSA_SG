@@ -1,5 +1,5 @@
 //
-//  SGDatabase.swift
+//  Database.swift
 //  WPI_CSA
 //
 //  Created by NingFangming on 3/21/17.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class SGDatabase {
+class Database {
     
     private let dbPointer: OpaquePointer
     
@@ -18,17 +18,16 @@ class SGDatabase {
     }
     
     deinit {
-        //print("DB disconnected")
         sqlite3_close(dbPointer)
     }
     
-    static func connect() throws -> SGDatabase {
+    static func connect() throws -> Database {
         let doumentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
-        let dbPath = doumentDirectoryPath.appendingPathComponent("SG.sqlite")
+        let dbPath = doumentDirectoryPath.appendingPathComponent("Database.sqlite")
         
         var db: OpaquePointer? = nil
         if sqlite3_open_v2(dbPath, &db, SQLITE_OPEN_READWRITE, nil) == SQLITE_OK {
-            return SGDatabase(dbPointer: db!)
+            return Database(dbPointer: db!)
         } else {
             defer {
                 if db != nil {
@@ -50,9 +49,9 @@ class SGDatabase {
         var menuList = [Menu]()
         
         if menuId == 0 {
-            query = "SELECT ID, NAME FROM MENUS WHERE PARENT_ID IS NULL ORDER BY POSITION ASC"
+            query = "SELECT ID, TITLE_ALIAS FROM ARTICLES WHERE PARENT_ID IS NULL ORDER BY POSITION ASC"
         }else{
-            query = "SELECT ID, NAME FROM MENUS WHERE PARENT_ID = \(menuId) ORDER BY POSITION ASC"
+            query = "SELECT ID, TITLE_ALIAS FROM ARTICLES WHERE PARENT_ID = \(menuId) ORDER BY POSITION ASC"
         }
         
         if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
@@ -95,7 +94,7 @@ class SGDatabase {
     }
     
     func getMenuTitle(byMenuId menuId: Int) -> String{
-        let query = "SELECT NAME FROM MENUS WHERE ID = \(menuId)"
+        let query = "SELECT TITLE_ALIAS FROM ARTICLES WHERE ID = \(menuId)"
         var queryStatement: OpaquePointer? = nil
         var name = ""
         
@@ -113,7 +112,7 @@ class SGDatabase {
     }
     
     func getArticle(byMenuId menuId: Int) -> Article{
-        let query = "SELECT TITLE, CONTENT FROM ARTICLES WHERE MENU_ID = \(menuId)"
+        let query = "SELECT TITLE, CONTENT FROM ARTICLES WHERE ID = \(menuId)"
         var queryStatement: OpaquePointer? = nil
         var article: Article
         
@@ -148,37 +147,37 @@ class SGDatabase {
     
     open class func localDirInitiateSetup() {
         let fileManager = FileManager.default
-        let doumentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
-        let dbPath = doumentDirectoryPath.appendingPathComponent("SG.sqlite")
-        if fileManager.fileExists(atPath: dbPath){
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        
+        // Copy database file to document folder. Replace it if the file already exists
+        let dbDestinationPath = documentDirectoryPath.appendingPathComponent("Database.sqlite")
+        if fileManager.fileExists(atPath: dbDestinationPath){
             do{
-                try fileManager.removeItem(atPath: dbPath)
+                try fileManager.removeItem(atPath: dbDestinationPath)
             }catch let error {
-                print("error occurred, here are the details:\n \(error)")
+                print(error.localizedDescription)
             }
         }
-        
-        let path = Bundle.main.path(forResource: "SG", ofType: "sqlite")
         do{
-            try fileManager.copyItem(atPath: path!, toPath: dbPath)
+            try fileManager.copyItem(atPath: Bundle.main.path(forResource: "Database",
+                                                              ofType: "sqlite")!,
+                                     toPath: dbDestinationPath)
         }catch let error as NSError {
             print("error occurred, here are the details:\n \(error)")
         }
-        var dbPathUrl = URL(fileURLWithPath: dbPath)
-        do {
-            var resourceValues = URLResourceValues()
-            resourceValues.isExcludedFromBackup = true
-            try dbPathUrl.setResourceValues(resourceValues)
-            
-        } catch {
-            print("failed to set resource value")
-        }
-    }
-    
-    open class func migrationToVersion2() {
-        let fileManager = FileManager.default
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
         
+        /* DB 2.0 Migration code starts */
+        let legacyDBPath = documentDirectoryPath.appendingPathComponent("SG.sqlite")
+        if fileManager.fileExists(atPath: legacyDBPath){
+            do{
+                try fileManager.removeItem(atPath: legacyDBPath)
+            }catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        /* DB 2.0 Migration code ends */
+        
+        // Creating image cache folder
         let imageCacheDir = documentDirectoryPath.appendingPathComponent("imageCache")
         do {
             if !fileManager.fileExists(atPath: imageCacheDir) {
@@ -189,7 +188,7 @@ class SGDatabase {
             print(error.localizedDescription)
         }
         
-        let pdfCacheDir = documentDirectoryPath.appendingPathComponent("pdfCache")
+        /*let pdfCacheDir = documentDirectoryPath.appendingPathComponent("pdfCache")
         do {
             if !fileManager.fileExists(atPath: pdfCacheDir) {
                 try fileManager.createDirectory(atPath: pdfCacheDir,
@@ -197,7 +196,26 @@ class SGDatabase {
             }
         } catch let error {
             print(error.localizedDescription)
+        }*/
+        
+        // Exclude files or directories from icloud backup
+        var dbPathUrl = URL(fileURLWithPath: dbDestinationPath)
+        var imgCachePathUrl = URL(fileURLWithPath: imageCacheDir)
+        do {
+            var resourceValues = URLResourceValues()
+            resourceValues.isExcludedFromBackup = true
+            try dbPathUrl.setResourceValues(resourceValues)
+            try imgCachePathUrl.setResourceValues(resourceValues)
+            
+        } catch let error{
+            print(error.localizedDescription)
         }
+    }
+    
+    open class func migrationToVersion2() {
+        //let fileManager = FileManager.default
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        
         
         let img = UIImage(named: "1_2.jpg")
         let imgPath = URL(fileURLWithPath: documentDirectoryPath.appendingPathComponent("1.jpg"))
@@ -211,7 +229,7 @@ class SGDatabase {
     /*
     open class func getParam(named key: String) ->String? {
         do{
-            let db = try SGDatabase.connect()
+            let db = try Database.connect()
             
             let query = "SELECT VALUE FROM PARAMS WHERE KEY = '\(key)'"
             var queryStatement: OpaquePointer? = nil
@@ -234,7 +252,7 @@ class SGDatabase {
     
     open class func setParam(named key:String, withValue value:String) {
         do{
-            let db = try SGDatabase.connect()
+            let db = try Database.connect()
             let processedValue = value.replacingOccurrences(of: "'", with: "''")
             let query = "INSERT OR REPLACE INTO PARAMS VALUES ('\(key)', '\(processedValue)')"
             var queryStatement: OpaquePointer? = nil
@@ -251,7 +269,7 @@ class SGDatabase {
     
     open class func deleteParam(named key:String) {
         do{
-            let db = try SGDatabase.connect()
+            let db = try Database.connect()
             
             let query = "DELETE FROM PARAMS WHERE KEY = '\(key)'"
             var queryStatement: OpaquePointer? = nil
@@ -269,7 +287,7 @@ class SGDatabase {
     */
     open class func run(queries: String){
         do{
-            let db = try SGDatabase.connect()
+            let db = try Database.connect()
             
             var errMsg: UnsafeMutablePointer<Int8>? = nil
             

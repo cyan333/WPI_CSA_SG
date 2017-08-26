@@ -35,141 +35,87 @@ class Article{
         }
     }
     
-    /* 4 possible conditions
-     | img  | tab  | check | condition in code |
-     | 0    | null | img   |        1          |
-     | null | 0    | tab   |        2          |
-     | 0    | 1    | img   |        3          |
-     | 1    | 0    | tab   |        4          |
-     */
     func processContent(){
-        var imgTagRange: Range<String.Index>? = content.range(of: "<img")
-        var listTagRange: Range<String.Index>? = content.range(of: "<tab>")
-        var formatCheck = 0
         
-        while let rangeCheck = imgTagRange ??  listTagRange {
-            let contentLength = content.characters.count
-            if let imgRange = imgTagRange {
-                if let listRange = listTagRange {
-                    if imgRange.lowerBound < listRange.lowerBound { //Condition 3
-                        if formatCheck == contentLength {
-                            print("Malformatted. Exist 3")
-                            break
-                        }
-                        processImageTag(range: imgRange);
-                        imgTagRange = content.range(of: "<img")
-                    }else{                                          //Condition 4
-                        if formatCheck == contentLength {
-                            print("Malformatted. Exist 4")
-                            break
-                        }
-                        processListTag(range: listRange);
-                        listTagRange = content.range(of: "<tab>")
-                    }
-                }else{                                              //Condition 1
-                    if formatCheck == contentLength {
-                        print("Malformatted. Exist 1")
-                        break
-                    }
-                    processImageTag(range: rangeCheck);
-                    imgTagRange = content.range(of: "<img")
-                }
-            }else{                                                  //Condition 2
-                if formatCheck == contentLength {
-                    print("Malformatted. Exist 2")
-                    break
-                }
-                processListTag(range: rangeCheck);
-                listTagRange = content.range(of: "<tab>")
+        let regex = try! NSRegularExpression(pattern:
+            "(<img.*?\\/>)|(<imgtxt.*?<\\/imgtxt>)|(<txtimg.*?<\\/txtimg>)|(<tab.*?<\\/tab>)")
+        let matchs = regex.matches(in: content, range: NSRange(location: 0, length: content.characters.count))
+            .map{(content as NSString).substring(with: $0.range)}
+        let count = matchs.count
+        
+        for i in 0 ..< count {
+            let parts = content.components(separatedBy: matchs[i])
+            let first = parts[0]
+            var paraType = ParagraphType.Plain
+            if first.characters.count > 0 {
+                paraType = getParagraphType(string: first)
+                paragraphs.append(Paragraph(content: first.htmlAttributedString(ratio: .Enlarged), type: paraType))
             }
-            formatCheck = contentLength
+            
+            paraType = getParagraphType(string: matchs[i])
+            switch paraType {
+            case .Image:
+                paragraphs.append(Paragraph(content: "".htmlAttributedString(ratio: .Enlarged), type: .Image, properties: convertTagToDictionary(text: matchs[i])))
+                break
+            case .ImageText, .TextImage:
+                let imgStr = matchs[i].substring(to: matchs[i].index(matchs[i].endIndex, offsetBy: -9))
+                let separator = imgStr.range(of: ">")
+                paragraphs.append(Paragraph(content: imgStr.substring(from: separator!.upperBound)
+                    .htmlAttributedString(ratio: .Enlarged),
+                                            type: paraType,
+                                            properties: convertTagToDictionary(text:
+                                                imgStr.substring(to: separator!.lowerBound))))
+                break
+            case .Table:
+                let listItems = matchs[i].replacingOccurrences(of: "<tab>", with: "")
+                    .replacingOccurrences(of: "</tab>", with: "")
+                    .components(separatedBy: "<tbr>")
+                if(listItems.count > 0){
+                    paragraphs[paragraphs.count - 1].separatorType = .Full //This is valid because of the title cell
+                    for str in listItems as [String]{
+                        let p = Paragraph(content: str.htmlAttributedString(ratio: .Enlarged), type: .Plain)
+                        p.separatorType = .Normal
+                        paragraphs.append(p)
+                    }
+                    paragraphs[paragraphs.count - 1].separatorType = .Full
+                }
+                break
+            default:
+                break
+            }
+            
+            content = parts[1]
         }
+        
         if content != "" {
             paragraphs.append(Paragraph(content: content.htmlAttributedString(ratio: .Enlarged)))
         }
-    }
-    
-    /* 5 possible conditions
-     | imgClose | imageTextClose | choose  | condition in code |
-     | 10       | null           | img     |        1          |
-     | null     | 10             | imgText |        2          |
-     | 10       | 20             | img     |        3          |
-     | 10       | 5              | imgText |        4          |
-     */
-    func processImageTag(range: Range<String.Index>){
-        let currentContent = content.substring(to: range.lowerBound)
-        if currentContent != "" {
-            paragraphs.append(Paragraph(content: currentContent.htmlAttributedString(ratio: .Enlarged)))
-            content = content.substring(from: range.lowerBound)
-        }
-        
-        let imgTagCloseRange: Range<String.Index>? = content.range(of: "/>")
-        let imgTextTagCloseRange: Range<String.Index>? = content.range(of: "</img>")
-        if let imgCloseRange = imgTagCloseRange {
-            if let imgTextCloseRange = imgTextTagCloseRange {
-                if imgCloseRange.lowerBound < imgTextCloseRange.lowerBound { //Condition 3
-                    let imgStr = content.substring(to: imgCloseRange.upperBound)
-                    content = content.substring(from: imgCloseRange.upperBound)
-                    paragraphs.append(Paragraph(content: "".htmlAttributedString(ratio: .Enlarged), type: .Image, properties: convertTagToDictionary(text: imgStr)))
-                }else{                                                       //Condition 4
-                    let imgStr = content.substring(to: imgTextCloseRange.lowerBound)
-                    let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
-                    content = content.substring(from: imgTextCloseRange.upperBound)
-                    if let range = tagEndRange {
-                        paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound).htmlAttributedString(ratio: .Enlarged),
-                                                    type: .ImageText,
-                                                    properties: convertTagToDictionary(text: imgStr.substring(to: range.upperBound))))
-                    }
-                }
-            }else{                                                           //Condition 1
-                let imgStr = content.substring(to: imgCloseRange.upperBound)
-                content = content.substring(from: imgCloseRange.upperBound)
-                paragraphs.append(Paragraph(content: "".htmlAttributedString(ratio: .Enlarged),
-                                            type: .Image, properties: convertTagToDictionary(text: imgStr)))
-            }
-        }else{                                                               //Condition 2
-            if let imgTextCloseRange = imgTextTagCloseRange {
-                let imgStr = content.substring(to: imgTextCloseRange.lowerBound)
-                let tagEndRange: Range<String.Index>? = imgStr.range(of: ">")
-                content = content.substring(from: imgTextCloseRange.upperBound)
-                if let range = tagEndRange {
-                    paragraphs.append(Paragraph(content: imgStr.substring(from: range.upperBound).htmlAttributedString(ratio: .Enlarged),
-                                                type: .ImageText,
-                                                properties: convertTagToDictionary(text: imgStr.substring(to: range.upperBound))))
-                }
-                
-            }
-            
-        }
+
         
     }
     
-    func processListTag(range: Range<String.Index>){
-        let currentContent = content.substring(to: range.lowerBound)
-        if currentContent != "" {
-            paragraphs.append(Paragraph(content: currentContent.htmlAttributedString(ratio: .Enlarged)))
-            content = content.substring(from: range.upperBound)
-        }
-        let listTagCloseRange: Range<String.Index>? = content.range(of: "</tab>")
-        if let listCloseRange = listTagCloseRange{
-            let listContent = content.substring(to: listCloseRange.lowerBound)
-            let listItems = listContent.components(separatedBy: "<tbr>")
-            if(listItems.count > 0){
-                paragraphs[paragraphs.count - 1].separatorType = .Full //This is valid because of the title cell
-                for str in listItems as [String]{
-                    let p = Paragraph(content: str.htmlAttributedString(ratio: .Enlarged), type: .Plain)
-                    p.separatorType = .Normal
-                    paragraphs.append(p)
-                }
-                paragraphs[paragraphs.count - 1].separatorType = .Full
-            }
-            
-            content = content.substring(from: listCloseRange.upperBound)
+    func getParagraphType(string: String) -> ParagraphType {
+        if !string.hasPrefix("<") {
+            return .Plain
+        }else if string.hasPrefix("<imgtxt") {
+            return .ImageText
+        } else if string.hasPrefix("<img") {
+            return .Image
+        } else if string.hasPrefix("<tab") {
+            return .Table
+        } else if string.hasPrefix("<txtimg") {
+            return .TextImage
+        } else {
+            return .Plain
         }
     }
     
+        
     func convertTagToDictionary(text: String) -> [String: Any]? {
-        let processedText = text.replacingOccurrences(of: "<img ", with: "{\"")
+        let preText = text.hasSuffix(">") ? text : text + ">"
+        let processedText = preText.replacingOccurrences(of: "<img ", with: "{\"")
+            .replacingOccurrences(of: "<imgtxt ", with: "{\"")
+            .replacingOccurrences(of: "<txtimg ", with: "{\"")
             .replacingOccurrences(of: "/>", with: "}")
             .replacingOccurrences(of: " />", with: "}")
             .replacingOccurrences(of: ">", with: "}")
@@ -228,6 +174,7 @@ enum ParagraphType{
     case Plain
     case Image
     case ImageText
+    case TextImage
     case Table
 }
 

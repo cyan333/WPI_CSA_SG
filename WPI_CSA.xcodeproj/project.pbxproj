@@ -38,8 +38,7 @@
 		877E61581E8C4DD100B88831 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877E61571E8C4DD100B88831 /* Article.swift */; };
 		877FD5981E94300E00632887 /* menuExpanded.png in Resources */ = {isa = PBXBuildFile; fileRef = 877FD5961E94300E00632887 /* menuExpanded.png */; };
 		877FD5991E94300E00632887 /* menuCollapsed.png in Resources */ = {isa = PBXBuildFile; fileRef = 877FD5971E94300E00632887 /* menuCollapsed.png */; };
-		877FD59B1E95CD0A00632887 /* SG.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 877FD59A1E95CD0A00632887 /* SG.sqlite */; };
-		87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ADA8281E8227C300EF81A4 /* SGDatabase.swift */; };
+		87ADA8291E8227C300EF81A4 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87ADA8281E8227C300EF81A4 /* Database.swift */; };
 		87ADA82C1E82300800EF81A4 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */; };
 		87BB2BE41F3A905900083536 /* 35_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 87BB2BE31F3A905900083536 /* 35_1.jpg */; };
 		87BB2BE61F3A987C00083536 /* landing.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 87BB2BE51F3A987C00083536 /* landing.jpg */; };
@@ -51,6 +50,7 @@
 		87CAC39E1ED3DF9F004D0A97 /* NVActivityIndicatorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CAC39D1ED3DF9F004D0A97 /* NVActivityIndicatorPresenter.swift */; };
 		87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CD3A491E8494E900C9E5F3 /* Menu.swift */; };
 		87D097521F4A68B800D78BF8 /* WCImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D097511F4A68B800D78BF8 /* WCImage.swift */; };
+		87D097561F4FAC9400D78BF8 /* Database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 87D097531F4F518100D78BF8 /* Database.sqlite */; };
 		87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC11EC41DF800BB49EB /* WCUser.swift */; };
 		87DE40051EC765C800BB49EB /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE40041EC765C800BB49EB /* SettingViewController.swift */; };
 		87DE40091EC7776200BB49EB /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40081EC7776200BB49EB /* defaultAvatar.png */; };
@@ -105,9 +105,8 @@
 		877E61571E8C4DD100B88831 /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Article.swift; path = Objects/Article.swift; sourceTree = "<group>"; };
 		877FD5961E94300E00632887 /* menuExpanded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuExpanded.png; path = Icons/menuExpanded.png; sourceTree = "<group>"; };
 		877FD5971E94300E00632887 /* menuCollapsed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuCollapsed.png; path = Icons/menuCollapsed.png; sourceTree = "<group>"; };
-		877FD59A1E95CD0A00632887 /* SG.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = SG.sqlite; sourceTree = "<group>"; };
 		87ADA8241E82275000EF81A4 /* WPI_CSA-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "WPI_CSA-Bridging-Header.h"; path = "Database/WPI_CSA-Bridging-Header.h"; sourceTree = "<group>"; };
-		87ADA8281E8227C300EF81A4 /* SGDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SGDatabase.swift; path = Database/SGDatabase.swift; sourceTree = "<group>"; };
+		87ADA8281E8227C300EF81A4 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Database.swift; path = Database/Database.swift; sourceTree = "<group>"; };
 		87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libsqlite3.tbd; sourceTree = DEVELOPER_DIR; };
 		87BB2BE31F3A905900083536 /* 35_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 35_1.jpg; path = SGImages/35_1.jpg; sourceTree = "<group>"; };
 		87BB2BE51F3A987C00083536 /* landing.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = landing.jpg; path = SGImages/landing.jpg; sourceTree = "<group>"; };
@@ -119,7 +118,7 @@
 		87CAC39D1ED3DF9F004D0A97 /* NVActivityIndicatorPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NVActivityIndicatorPresenter.swift; path = Helpers/ActivityIndicator/NVActivityIndicatorPresenter.swift; sourceTree = "<group>"; };
 		87CD3A491E8494E900C9E5F3 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Menu.swift; path = Objects/Menu.swift; sourceTree = "<group>"; };
 		87D097511F4A68B800D78BF8 /* WCImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCImage.swift; path = WebService/WCImage.swift; sourceTree = "<group>"; };
-		87D097531F4F518100D78BF8 /* Database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = Database.sqlite; path = Database/Database.sqlite; sourceTree = "<group>"; };
+		87D097531F4F518100D78BF8 /* Database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Database.sqlite; sourceTree = "<group>"; };
 		87DE3FC11EC41DF800BB49EB /* WCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUser.swift; path = WebService/WCUser.swift; sourceTree = "<group>"; };
 		87DE40041EC765C800BB49EB /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingViewController.swift; path = ViewControllers/SettingViewController.swift; sourceTree = "<group>"; };
 		87DE40081EC7776200BB49EB /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultAvatar.png; path = Icons/defaultAvatar.png; sourceTree = "<group>"; };
@@ -239,8 +238,7 @@
 		87ADA8231E82272300EF81A4 /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				87D097531F4F518100D78BF8 /* Database.sqlite */,
-				87ADA8281E8227C300EF81A4 /* SGDatabase.swift */,
+				87ADA8281E8227C300EF81A4 /* Database.swift */,
 				87ADA8241E82275000EF81A4 /* WPI_CSA-Bridging-Header.h */,
 			);
 			name = Database;
@@ -316,12 +314,12 @@
 				877E615A1E92CA5900B88831 /* SGImages */,
 				87C14A4A1EBE2F070031E20A /* ViewControllers */,
 				871E35C21EBA5D5400EA483E /* WebService */,
-				910CFDB81E80BF950005CC1D /* Main.storyboard */,
 				910CFDB41E80BF950005CC1D /* AppDelegate.swift */,
 				910CFDBB1E80BF950005CC1D /* Assets.xcassets */,
 				910CFDBD1E80BF950005CC1D /* LaunchScreen.storyboard */,
+				910CFDB81E80BF950005CC1D /* Main.storyboard */,
+				87D097531F4F518100D78BF8 /* Database.sqlite */,
 				910CFDC01E80BF950005CC1D /* Info.plist */,
-				877FD59A1E95CD0A00632887 /* SG.sqlite */,
 			);
 			path = WPI_CSA;
 			sourceTree = "<group>";
@@ -387,6 +385,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87D097561F4FAC9400D78BF8 /* Database.sqlite in Resources */,
 				871E35B61EB19FF700EA483E /* 1_6.jpg in Resources */,
 				871E35BA1EB19FF700EA483E /* 28_1.jpg in Resources */,
 				871E35B21EB19FF700EA483E /* 1_2.jpg in Resources */,
@@ -395,7 +394,6 @@
 				871E35BF1EB6BBDE00EA483E /* 11_1.jpg in Resources */,
 				871E35B71EB19FF700EA483E /* 1_7.jpg in Resources */,
 				87BB2BE61F3A987C00083536 /* landing.jpg in Resources */,
-				877FD59B1E95CD0A00632887 /* SG.sqlite in Resources */,
 				910CFDBF1E80BF950005CC1D /* LaunchScreen.storyboard in Resources */,
 				872779721F2A1829009F83B7 /* separator.jpg in Resources */,
 				871E35B11EB19FF700EA483E /* 1_1.jpg in Resources */,
@@ -458,7 +456,7 @@
 				871E35CC1EBAA44B00EA483E /* HTTPSecurity.swift in Sources */,
 				87CAC39A1ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift in Sources */,
 				910CFDD61E80C1130005CC1D /* SGViewController.swift in Sources */,
-				87ADA8291E8227C300EF81A4 /* SGDatabase.swift in Sources */,
+				87ADA8291E8227C300EF81A4 /* Database.swift in Sources */,
 				8721CB571EE651D80023152A /* EditorViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
