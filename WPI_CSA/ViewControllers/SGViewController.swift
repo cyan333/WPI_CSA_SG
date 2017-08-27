@@ -51,16 +51,8 @@ class SGViewController: UIViewController {
     var article: Article?
     
     override func viewDidLoad() {
-        //Database.localDirInitiateSetup()
+        Database.localDirInitiateSetup()
         //Database.migrationToVersion2()
-        
-        let a = "<image hahahahah/> jshdskjadhkj <image 11/> wuwu  <imgtxt blue> </imgtxt> hu lala"
-        
-        
-        print(a.hasPrefix("<ima"))
-        print("a".hasPrefix("hahahhahaha"))
-        
-        
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         DispatchQueue.global(qos: .background).async {

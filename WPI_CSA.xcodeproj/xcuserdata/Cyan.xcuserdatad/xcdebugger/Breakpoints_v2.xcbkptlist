@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "WPI_CSA/Objects/Article.swift"
-            timestampString = "525456168.16909"
+            timestampString = "525488130.489429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
             landmarkName = "convertTagToDictionary(text:)"
             landmarkType = "7">
          </BreakpointContent>

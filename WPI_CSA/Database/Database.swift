@@ -49,9 +49,9 @@ class Database {
         var menuList = [Menu]()
         
         if menuId == 0 {
-            query = "SELECT ID, TITLE_ALIAS FROM ARTICLES WHERE PARENT_ID IS NULL ORDER BY POSITION ASC"
+            query = "SELECT ID, TITLE FROM ARTICLES WHERE PARENT_ID IS NULL ORDER BY POSITION ASC"
         }else{
-            query = "SELECT ID, TITLE_ALIAS FROM ARTICLES WHERE PARENT_ID = \(menuId) ORDER BY POSITION ASC"
+            query = "SELECT ID, TITLE FROM ARTICLES WHERE PARENT_ID = \(menuId) ORDER BY POSITION ASC"
         }
         
         if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
@@ -94,7 +94,7 @@ class Database {
     }
     
     func getMenuTitle(byMenuId menuId: Int) -> String{
-        let query = "SELECT TITLE_ALIAS FROM ARTICLES WHERE ID = \(menuId)"
+        let query = "SELECT TITLE FROM ARTICLES WHERE ID = \(menuId)"
         var queryStatement: OpaquePointer? = nil
         var name = ""
         
@@ -112,15 +112,14 @@ class Database {
     }
     
     func getArticle(byMenuId menuId: Int) -> Article{
-        let query = "SELECT TITLE, CONTENT FROM ARTICLES WHERE ID = \(menuId)"
+        let query = "SELECT CONTENT FROM ARTICLES WHERE ID = \(menuId)"
         var queryStatement: OpaquePointer? = nil
         var article: Article
         
         if sqlite3_prepare_v2(dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
             if sqlite3_step(queryStatement) == SQLITE_ROW {
-                let title = String(cString: sqlite3_column_text(queryStatement, 0)) //Not null column
-                let content = String(cString: sqlite3_column_text(queryStatement, 1)) //Not null column
-                article = Article(title: title, content: content)
+                let content = String(cString: sqlite3_column_text(queryStatement, 0))
+                article = Article(content: content)
             }else{
                 print("Article not found")
                 article = Article(content: "")
@@ -302,73 +301,6 @@ class Database {
         }catch {}
     }
     
-    func printBtnList(query: String){
-        var queryStatement: OpaquePointer? = nil
-        
-        if sqlite3_prepare_v2(dbPointer, "select ID, NAME  from menus ORDER BY ID ASC",
-                              -1, &queryStatement, nil) == SQLITE_OK {
-            /*
-            if sqlite3_step(queryStatement) == SQLITE_ROW {
-                // 3
-                let id = sqlite3_column_int(queryStatement, 0)
-                
-                // 4
-                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
-                let name = String(cString: queryResultCol1!)
-                
-                // 5
-                print("Query Result:")
-                print("\(id) | \(name)")
-                
-            } else {
-                print("Query returned no results")
-            }*/
-            
-            while (sqlite3_step(queryStatement) == SQLITE_ROW) {
-                let id = sqlite3_column_int(queryStatement, 0)
-                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
-                let name = String(cString: queryResultCol1!)
-                /*let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
-                var position : String
-                if(queryResultCol2 == nil){
-                    position = "null"
-                }else{
-                    position = String(cString: queryResultCol2!)
-                }*/
-                print("<button type=\"button\" class=\"list-group-item list-group-item-action\" onclick=\"getArticle(\(id))\">\(name)</button>")
-            }
-            
-        } else {
-            print("SELECT statement could not be prepared")
-        }
-        
-        // 6
-        sqlite3_finalize(queryStatement)
-    }
-    
-    
-    
-    func createTable() {
-        let createTableString = "CREATE TABLE Contact(" +
-            "Id INT PRIMARY KEY NOT NULL," +
-        "Name CHAR(255));"
-        
-        // 1
-        var createTableStatement: OpaquePointer? = nil
-        // 2
-        if sqlite3_prepare_v2(dbPointer, createTableString, -1, &createTableStatement, nil) == SQLITE_OK {
-            // 3
-            if sqlite3_step(createTableStatement) == SQLITE_DONE {
-                print("Contact table created.")
-            } else {
-                print("Contact table could not be created.")
-            }
-        } else {
-            print("CREATE TABLE statement could not be prepared.")
-        }
-        // 4
-        sqlite3_finalize(createTableStatement)
-    }
 }
 
 enum SQLiteError: Error {

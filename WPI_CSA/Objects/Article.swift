@@ -24,17 +24,6 @@ class Article{
         paragraphs = [Paragraph]()
     }
     
-    init(title: String, content: String){
-        self.content = content
-        paragraphs = [Paragraph]()
-        if title.range(of: "<") != nil {
-            paragraphs.append(Paragraph(content: title.htmlAttributedString(ratio: .Normal), type: .Plain))
-        }else{
-            let processedTitle = "<center><span style=\"font-weight:bold;font-size:20px;\">" + title + "</span></center>"
-            paragraphs.append(Paragraph(content: processedTitle.htmlAttributedString(ratio: .Normal), type: .Plain))
-        }
-    }
-    
     func processContent(){
         
         let regex = try! NSRegularExpression(pattern:
