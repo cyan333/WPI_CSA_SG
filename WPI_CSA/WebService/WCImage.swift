@@ -26,26 +26,16 @@ open class WCImageManager {
     }
     
     
-    open class func getSaltForUser(withUsername username: String,
-                                   completion: @escaping (_ error: String, _ salt: String) -> Void) {
+    open class func uploadImg(completion: @escaping (_ error: String) -> Void) {
         do {
-            let params = ["username" : username]
-            let opt = try HTTP.POST(serviceBase + pathGetSalt, parameters: params)
-            opt.start { response in
-                if response.error != nil {
-                    completion(serverDown, "")
-                    return
-                }
-                let dict = WCUtils.convertToDictionary(data: response.data)
-                if dict!["error"] as! String != "" {
-                    completion(dict!["error"]! as! String, "")
-                }else{
-                    completion("", dict!["salt"]! as! String)
-                }
+            let params = ["file" : UIImageJPEGRepresentation(UIImage(named: "1_1.jpg")!, 1.0)]
+            let opt = try HTTP.POST(serviceBase + "fileup", parameters: params)
+            opt.start{ response in
+                completion("ok")
             }
         } catch let error{
             print (error.localizedDescription)
-            completion(serverDown, "")
+            completion(serverDown)
         }
     }
 }

@@ -51,6 +51,7 @@
 		87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87CD3A491E8494E900C9E5F3 /* Menu.swift */; };
 		87D097521F4A68B800D78BF8 /* WCImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D097511F4A68B800D78BF8 /* WCImage.swift */; };
 		87D097561F4FAC9400D78BF8 /* Database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 87D097531F4F518100D78BF8 /* Database.sqlite */; };
+		87D097581F53443400D78BF8 /* LifeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D097571F53443400D78BF8 /* LifeViewController.swift */; };
 		87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC11EC41DF800BB49EB /* WCUser.swift */; };
 		87DE40051EC765C800BB49EB /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE40041EC765C800BB49EB /* SettingViewController.swift */; };
 		87DE40091EC7776200BB49EB /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40081EC7776200BB49EB /* defaultAvatar.png */; };
@@ -119,6 +120,7 @@
 		87CD3A491E8494E900C9E5F3 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Menu.swift; path = Objects/Menu.swift; sourceTree = "<group>"; };
 		87D097511F4A68B800D78BF8 /* WCImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCImage.swift; path = WebService/WCImage.swift; sourceTree = "<group>"; };
 		87D097531F4F518100D78BF8 /* Database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Database.sqlite; sourceTree = "<group>"; };
+		87D097571F53443400D78BF8 /* LifeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LifeViewController.swift; path = ViewControllers/LifeViewController.swift; sourceTree = "<group>"; };
 		87DE3FC11EC41DF800BB49EB /* WCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUser.swift; path = WebService/WCUser.swift; sourceTree = "<group>"; };
 		87DE40041EC765C800BB49EB /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingViewController.swift; path = ViewControllers/SettingViewController.swift; sourceTree = "<group>"; };
 		87DE40081EC7776200BB49EB /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultAvatar.png; path = Icons/defaultAvatar.png; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				8721CB561EE651D80023152A /* EditorViewController.swift */,
+				87D097571F53443400D78BF8 /* LifeViewController.swift */,
 				910CFDD31E80C1130005CC1D /* MenuViewController.swift */,
 				874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */,
 				87C14A4B1EBE321B0031E20A /* ReportViewController.swift */,
@@ -431,6 +434,7 @@
 				87E5D31B1ED1FEFA004E1F84 /* RegisterViewController.swift in Sources */,
 				8732FE071EBD07A600B1CDB1 /* WCUtils.swift in Sources */,
 				910CFDD41E80C1130005CC1D /* DismissMenuAnimator.swift in Sources */,
+				87D097581F53443400D78BF8 /* LifeViewController.swift in Sources */,
 				87D097521F4A68B800D78BF8 /* WCImage.swift in Sources */,
 				871E35C71EBA67CB00EA483E /* Upload.swift in Sources */,
 				874F3D3B1EF6F4B100B47492 /* PreviewViewController.swift in Sources */,

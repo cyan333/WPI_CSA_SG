@@ -132,30 +132,6 @@ open class WCUserManager{
         }
     }
     
-    open class func getCurrentUserDetails(completion: @escaping (_ error: String) -> Void){
-        do {
-            let params = ["accessToken": WCService.currentUser!.accessToken,
-                          "userId": WCService.currentUser!.id] as [String : Any?]
-            let opt = try HTTP.POST(serviceBase + pathGetUserDetails, parameters: params)
-            opt.start { response in
-                if response.error != nil {
-                    completion(serverDown)
-                    return
-                }
-                let dict = WCUtils.convertToDictionary(data: response.data)
-                if dict!["error"] as! String != "" {
-                    completion(dict!["error"]! as! String)
-                }else{
-                    WCService.currentUser!.name = dict!["name"] as! String
-                    completion("")
-                }
-            }
-        } catch let error{
-            print (error.localizedDescription)
-            completion(serverDown)
-        }
-    }
-    
     open class func saveCurrentUserDetails(realName name: String?, completion: @escaping (_ error: String) -> Void){
         do {
             let params = ["accessToken": WCService.currentUser!.accessToken,
