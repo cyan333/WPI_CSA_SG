@@ -13,5 +13,53 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "WPI_CSA/Objects/Article.swift"
+            timestampString = "525748046.510508"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "convertTagToDictionary(text:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WPI_CSA.Article.convertTagToDictionary (text : Swift.String) -&gt; Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Any&gt;&gt;"
+                  moduleName = "WPI_CSA"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Cyan/Documents/WPI_CSA_SG/WPI_CSA/Objects/Article.swift"
+                  timestampString = "525746458.260414"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "4445">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "WPI_CSA.Article.convertTagToDictionary (text : Swift.String) -&gt; Swift.Optional&lt;Swift.Dictionary&lt;Swift.String, Any&gt;&gt;"
+                  moduleName = "WPI_CSA"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Cyan/Documents/WPI_CSA_SG/WPI_CSA/Objects/Article.swift"
+                  timestampString = "525746458.26449"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "128"
+                  endingLineNumber = "128"
+                  offsetFromSymbolStart = "4542">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -23,6 +23,10 @@ let savedPassword = "password"
 let localTitle = "title"
 let localArticle = "article"
 
+//View tag numbers
+let statusBackgroundViewTag = 50 // Used to change status bar color
+
+
 open class Utils {
     static var appMode: AppMode = .Offline
     static var menuOrderList: [Int] = []
@@ -249,9 +253,11 @@ extension String {
             (value, range, stop) in
             if let font = value as? UIFont {
                 let fontRatio: CGFloat = ratio == .Normal ? 0.75 : 1.25
-                let resizedFont = font.withSize(font.pointSize * fontRatio)
+                let fontName = font.fontName.hasSuffix("BoldMT") ? "Helvetica-Bold" : "Helvetica"
+                
+                let finalFont = UIFont(name: fontName, size: font.pointSize * fontRatio)!
                 html.addAttribute(NSFontAttributeName,
-                                         value: resizedFont,
+                                         value: finalFont,
                                          range: range)
             }
         }
@@ -271,5 +277,42 @@ extension NSAttributedString {
         }
         catch {}
         return nil
+    }
+}
+
+extension UIColor {
+    convenience init(hexString: String) {
+        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int = UInt32()
+        Scanner(string: hex).scanHexInt32(&int)
+        let a, r, g, b: UInt32
+        switch hex.characters.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
+    }
+}
+
+extension UIViewController {
+    func addOrUpdateStatusBGView(viewController: UIViewController, color: UIColor) -> Void {
+        var view = viewController.view.viewWithTag(statusBackgroundViewTag)
+        if view == nil {
+            let rect = CGRect(origin: CGPoint(x: 0, y: 0), size:CGSize(width: UIScreen.main.bounds.size.width, height:20))
+            view = UIView.init(frame: rect)
+            view?.tag = statusBackgroundViewTag
+            viewController.view?.addSubview(view!)
+            print("create staus view")
+        } else{
+            print("update status view")
+        }
+        view?.backgroundColor = color
+        
     }
 }

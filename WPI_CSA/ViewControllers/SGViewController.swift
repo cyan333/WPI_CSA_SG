@@ -9,6 +9,8 @@
 import UIKit
 import Foundation
 
+var tableTopInset: CGFloat = 64
+
 let padding: CGFloat = 10
 let imgViewWidth: Int = 130
 let screenWidth: CGFloat = UIScreen.main.bounds.width
@@ -40,6 +42,8 @@ class SGNavCell: UITableViewCell{
 
 class SGViewController: UIViewController {
     
+    @IBOutlet weak var menuBtn: UIButton!
+    @IBOutlet weak var actionBtn: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
     let interactor = Interactor()
@@ -52,7 +56,13 @@ class SGViewController: UIViewController {
     
     override func viewDidLoad() {
         Database.localDirInitiateSetup()
-        //Database.migrationToVersion2()
+        
+        navigationController?.navigationBar.tintColor = .white
+        
+        navigationController?.hidesBarsOnSwipe = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.shadowImage = UIImage()
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         DispatchQueue.global(qos: .background).async {
@@ -66,6 +76,13 @@ class SGViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(showToast(_:)),
                                                name: NSNotification.Name.init("showToast"), object: nil)
+        
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     func showToast(_ notification: NSNotification) {
@@ -90,6 +107,7 @@ class SGViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.article?.processContent()
             DispatchQueue.main.async {
+                self.updatePageTheme()
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: MAY need some tweak here
             }
         }
@@ -106,9 +124,32 @@ class SGViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.article?.processContent()
             DispatchQueue.main.async {
+                self.updatePageTheme()
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .left)//TODO: MAY need some tweak here
             }
         }
+    }
+    
+    func updatePageTheme(){
+        if let article = article {
+            if let themeColor = article.themeColor {
+                tableView.backgroundColor = themeColor
+                addOrUpdateStatusBGView(viewController: self, color: themeColor)
+                UIApplication.shared.statusBarStyle = .lightContent
+                navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+                menuBtn.setImage(#imageLiteral(resourceName: "MenuLight"), for: .normal)
+                actionBtn.setImage(#imageLiteral(resourceName: "ActionLight"), for: .normal)
+            } else {
+                let defaultColor = UIColor(hexString: "F9F9F9")
+                tableView.backgroundColor = .white
+                addOrUpdateStatusBGView(viewController: self, color: defaultColor)
+                UIApplication.shared.statusBarStyle = .default
+                navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]
+                menuBtn.setImage(#imageLiteral(resourceName: "MenuDefault"), for: .normal)
+                actionBtn.setImage(#imageLiteral(resourceName: "ActionDefault"), for: .normal)
+            }
+        }
+        
     }
     
     @IBAction func openMenu(_ sender: UIButton) {
@@ -116,6 +157,7 @@ class SGViewController: UIViewController {
     }
     
     @IBAction func action(_ sender: UIButton) {
+        UIApplication.shared.statusBarStyle = .default
         if Utils.appMode == .Offline {
             let alert = UIAlertController(title: nil, message: "This feature won't work in offline mode. Please go to setting and check network status.", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -271,14 +313,14 @@ extension SGViewController : UITableViewDataSource {
                     cell.nextBtn.alpha = 0.5
                 }
                 
-                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
                 return cell
             }
             paragraph = article.paragraphs[indexPath.row]
         }
         
         switch paragraph.type {
-        case .Plain:
+        case .Plain, .Div:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SGTextCell") as! SGTextCell
             
             if paragraph.cellHeight == 0 {
@@ -299,9 +341,15 @@ extension SGViewController : UITableViewDataSource {
             if paragraph.separatorType == .Full {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             } else if paragraph.separatorType == .None{
-                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
             } else {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+            }
+            
+            if paragraph.type == .Div {
+                cell.backgroundColor = article?.themeColor
+            } else {
+                cell.backgroundColor = .white
             }
             
             return cell
@@ -332,7 +380,7 @@ extension SGViewController : UITableViewDataSource {
             if(paragraph.separatorType == .Full){
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             }else if (paragraph.separatorType == .None){
-                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
             } else {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
             }
@@ -375,7 +423,7 @@ extension SGViewController : UITableViewDataSource {
             if(paragraph.separatorType == .Full){
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             }else if (paragraph.separatorType == .None){
-                cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
             } else {
                 cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
             }
@@ -383,7 +431,7 @@ extension SGViewController : UITableViewDataSource {
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SGImgTextCell") as! SGImgTextCell
-            cell.separatorInset = UIEdgeInsets(top: 0, left: cell.bounds.size.width, bottom: 0, right: 0)
+            cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
             return cell
         }
     }
@@ -392,6 +440,24 @@ extension SGViewController : UITableViewDataSource {
 extension SGViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(indexPath)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if tableTopInset != scrollView.contentInset.top {
+            tableTopInset = scrollView.contentInset.top
+            if(tableTopInset == 64){
+                if let themeColor = article?.themeColor {
+                    addOrUpdateStatusBGView(viewController: self, color: themeColor)
+                    UIApplication.shared.statusBarStyle = .lightContent
+                }else {
+                    addOrUpdateStatusBGView(viewController: self, color: UIColor(hexString: "FFFFFF"))
+                    UIApplication.shared.statusBarStyle = .default
+                }
+            }else{
+                addOrUpdateStatusBGView(viewController: self, color: UIColor(hexString: "CFFFFFFF"))
+                UIApplication.shared.statusBarStyle = .default
+            }
+        }
     }
 }
 
@@ -428,12 +494,13 @@ extension SGViewController : MenuActionDelegate {
     func displayArticleAndSaveMenuState(article: Article?, keyword: String?, menuList: [Menu]){
         self.searchKeyword = keyword
         self.menuList = menuList
-        if let art = article {
-            if(art.menuId != self.article?.menuId){
+        if let article = article {
+            if(article.menuId != self.article?.menuId){
                 DispatchQueue.global(qos: .background).async {
-                    self.article = art
+                    self.article = article
                     self.article?.processContent()
                     DispatchQueue.main.async {
+                        self.updatePageTheme()
                         self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: need some tweak here
                     }
                 }

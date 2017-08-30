@@ -35,6 +35,17 @@ class MenuViewController : UIViewController {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+        searchController.searchBar.backgroundImage = UIImage()
+        searchController.searchBar.barTintColor = .clear
+        
+        searchController.searchBar.tintColor = .white
+        searchController.searchBar.subviews[0].subviews.flatMap(){ $0 as? UITextField }.first?.tintColor = .lightGray
+        /*if #available(iOS 9.0, *) {
+            UITextField.appearance(whenContainedInInstancesOf: [type(of: searchController.searchBar)]).tintColor = .black
+        } else {
+            // Fallback on earlier versions
+        }*/
+        
         tableView.tableHeaderView = searchController.searchBar
         
         if let keyword = keyword{
@@ -70,7 +81,22 @@ class MenuViewController : UIViewController {
         visibleCellCount = calculateVisibleCellNumber(menuList: menuList)
         tableView.reloadData();
         
+        let gradientBackgroundColors = [UIColor(hexString: "#93B9C8").cgColor, UIColor(hexString: "#A57363").cgColor]
+        let gradientLocations = [0.0,1.0]
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientBackgroundColors
+        gradientLayer.locations = gradientLocations as [NSNumber]
+        
+        gradientLayer.frame = self.view.bounds
+        let backgroundView = UIView(frame: self.view.bounds)
+        backgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        self.tableView.backgroundView = backgroundView
+        
+        
+        addOrUpdateStatusBGView(viewController: self, color: UIColor(hexString: "#93B9C8"))
     }
+    
     
     @IBAction func handleGesture(sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: view)
@@ -214,6 +240,7 @@ class MenuViewController : UIViewController {
 
 //MARK: Table view delegates
 extension MenuViewController : UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.searchBar.text != "" {
             return searchResults.count
@@ -252,6 +279,11 @@ extension MenuViewController : UITableViewDataSource {
 }
 
 extension MenuViewController : UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.backgroundColor = UIColor.clear
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -274,3 +306,4 @@ extension MenuViewController : UISearchResultsUpdating {
         searchForArticles(keyword: searchController.searchBar.text!)
     }
 }
+

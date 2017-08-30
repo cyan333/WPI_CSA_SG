@@ -19,6 +19,8 @@ class Article{
     var nextMenuId: Int?
     var nextMenuText: String?
     
+    var themeColor: UIColor?
+    
     init(content: String){
         self.content = content
         paragraphs = [Paragraph]()
@@ -27,7 +29,7 @@ class Article{
     func processContent(){
         
         let regex = try! NSRegularExpression(pattern:
-            "(<img.*?\\/>)|(<imgtxt.*?<\\/imgtxt>)|(<txtimg.*?<\\/txtimg>)|(<tab.*?<\\/tab>)")
+            "(<img.*?\\/>)|(<imgtxt.*?<\\/imgtxt>)|(<txtimg.*?<\\/txtimg>)|(<tab.*?<\\/tab>)|(<div.*?<\\/div>)")
         let matchs = regex.matches(in: content, range: NSRange(location: 0, length: content.characters.count))
             .map{(content as NSString).substring(with: $0.range)}
         let count = matchs.count
@@ -69,6 +71,19 @@ class Article{
                     paragraphs[paragraphs.count - 1].separatorType = .Full
                 }
                 break
+            case .Div:
+                let divStr = matchs[i].substring(to: matchs[i].index(matchs[i].endIndex, offsetBy: -6))
+                let separator = divStr.range(of: ">")
+                let paragraph = Paragraph(content: divStr.substring(from: separator!.upperBound)
+                    .htmlAttributedString(ratio: .Enlarged),
+                                            type: .Div,
+                                            properties: convertTagToDictionary(text:
+                                                divStr.substring(to: separator!.lowerBound)))
+                paragraphs.append(paragraph)
+                if let bgColor = paragraph.properties?["color"] as? String {
+                    themeColor = UIColor(hexString: bgColor)
+                }
+                break
             default:
                 break
             }
@@ -94,6 +109,8 @@ class Article{
             return .Table
         } else if string.hasPrefix("<txtimg") {
             return .TextImage
+        } else if string.hasPrefix("<div") {
+            return .Div
         } else {
             return .Plain
         }
@@ -105,6 +122,7 @@ class Article{
         let processedText = preText.replacingOccurrences(of: "<img ", with: "{\"")
             .replacingOccurrences(of: "<imgtxt ", with: "{\"")
             .replacingOccurrences(of: "<txtimg ", with: "{\"")
+            .replacingOccurrences(of: "<div ", with: "{\"")
             .replacingOccurrences(of: "/>", with: "}")
             .replacingOccurrences(of: " />", with: "}")
             .replacingOccurrences(of: ">", with: "}")
@@ -165,6 +183,7 @@ enum ParagraphType{
     case ImageText
     case TextImage
     case Table
+    case Div
 }
 
 enum SeparatorType{

@@ -2,7 +2,7 @@
 //  LifeViewController.swift
 //  WPI_CSA
 //
-//  Created by Cyan Xie on 8/27/17.
+//  Created by NingFangming on 8/27/17.
 //  Copyright © 2017 fangming. All rights reserved.
 //
 
