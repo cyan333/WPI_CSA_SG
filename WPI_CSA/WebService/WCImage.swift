@@ -13,10 +13,15 @@ open class WCImageManager {
     
     open class func getImage(withId id: Int, completion: @escaping (_ error: String, _ image: UIImage?) -> Void) {
         do {
-            let opt = try HTTP.GET(serviceBase + "file")
+            let params = ["id" : id]
+            let opt = try HTTP.GET(serviceBase + "get_image", parameters: params)
             opt.start{ response in
-                if let imageData = response.data as Data? {
-                    completion("", UIImage(data: imageData))
+                if let image = UIImage(data: response.data) {
+                    completion("", image)
+                } else if let error = String(data: response.data, encoding: .utf8) {
+                    completion(error, nil)
+                } else {
+                    completion("Unknown error", nil)
                 }
             }
         } catch let error {

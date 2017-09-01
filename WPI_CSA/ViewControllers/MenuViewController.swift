@@ -81,20 +81,15 @@ class MenuViewController : UIViewController {
         visibleCellCount = calculateVisibleCellNumber(menuList: menuList)
         tableView.reloadData();
         
-        let gradientBackgroundColors = [UIColor(hexString: "#93B9C8").cgColor, UIColor(hexString: "#A57363").cgColor]
-        let gradientLocations = [0.0,1.0]
+        UIApplication.shared.statusBarStyle = .lightContent
         
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = gradientBackgroundColors
-        gradientLayer.locations = gradientLocations as [NSNumber]
+        let coloredView = ColoredView(frame: self.view.bounds)
+        coloredView.setVerticalGradient(topColor: UIColor(hexString: "93B9C8"),
+                                        bottomColor: UIColor(hexString: "A57363"))
         
-        gradientLayer.frame = self.view.bounds
-        let backgroundView = UIView(frame: self.view.bounds)
-        backgroundView.layer.insertSublayer(gradientLayer, at: 0)
-        self.tableView.backgroundView = backgroundView
+        self.tableView.backgroundView = coloredView
         
-        
-        addOrUpdateStatusBGView(viewController: self, color: UIColor(hexString: "#93B9C8"))
+        addOrUpdateStatusBGView(viewController: self, color: UIColor(hexString: "93B9C8"))
     }
     
     

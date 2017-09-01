@@ -25,6 +25,7 @@ let localArticle = "article"
 
 //View tag numbers
 let statusBackgroundViewTag = 50 // Used to change status bar color
+let sgTableBackgroundViewTag = 51// Used for the half colored background view
 
 
 open class Utils {
@@ -308,9 +309,6 @@ extension UIViewController {
             view = UIView.init(frame: rect)
             view?.tag = statusBackgroundViewTag
             viewController.view?.addSubview(view!)
-            print("create staus view")
-        } else{
-            print("update status view")
         }
         view?.backgroundColor = color
         

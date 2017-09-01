@@ -10,9 +10,22 @@ import UIKit
 import EventKit
 
 class LifeViewController: UIViewController {
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         
+        WCImageManager.getImage(withId: 3) { (error, img ) in
+            if error != "" {
+                print(error)
+            } else if let img = img {
+                DispatchQueue.main.async {
+                    let a = UIImageView(image: img)
+                    self.tableView.backgroundView = a
+                }
+            } else{
+                print("img nil")
+            }
+        }
         
     }
     

@@ -53,6 +53,7 @@
 		87D097561F4FAC9400D78BF8 /* Database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 87D097531F4F518100D78BF8 /* Database.sqlite */; };
 		87D097581F53443400D78BF8 /* LifeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D097571F53443400D78BF8 /* LifeViewController.swift */; };
 		87D0975A1F55F75F00D78BF8 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D097591F55F75F00D78BF8 /* TabBarViewController.swift */; };
+		87D0975C1F5721D000D78BF8 /* ColoredView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87D0975B1F5721D000D78BF8 /* ColoredView.swift */; };
 		87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE3FC11EC41DF800BB49EB /* WCUser.swift */; };
 		87DE40051EC765C800BB49EB /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DE40041EC765C800BB49EB /* SettingViewController.swift */; };
 		87DE40091EC7776200BB49EB /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40081EC7776200BB49EB /* defaultAvatar.png */; };
@@ -123,6 +124,7 @@
 		87D097531F4F518100D78BF8 /* Database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Database.sqlite; sourceTree = "<group>"; };
 		87D097571F53443400D78BF8 /* LifeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LifeViewController.swift; path = ViewControllers/LifeViewController.swift; sourceTree = "<group>"; };
 		87D097591F55F75F00D78BF8 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TabBarViewController.swift; path = ViewControllers/TabBarViewController.swift; sourceTree = "<group>"; };
+		87D0975B1F5721D000D78BF8 /* ColoredView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColoredView.swift; path = Helpers/ColoredView.swift; sourceTree = "<group>"; };
 		87DE3FC11EC41DF800BB49EB /* WCUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCUser.swift; path = WebService/WCUser.swift; sourceTree = "<group>"; };
 		87DE40041EC765C800BB49EB /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingViewController.swift; path = ViewControllers/SettingViewController.swift; sourceTree = "<group>"; };
 		87DE40081EC7776200BB49EB /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = defaultAvatar.png; path = Icons/defaultAvatar.png; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				87CAC3941ED3D5A4004D0A97 /* ActivityIndicator */,
+				87D0975B1F5721D000D78BF8 /* ColoredView.swift */,
 				910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */,
 				910CFDCF1E80C1130005CC1D /* Interactor.swift */,
 				910CFDD11E80C1130005CC1D /* MenuHelper.swift */,
@@ -456,6 +459,7 @@
 				87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */,
 				87CAC3981ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */,
 				87DE40051EC765C800BB49EB /* SettingViewController.swift in Sources */,
+				87D0975C1F5721D000D78BF8 /* ColoredView.swift in Sources */,
 				87C14A4C1EBE321B0031E20A /* ReportViewController.swift in Sources */,
 				874F3D3D1EF9AAE500B47492 /* WCArticle.swift in Sources */,
 				87D0975A1F55F75F00D78BF8 /* TabBarViewController.swift in Sources */,

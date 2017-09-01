@@ -80,7 +80,7 @@ class Article{
                                             properties: convertTagToDictionary(text:
                                                 divStr.substring(to: separator!.lowerBound)))
                 paragraphs.append(paragraph)
-                if let bgColor = paragraph.properties?["color"] as? String {
+                if let bgColor = paragraph.properties?["color"] as? String, themeColor == nil {
                     themeColor = UIColor(hexString: bgColor)
                 }
                 break

@@ -56,6 +56,7 @@ class SGViewController: UIViewController {
     
     override func viewDidLoad() {
         Database.localDirInitiateSetup()
+        //self.tableView.bounces = false
         
         navigationController?.navigationBar.tintColor = .white
         
@@ -76,7 +77,6 @@ class SGViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(showToast(_:)),
                                                name: NSNotification.Name.init("showToast"), object: nil)
-        
         
     }
     
@@ -107,8 +107,8 @@ class SGViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.article?.processContent()
             DispatchQueue.main.async {
-                self.updatePageTheme()
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: MAY need some tweak here
+                self.updatePageTheme()
             }
         }
     }
@@ -124,8 +124,8 @@ class SGViewController: UIViewController {
         DispatchQueue.global(qos: .background).async {
             self.article?.processContent()
             DispatchQueue.main.async {
-                self.updatePageTheme()
                 self.tableView.reloadSections(IndexSet(integer: 0), with: .left)//TODO: MAY need some tweak here
+                self.updatePageTheme()
             }
         }
     }
@@ -133,20 +133,28 @@ class SGViewController: UIViewController {
     func updatePageTheme(){
         if let article = article {
             if let themeColor = article.themeColor {
-                tableView.backgroundColor = themeColor
                 addOrUpdateStatusBGView(viewController: self, color: themeColor)
                 UIApplication.shared.statusBarStyle = .lightContent
                 navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
                 menuBtn.setImage(#imageLiteral(resourceName: "MenuLight"), for: .normal)
                 actionBtn.setImage(#imageLiteral(resourceName: "ActionLight"), for: .normal)
+                if tableView.backgroundView is ColoredView {
+                    (tableView.backgroundView as! ColoredView).setTopHalfColor(color: themeColor)
+                }else{
+                    let coloredView = ColoredView(frame: self.view.bounds)
+                    coloredView.setTopHalfColor(color: themeColor)
+                    tableView.backgroundView = coloredView
+                }
             } else {
                 let defaultColor = UIColor(hexString: "F9F9F9")
-                tableView.backgroundColor = .white
                 addOrUpdateStatusBGView(viewController: self, color: defaultColor)
                 UIApplication.shared.statusBarStyle = .default
                 navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]
                 menuBtn.setImage(#imageLiteral(resourceName: "MenuDefault"), for: .normal)
                 actionBtn.setImage(#imageLiteral(resourceName: "ActionDefault"), for: .normal)
+                if tableView.backgroundView is ColoredView {
+                    (tableView.backgroundView as! ColoredView).removeColorLayer()
+                }
             }
         }
         
