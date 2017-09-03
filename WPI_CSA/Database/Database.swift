@@ -194,7 +194,28 @@ class Database {
         query += mappingId == nil ? "null" : "\(mappingId!)"
         query += ", "
         query += value == nil ? "null)" : "'\(value!)')"
+        
         run(queries: query)
+    }
+    
+    open class func createOrUpdateImageCache(imageId: Int) {
+        do{
+            let db = try Database.connect()
+            let query = "SELECT ID FROM CACHE WHERE TYPE = 'Image' AND MAPPING_ID = \(imageId)"
+            var queryStatement: OpaquePointer? = nil
+            if sqlite3_prepare_v2(db.dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+                if sqlite3_step(queryStatement) == SQLITE_ROW {
+                    let cacheId = Int(sqlite3_column_int(queryStatement, 0))
+                    sqlite3_exec(db.dbPointer, "UPDATE CACHE SET VALUE = VALUE + 1 WHERE ID = \(cacheId)",
+                        nil, nil, nil)
+                } else {
+                    sqlite3_exec(db.dbPointer, "INSERT INTO CACHE(TYPE, MAPPING_ID, VALUE) VALUES ('Image', \(imageId), '1')", nil, nil, nil)
+                }
+            } else {
+                print("INSERT statement could not be prepared")
+            }
+            sqlite3_finalize(queryStatement)
+        }catch {}
     }
     
     open class func deleteCache(id: Int) {
@@ -269,8 +290,6 @@ class Database {
                 if let errMsg = errMsg {
                     print(String(cString: errMsg))
                 }
-            }else{
-                print("Query is successfully executed")
             }
         }catch {}
     }

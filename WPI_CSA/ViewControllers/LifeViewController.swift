@@ -15,7 +15,8 @@ class LifeViewController: UIViewController {
     override func viewDidLoad() {
         //CacheManager.localDirInitiateSetup()
         
-        CacheManager.getImage(withId: 3) { (error, img ) in
+        
+        /*CacheManager.getImage(withName: "WCImage_3") { (error, img ) in
             if error != "" {
                 print(error)
             } else if let img = img {
@@ -26,7 +27,7 @@ class LifeViewController: UIViewController {
             } else{
                 print("img nil")
             }
-        }
+        }*/
         
     }
     

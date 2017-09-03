@@ -374,7 +374,13 @@ extension SGViewController : UITableViewDataSource {
             }
             
             if let imgName = paragraph.properties?["src"] {
-                cell.imgView.image = UIImage(named: imgName as! String)
+                CacheManager.getImage(withName: imgName as! String,
+                                      completion: { (err, image) in
+                                        DispatchQueue.main.async {
+                                            cell.imgView.image = image
+                                        }
+                })
+                
                 let filteredConstraints = cell.imgView.constraints.filter { $0.identifier == "ImgCellImgHeight" }
                 if let heightConstraint = filteredConstraints.first {
                     heightConstraint.constant = paragraph.imgViewHeight
@@ -413,11 +419,18 @@ extension SGViewController : UITableViewDataSource {
                 cell.textView.attributedText = paragraph.content
             }
             if let imgName = paragraph.properties?["src"] {
-                cell.imgView.image = UIImage(named: imgName as! String)
+                CacheManager.getImage(withName: "WCImage_21",//imgName as! String,
+                                      completion: { (err, image) in
+                                        DispatchQueue.main.async {
+                                            cell.imgView.image = image
+                                        }
+                                        
+                })
                 let filteredConstraints = cell.imgView.constraints.filter { $0.identifier == "imgTxtCellImgHeight" }
                 if let heightConstraint = filteredConstraints.first {
                     heightConstraint.constant = paragraph.imgViewHeight
                 }
+                
             }else{
                 //TODO: friendly error message?
                 print("Cannot read image")

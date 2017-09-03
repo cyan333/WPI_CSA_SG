@@ -94,8 +94,22 @@ open class CacheManager {
         }
     }
     
-    open class func getImage(withId id: Int, completion: @escaping (_ error: String, _ image: UIImage?) -> Void) {
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+    open class func getImage(withName name: String, completion: @escaping (_ error: String, _ image: UIImage?) -> Void) {
+        var id = 0
+        if name.hasPrefix("WCImage_"){
+            if let imgId = Int(name.replacingOccurrences(of: "WCImage_", with: "")) {
+                id = imgId
+            } else {
+                completion("Malformated WCService image id", nil)
+                return
+            }
+        } else {
+            completion("", UIImage(named: name))
+            return
+        }
+        
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                        .userDomainMask, true)[0] as NSString
         
         if Database.getCache(type: .Image, mappingId: id) != nil {
             let image = UIImage(contentsOfFile: documentDirectoryPath
@@ -122,7 +136,8 @@ open class CacheManager {
                     do{
                         try UIImageJPEGRepresentation(image, 1.0)?.write(to: URL(fileURLWithPath: imgPath),
                                                                          options: .atomic)
-                        Database.createCache(type: .Image, mappingId: id, value: "1")
+                        //Database.createCache(type: .Image, mappingId: id, value: "1")
+                        Database.createOrUpdateImageCache(imageId: id)
                     }catch let error{
                         print(error.localizedDescription)
                     }
