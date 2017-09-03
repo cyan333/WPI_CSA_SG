@@ -1,0 +1,143 @@
+//
+//  CacheManager.swift
+//  WPI_CSA
+//
+//  Created by NingFangming on 9/1/17.
+//  Copyright © 2017 fangming. All rights reserved.
+//
+
+import Foundation
+import UIKit
+
+open class CacheManager {
+    
+    open class func localDirInitiateSetup() {
+        let fileManager = FileManager.default
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        
+        // Copy database file to document folder. Replace it if the file already exists
+        let dbDestinationPath = documentDirectoryPath.appendingPathComponent("Database.sqlite")
+        if fileManager.fileExists(atPath: dbDestinationPath){
+            do{
+                try fileManager.removeItem(atPath: dbDestinationPath)
+            }catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        do{
+            try fileManager.copyItem(atPath: Bundle.main.path(forResource: "Database",
+                                                              ofType: "sqlite")!,
+                                     toPath: dbDestinationPath)
+        }catch let error as NSError {
+            print("error occurred, here are the details:\n \(error)")
+        }
+        
+        /* DB 2.0 Migration code starts */
+        let legacyDBPath = documentDirectoryPath.appendingPathComponent("SG.sqlite")
+        if fileManager.fileExists(atPath: legacyDBPath){
+            do{
+                try fileManager.removeItem(atPath: legacyDBPath)
+            }catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        /* DB 2.0 Migration code ends */
+        
+        // Creating image cache folder
+        let imageCacheDir = documentDirectoryPath.appendingPathComponent("imageCache")
+        do {
+            if fileManager.fileExists(atPath: imageCacheDir) {
+                try fileManager.removeItem(atPath: imageCacheDir)
+            }
+            try fileManager.createDirectory(atPath: imageCacheDir,
+                                            withIntermediateDirectories: false, attributes: nil)
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        /*let pdfCacheDir = documentDirectoryPath.appendingPathComponent("pdfCache")
+         do {
+         if !fileManager.fileExists(atPath: pdfCacheDir) {
+         try fileManager.createDirectory(atPath: pdfCacheDir,
+         withIntermediateDirectories: false, attributes: nil)
+         }
+         } catch let error {
+         print(error.localizedDescription)
+         }*/
+        
+        // Exclude files or directories from icloud backup
+        var dbPathUrl = URL(fileURLWithPath: dbDestinationPath)
+        var imgCachePathUrl = URL(fileURLWithPath: imageCacheDir)
+        do {
+            var resourceValues = URLResourceValues()
+            resourceValues.isExcludedFromBackup = true
+            try dbPathUrl.setResourceValues(resourceValues)
+            try imgCachePathUrl.setResourceValues(resourceValues)
+            
+        } catch let error{
+            print(error.localizedDescription)
+        }
+    }
+    
+    open class func migrationToVersion2() {
+        //let fileManager = FileManager.default
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        
+        
+        let img = UIImage(named: "1_2.jpg")
+        let imgPath = URL(fileURLWithPath: documentDirectoryPath.appendingPathComponent("1.jpg"))
+        
+        do{
+            try UIImageJPEGRepresentation(img!, 1.0)?.write(to: imgPath, options: .atomic)
+        }catch let error{
+            print(error.localizedDescription)
+        }
+    }
+    
+    open class func getImage(withId id: Int, completion: @escaping (_ error: String, _ image: UIImage?) -> Void) {
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
+        
+        if Database.getCache(type: .Image, mappingId: id) != nil {
+            let image = UIImage(contentsOfFile: documentDirectoryPath
+                .appendingPathComponent("imageCache/\(id).jpg"))
+            if let image = image {
+                print("image from local")
+                Database.imageHit(id: id)
+                //Database.getImgHit(id: id)
+                completion("", image)
+                return
+            } else {
+                Database.deleteCache(id: id)
+            }
+        }
+        
+        print("img from server")
+        do {
+            let params = ["id" : id]
+            let opt = try HTTP.GET(serviceBase + "get_image", parameters: params)
+            opt.start{ response in
+                if let image = UIImage(data: response.data) {
+                    let imgPath = documentDirectoryPath.appendingPathComponent("imageCache/\(id).jpg")
+                    
+                    do{
+                        try UIImageJPEGRepresentation(image, 1.0)?.write(to: URL(fileURLWithPath: imgPath),
+                                                                         options: .atomic)
+                        Database.createCache(type: .Image, mappingId: id, value: "1")
+                    }catch let error{
+                        print(error.localizedDescription)
+                    }
+                    completion("", image)
+                } else if let error = String(data: response.data, encoding: .utf8) {
+                    completion(error, nil)
+                } else {
+                    completion("Unknown error", nil)
+                }
+            }
+        } catch let error {
+            print(error.localizedDescription)
+            completion(serverDown, nil)
+        }
+    }
+    
+}
+

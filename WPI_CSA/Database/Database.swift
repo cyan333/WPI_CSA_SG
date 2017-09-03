@@ -76,7 +76,7 @@ class Database {
     }
     
     func searchArticles(withKeyword keyword: String) -> [Menu] {
-        let query = "SELECT ID, NAME FROM MENUS WHERE NAME LIKE '%\(keyword)%' UNION SELECT ID, NAME FROM MENUS WHERE ID IN (SELECT MENU_ID FROM ARTICLES WHERE TITLE LIKE '%\(keyword)%' OR CONTENT LIKE '%\(keyword)%')"
+        let query = "SELECT ID, TITLE FROM ARTICLES WHERE CONTENT LIKE '%\(keyword)%'"
         var queryStatement: OpaquePointer? = nil
         var menuList = [Menu]()
         
@@ -144,111 +144,85 @@ class Database {
         return article
     }
     
-    open class func localDirInitiateSetup() {
-        let fileManager = FileManager.default
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
         
-        // Copy database file to document folder. Replace it if the file already exists
-        let dbDestinationPath = documentDirectoryPath.appendingPathComponent("Database.sqlite")
-        if fileManager.fileExists(atPath: dbDestinationPath){
-            do{
-                try fileManager.removeItem(atPath: dbDestinationPath)
-            }catch let error {
-                print(error.localizedDescription)
-            }
-        }
-        do{
-            try fileManager.copyItem(atPath: Bundle.main.path(forResource: "Database",
-                                                              ofType: "sqlite")!,
-                                     toPath: dbDestinationPath)
-        }catch let error as NSError {
-            print("error occurred, here are the details:\n \(error)")
-        }
-        
-        /* DB 2.0 Migration code starts */
-        let legacyDBPath = documentDirectoryPath.appendingPathComponent("SG.sqlite")
-        if fileManager.fileExists(atPath: legacyDBPath){
-            do{
-                try fileManager.removeItem(atPath: legacyDBPath)
-            }catch let error {
-                print(error.localizedDescription)
-            }
-        }
-        /* DB 2.0 Migration code ends */
-        
-        // Creating image cache folder
-        let imageCacheDir = documentDirectoryPath.appendingPathComponent("imageCache")
-        do {
-            if !fileManager.fileExists(atPath: imageCacheDir) {
-                try fileManager.createDirectory(atPath: imageCacheDir,
-                                                withIntermediateDirectories: false, attributes: nil)
-            }
-        } catch let error {
-            print(error.localizedDescription)
-        }
-        
-        /*let pdfCacheDir = documentDirectoryPath.appendingPathComponent("pdfCache")
-        do {
-            if !fileManager.fileExists(atPath: pdfCacheDir) {
-                try fileManager.createDirectory(atPath: pdfCacheDir,
-                                                withIntermediateDirectories: false, attributes: nil)
-            }
-        } catch let error {
-            print(error.localizedDescription)
-        }*/
-        
-        // Exclude files or directories from icloud backup
-        var dbPathUrl = URL(fileURLWithPath: dbDestinationPath)
-        var imgCachePathUrl = URL(fileURLWithPath: imageCacheDir)
-        do {
-            var resourceValues = URLResourceValues()
-            resourceValues.isExcludedFromBackup = true
-            try dbPathUrl.setResourceValues(resourceValues)
-            try imgCachePathUrl.setResourceValues(resourceValues)
-            
-        } catch let error{
-            print(error.localizedDescription)
-        }
-    }
-    
-    open class func migrationToVersion2() {
-        //let fileManager = FileManager.default
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
-        
-        
-        let img = UIImage(named: "1_2.jpg")
-        let imgPath = URL(fileURLWithPath: documentDirectoryPath.appendingPathComponent("1.jpg"))
-        
-        do{
-            try UIImageJPEGRepresentation(img!, 1.0)?.write(to: imgPath, options: .atomic)
-        }catch let error{
-            print(error.localizedDescription)
-        }
-    }
-    /*
-    open class func getParam(named key: String) ->String? {
+    open class func getCache(type: CacheType, mappingId id: Int = 0) -> Cache? {
+        var cache: Cache?
         do{
             let db = try Database.connect()
+            var query = "SELECT ID, NAME, MAPPING_ID, VALUE FROM CACHE "
             
-            let query = "SELECT VALUE FROM PARAMS WHERE KEY = '\(key)'"
+            switch type {
+            case .Image, .PDF:
+                query += "WHERE TYPE = '\(type.rawValue)' AND MAPPING_ID = \(id)"
+                break
+            default:
+                break
+            }
+            
             var queryStatement: OpaquePointer? = nil
-            var value: String?
             
             if sqlite3_prepare_v2(db.dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
                 if sqlite3_step(queryStatement) == SQLITE_ROW {
-                    value = String(cString: sqlite3_column_text(queryStatement, 0))
+                    let cacheId = Int(sqlite3_column_int(queryStatement, 0))
+                    var name = ""
+                    if let nameChar = sqlite3_column_text(queryStatement, 1) {
+                        name = String(cString: nameChar)
+                    }
+                    let mappingId = Int(sqlite3_column_int(queryStatement, 2))
+                    var value = ""
+                    if let valueChar = sqlite3_column_text(queryStatement, 3) {
+                        value = String(cString: valueChar)
+                    }
+                    
+                    cache = Cache(id: cacheId, name: name, type: type, mappingId: mappingId, value: value)
                 }
             } else {
-                print("SELECT statement could not be prepared")
+                print("query cannot be prepared")
             }
             sqlite3_finalize(queryStatement)
             
-            return value
+            return cache
         }catch{
             return nil
         }
     }
     
+    open class func createCache(type: CacheType, name: String? = nil, mappingId: Int? = nil, value: String? = nil) {
+        var query = "INSERT INTO CACHE (NAME, TYPE, MAPPING_ID, VALUE) VALUES ("
+        query += name == nil ? "null" : "'\(name!)'"
+        query += ", '\(type.rawValue)', "
+        query += mappingId == nil ? "null" : "\(mappingId!)"
+        query += ", "
+        query += value == nil ? "null)" : "'\(value!)')"
+        run(queries: query)
+    }
+    
+    open class func deleteCache(id: Int) {
+        run(queries: "DELETE FROM CACHE WHERE ID = \(id)")
+    }
+    
+    open class func imageHit(id: Int) {
+        run(queries: "UPDATE CACHE SET VALUE = VALUE + 1 WHERE TYPE = 'Image' AND MAPPING_ID = \(id)")
+    }
+    
+    open class func getImgHit(id: Int) {
+        do{
+            let db = try Database.connect()
+            let query = "select value from cache where type = 'Image' and mapping_id = \(id)"
+            var queryStatement: OpaquePointer? = nil
+            if sqlite3_prepare_v2(db.dbPointer, query, -1, &queryStatement, nil) == SQLITE_OK {
+                if sqlite3_step(queryStatement) == SQLITE_ROW {
+                    let hit = Int(sqlite3_column_int(queryStatement, 0))
+                    print("Current image hit \(hit)")
+                }
+            } else {
+                print("INSERT statement could not be prepared")
+            }
+            sqlite3_finalize(queryStatement)
+        }catch {}
+    }
+    
+    /*
     open class func setParam(named key:String, withValue value:String) {
         do{
             let db = try Database.connect()

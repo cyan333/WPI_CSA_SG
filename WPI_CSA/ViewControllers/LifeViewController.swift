@@ -13,8 +13,9 @@ class LifeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
+        //CacheManager.localDirInitiateSetup()
         
-        WCImageManager.getImage(withId: 3) { (error, img ) in
+        CacheManager.getImage(withId: 3) { (error, img ) in
             if error != "" {
                 print(error)
             } else if let img = img {

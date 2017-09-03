@@ -55,14 +55,11 @@ class SGViewController: UIViewController {
     var article: Article?
     
     override func viewDidLoad() {
-        Database.localDirInitiateSetup()
-        //self.tableView.bounces = false
         
         navigationController?.navigationBar.tintColor = .white
         
         navigationController?.hidesBarsOnSwipe = true
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.setBackgroundImage(article?.themeImage, for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
@@ -134,6 +131,7 @@ class SGViewController: UIViewController {
         if let article = article {
             if let themeColor = article.themeColor {
                 addOrUpdateStatusBGView(viewController: self, color: themeColor)
+                navigationController?.navigationBar.setBackgroundImage(article.themeImage, for: .default)
                 UIApplication.shared.statusBarStyle = .lightContent
                 navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
                 menuBtn.setImage(#imageLiteral(resourceName: "MenuLight"), for: .normal)
@@ -148,6 +146,7 @@ class SGViewController: UIViewController {
             } else {
                 let defaultColor = UIColor(hexString: "F9F9F9")
                 addOrUpdateStatusBGView(viewController: self, color: defaultColor)
+                navigationController?.navigationBar.setBackgroundImage(article.themeImage, for: .default)
                 UIApplication.shared.statusBarStyle = .default
                 navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]
                 menuBtn.setImage(#imageLiteral(resourceName: "MenuDefault"), for: .normal)
