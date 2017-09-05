@@ -14,7 +14,8 @@ var tableTopInset: CGFloat = 64
 let padding: CGFloat = 10
 let imgViewWidth: Int = 130
 let screenWidth: CGFloat = UIScreen.main.bounds.width
-let coverImg = "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>"
+let screenHeight: CGFloat = UIScreen.main.bounds.height
+//let coverImg = "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>"
 
 protocol MenuActionDelegate {
     func openSegue(segueName: String, sender: AnyObject?)
@@ -47,6 +48,7 @@ class SGViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     let interactor = Interactor()
+    var coverPage: UIImageView?
     
     var searchKeyword: String?
     var menuList = [Menu]()
@@ -55,21 +57,38 @@ class SGViewController: UIViewController {
     var article: Article?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         
-        navigationController?.navigationBar.tintColor = .white
         
         navigationController?.hidesBarsOnSwipe = true
-        navigationController?.navigationBar.setBackgroundImage(article?.themeImage, for: .default)
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = .clear
+        navigationController?.navigationBar.isHidden = true
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
-        DispatchQueue.global(qos: .background).async {
-            self.article = Article(content: coverImg)
-            self.article?.processContent()
-            DispatchQueue.main.async {
-                self.tableView.reloadSections(IndexSet(integer: 0), with: .right)//TODO: need some tweak here
-            }
-        }
+        
+        addOrUpdateStatusBGView(viewController: self, color: .clear)
+        
+        coverPage = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49))
+        coverPage?.image = UIImage(named: "cover.jpg")
+        coverPage?.isUserInteractionEnabled = true
+        let viewBtn = UIButton(frame: CGRect(x: screenWidth/2 - 70, y: screenHeight/2,
+                                                  width: 140, height: 40))
+        viewBtn.setTitle("Look inside", for: .normal)
+        viewBtn.titleLabel?.font = UIFont(name: "Helvetica", size: 24)
+        viewBtn.setTitleColor(.white, for: .normal)
+        viewBtn.setTitleColor(UIColor(hexString: "999999"), for: .highlighted)
+        viewBtn.layer.borderWidth = 2
+        viewBtn.layer.cornerRadius = 10
+        viewBtn.layer.borderColor = UIColor.white.cgColor
+        viewBtn.addTarget(self, action:#selector(lookInside), for: .touchUpInside)
+        coverPage?.addSubview(viewBtn)
+        self.view.addSubview(coverPage!)
+        
+        
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
         
         NotificationCenter.default.addObserver(self, selector: #selector(showToast(_:)),
@@ -77,8 +96,8 @@ class SGViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
         UIApplication.shared.statusBarStyle = .lightContent
     }
     
@@ -93,7 +112,28 @@ class SGViewController: UIViewController {
         
     }
     
-    func goToPreviousArticle(){
+    func lookInside() {
+        do{
+            let database = try Database.connect()
+            Utils.menuOrderList = []
+            menuList = database.getSubMenus(by: 0, withPrefix: "")
+            
+            self.article = database.getArticle(byMenuId: 1)
+            
+        }catch {
+            print(error)
+        }
+        
+        DispatchQueue.global(qos: .background).async {
+            self.article?.processContent()
+            DispatchQueue.main.async {
+                self.tableView.reloadSections(IndexSet(integer: 0), with: .left)//TODO: MAY need some tweak here
+                self.updatePageTheme()
+            }
+        }
+    }
+    
+    func goToPreviousArticle() {
         do{
             let database = try Database.connect()
             self.article = database.getArticle(byMenuId: (article?.prevMenuId!)!)
@@ -110,7 +150,7 @@ class SGViewController: UIViewController {
         }
     }
     
-    func goToNextArticle(){
+    func goToNextArticle() {
         do{
             let database = try Database.connect()
             self.article = database.getArticle(byMenuId: (self.article?.nextMenuId!)!)
@@ -128,6 +168,12 @@ class SGViewController: UIViewController {
     }
     
     func updatePageTheme(){
+        if let coverPage = self.coverPage {
+            coverPage.removeFromSuperview()
+            self.coverPage = nil
+            navigationController?.navigationBar.isHidden = false
+            
+        }
         if let article = article {
             if let themeColor = article.themeColor {
                 addOrUpdateStatusBGView(viewController: self, color: themeColor)
@@ -285,15 +331,31 @@ extension SGViewController : UITableViewDataSource {
             if indexPath.row == article.paragraphs.count {
                 let paragraph = NSMutableParagraphStyle()
                 paragraph.alignment = .center
-                let attributes: [String : Any] = [NSParagraphStyleAttributeName: paragraph]
+                var attributes: [String : Any]
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SGNavCell") as! SGNavCell
+                
+                if let themeColor = article.themeColor {
+                    attributes = [NSParagraphStyleAttributeName: paragraph,
+                                  NSForegroundColorAttributeName: UIColor.white]
+                    cell.prevBtn.layer.borderColor = UIColor.white.cgColor
+                    cell.prevBtn.backgroundColor = themeColor
+                    cell.nextBtn.layer.borderColor = UIColor.white.cgColor
+                    cell.nextBtn.backgroundColor = themeColor
+                } else {
+                    attributes = [NSParagraphStyleAttributeName: paragraph]
+                    cell.prevBtn.layer.borderColor = self.view.tintColor.cgColor
+                    cell.prevBtn.backgroundColor = .white
+                    cell.nextBtn.layer.borderColor = self.view.tintColor.cgColor
+                    cell.nextBtn.backgroundColor = .white
+                }
+                
                 cell.prevBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 10)
                 cell.prevBtn.layer.borderWidth = 1
                 cell.prevBtn.layer.cornerRadius = 5
-                cell.prevBtn.layer.borderColor = self.view.tintColor.cgColor
                 cell.prevBtn.titleLabel?.numberOfLines = 2
                 cell.prevBtn.addTarget(self, action:#selector(goToPreviousArticle), for: .touchUpInside)
+                
                 if let prevMenuText = article.prevMenuText {
                     cell.prevBtn.setAttributedTitle(NSMutableAttributedString(string: "Previous\n" + prevMenuText, attributes: attributes), for: .normal)
                     cell.prevBtn.isEnabled = true
@@ -307,9 +369,9 @@ extension SGViewController : UITableViewDataSource {
                 cell.nextBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 15)
                 cell.nextBtn.layer.borderWidth = 1
                 cell.nextBtn.layer.cornerRadius = 5
-                cell.nextBtn.layer.borderColor = self.view.tintColor.cgColor
                 cell.nextBtn.titleLabel?.numberOfLines = 2
                 cell.nextBtn.addTarget(self, action:#selector(goToNextArticle), for: .touchUpInside)
+                
                 if let nextMenuText = article.nextMenuText {
                     cell.nextBtn.setAttributedTitle(NSMutableAttributedString(string: "Next\n" + nextMenuText, attributes: attributes), for: .normal)
                     cell.nextBtn.isEnabled = true
@@ -319,6 +381,8 @@ extension SGViewController : UITableViewDataSource {
                     cell.nextBtn.isEnabled = false
                     cell.nextBtn.alpha = 0.5
                 }
+                
+                
                 
                 cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
                 return cell
@@ -419,7 +483,7 @@ extension SGViewController : UITableViewDataSource {
                 cell.textView.attributedText = paragraph.content
             }
             if let imgName = paragraph.properties?["src"] {
-                CacheManager.getImage(withName: "WCImage_21",//imgName as! String,
+                CacheManager.getImage(withName: imgName as! String,
                                       completion: { (err, image) in
                                         DispatchQueue.main.async {
                                             cell.imgView.image = image

@@ -83,13 +83,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "WPI_CSA/ViewControllers/SGViewController.swift"
-            timestampString = "526093805.754088"
+            filePath = "WPI_CSA/Database/Database.swift"
+            timestampString = "526181266.49628"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "132"
             endingLineNumber = "132"
-            landmarkName = "updatePageTheme()"
+            landmarkName = "getArticle(byMenuId:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
