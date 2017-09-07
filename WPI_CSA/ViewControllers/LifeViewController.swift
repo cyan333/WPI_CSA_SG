@@ -27,8 +27,9 @@ class LifeViewController: UIViewController {
             } else{
                 print("img nil")
             }
-        }*/
+         }*/
         
+        Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
     }
     
     @IBAction func click(_ sender: Any) {

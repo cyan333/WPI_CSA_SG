@@ -89,8 +89,6 @@ class SGViewController: UIViewController {
         self.view.addSubview(coverPage!)
         
         
-        Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(showToast(_:)),
                                                name: NSNotification.Name.init("showToast"), object: nil)
         

@@ -132,10 +132,27 @@ open class WCUserManager{
         }
     }
     
-    open class func saveCurrentUserDetails(realName name: String?, completion: @escaping (_ error: String) -> Void){
+    open class func saveCurrentUserDetails(name: String?, birthday: String?, classOf: String?, major: String?, completion: @escaping (_ error: String) -> Void){
         do {
-            let params = ["accessToken": WCService.currentUser!.accessToken,
-                          "name": name] as [String : Any?]
+            var params = ["accessToken": WCService.currentUser!.accessToken]
+            if let name = name {
+                params["name"] = name
+            }
+            if let birthday = birthday {
+                params["birthday"] = birthday
+            }
+            if let classOf = classOf {
+                params["year"] = classOf
+            }
+            if let major = major {
+                params["major"] = major
+            }
+            
+            if params.count == 1 {
+                completion("No user details to be saved")
+                return
+            }
+            
             let opt = try HTTP.POST(serviceBase + pathCreateUserDetails, parameters: params)
             opt.start { response in
                 if response.error != nil {

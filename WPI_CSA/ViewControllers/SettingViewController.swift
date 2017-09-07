@@ -308,7 +308,12 @@ extension SettingViewController : UITableViewDataSource {
 extension SettingViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == 1 {
+        if indexPath.section == 0 {
+            if tableView.cellForRow(at: indexPath) is SettingUserCell {
+                self.performSegue(withIdentifier: "UserDetailSegue", sender: nil)
+            }
+            
+        } else if indexPath.section == 1 {
             switch indexPath.row {
             case 0:
                 if #available(iOS 10.0, *) {
