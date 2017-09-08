@@ -14,6 +14,9 @@ public class WCUser{
     var accessToken: String?
     var emailConfirmed = true
     var name = ""
+    var birthday = ""
+    var classOf = ""
+    var major = ""
     
     init(id: Int){
         self.id = id
@@ -71,6 +74,15 @@ open class WCUserManager{
                     user.emailConfirmed = dict!["emailConfirmed"] as! Bool
                     if let name = dict!["name"] as? String {
                         user.name = name
+                    }
+                    if let birthday = dict!["birthday"] as? String {
+                        user.birthday = birthday
+                    }
+                    if let classOf = dict!["year"] as? String {
+                        user.classOf = classOf
+                    }
+                    if let major = dict!["major"] as? String {
+                        user.major = major
                     }
                     if user.name == "" {user.name = "Unknown"}
                     completion("", user)

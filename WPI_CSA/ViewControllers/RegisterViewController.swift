@@ -9,7 +9,6 @@
 import UIKit
 
 class RegisterInputCell: UITableViewCell {
-    
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var textField: UITextField!
 }
@@ -93,6 +92,15 @@ class RegisterViewController: UIViewController {
                                             WCUserManager.saveCurrentUserDetails(name: name, birthday: self.birthday, classOf: self.classOf, major: self.major, completion: { (error) in
                                                 if error == "" {
                                                     WCService.currentUser!.name = name
+                                                    if let birthday = self.birthday {
+                                                        WCService.currentUser!.birthday = birthday
+                                                    }
+                                                    if let classOf = self.classOf {
+                                                        WCService.currentUser!.birthday = classOf
+                                                    }
+                                                    if let major = self.major {
+                                                        WCService.currentUser!.birthday = major
+                                                    }
                                                     Utils.setParam(named: savedUsername, withValue: username)
                                                     Utils.setParam(named: savedPassword,
                                                                    withValue: WCUtils.md5(password + salt))
@@ -277,6 +285,7 @@ extension RegisterViewController: UITableViewDataSource {
                 picker.addTarget(self, action: #selector(handleDatePicker(sender:)), for: UIControlEvents.valueChanged)
                 cell.textField.inputView = picker
             } else if indexPath.row == 1 {
+                cell.textField.keyboardType = .numberPad
             } else{
                 cell.textField.returnKeyType = .join
             }
