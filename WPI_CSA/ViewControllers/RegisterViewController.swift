@@ -29,6 +29,8 @@ class RegisterViewController: UIViewController {
     var major: String?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:NSNotification.Name.UIKeyboardWillShow, object: nil)

@@ -19,6 +19,8 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     var reportHeightOffset: CGFloat = 120.0
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         if Utils.appMode == .LoggedOn {
             emailTxtField.removeFromSuperview()
             separatorView.removeFromSuperview()

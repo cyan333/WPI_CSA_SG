@@ -34,6 +34,8 @@ class EditorViewController: UIViewController {
     var menuId: Int?    
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         tableView.contentInset = UIEdgeInsetsMake(0, 0, 250, 0)
         

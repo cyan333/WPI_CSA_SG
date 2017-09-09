@@ -23,6 +23,8 @@ class PreviewViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         tableView.tableFooterView = UIView(frame: CGRect.zero)
     }
     @IBAction func submitClicked(_ sender: Any) {

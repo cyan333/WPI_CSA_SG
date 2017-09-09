@@ -46,6 +46,8 @@ class SettingViewController: UIViewController {
     var confirmButton: UIAlertAction? = nil
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadUserCell),

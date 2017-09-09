@@ -32,6 +32,8 @@ class MenuViewController : UIViewController {
     var database: Database?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true

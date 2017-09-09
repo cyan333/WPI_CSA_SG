@@ -25,11 +25,14 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
     let placeHolderText = ["Your name", "Your birthday", "Graduation year, like 2020", "Abbreviation of your major"]
     var userDetails = [WCService.currentUser!.name, WCService.currentUser!.birthday,
                        WCService.currentUser!.classOf, WCService.currentUser!.major]
+    var userDetailsOriginal = [String]()
     
     var imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        userDetailsOriginal = userDetails
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
@@ -103,10 +106,15 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
     }
     
     func goBack() {
-        print(1)
-        navigationController?.popViewController(animated: true)
+        for i in 0 ..< userDetails.count {
+            
+        }
+        //navigationController?.popViewController(animated: true)
     }
     
+    func textFieldDidChange(textField: UITextField) {
+        userDetails[textField.tag] = textField.text!
+    }
 }
 
 extension UserDetailViewController: UITableViewDelegate {
@@ -120,13 +128,6 @@ extension UserDetailViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        /*if section == 0{
-         return 25
-         } else if section == 1 {
-         return 35
-         } else {
-         return 20
-         }*/
         return 20
     }
     
@@ -168,7 +169,7 @@ extension UserDetailViewController: UITableViewDataSource {
             cell.textField.text = userDetails[indexPath.row]
             cell.textField.placeholder = placeHolderText[indexPath.row]
             cell.textField.delegate = self
-            
+            cell.textField.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
             if indexPath.row == 1 {
                 let picker = UIDatePicker()
                 picker.datePickerMode = .date
