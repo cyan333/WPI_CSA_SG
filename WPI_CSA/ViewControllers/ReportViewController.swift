@@ -71,7 +71,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             userId = WCService.currentUser!.id
             email = WCService.currentUser!.username!
         } else {
-            email = emailTxtField.text!.trimmingCharacters(in: .whitespaces)
+            email = emailTxtField.text!.trim()
             if email != "" && Utils.isEmailAddress(email: email) {
                 Utils.setParam(named: reportEmail, withValue: email)
             }else if email != "" {
@@ -103,7 +103,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
                     toastMessage = "Thank you for your report. We will not get back to you since you do not have email on record."
                 }
                 let messageDict = ["message": toastMessage]
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToast"), object: nil, userInfo: messageDict)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSG"), object: nil, userInfo: messageDict)
             }else{
                 Utils.dismissIndicator()
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)

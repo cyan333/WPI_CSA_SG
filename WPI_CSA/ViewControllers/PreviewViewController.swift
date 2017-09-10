@@ -39,7 +39,7 @@ class PreviewViewController: UIViewController {
                 Utils.dismissIndicator()
                 self.dismiss(animated: true, completion: nil)
                 let messageDict = ["message": "Thank you for your contribution. We have received your article and it's under validation now."]
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToast"), object: nil, userInfo: messageDict)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSG"), object: nil, userInfo: messageDict)
             }else{
                 Utils.dismissIndicator()
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)

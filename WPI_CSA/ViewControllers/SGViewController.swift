@@ -90,7 +90,7 @@ class SGViewController: UIViewController {
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(showToast(_:)),
-                                               name: NSNotification.Name.init("showToast"), object: nil)
+                                               name: NSNotification.Name.init("showToastOnSG"), object: nil)
         
     }
     

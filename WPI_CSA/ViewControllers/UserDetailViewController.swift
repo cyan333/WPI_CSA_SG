@@ -17,9 +17,17 @@ class DetailInputCell: UITableViewCell {
     @IBOutlet weak var textField: UITextField!
 }
 
+protocol UserDetailViewControllerDelegate
+{
+    func updateUserDetails()
+}
+
 class UserDetailViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
     
     @IBOutlet weak var tableView: UITableView!
+    
+    var avatarChanged = false
+    var delegate: UserDetailViewControllerDelegate?
     
     let labelText = ["Name", "Birthday", "Class of", "Major"]
     let placeHolderText = ["Your name", "Your birthday", "Graduation year, like 2020", "Abbreviation of your major"]
@@ -55,7 +63,6 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
     }
     
     func keyboardWillShow(notification:NSNotification){
-        //give room at the bottom of the scroll view, so it doesn't cover up anything the user needs to tap
         var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -76,15 +83,13 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
             let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/YY"
             let dateStr = formatter.string(from: sender.date)
-            //birthday = dateStr
+            userDetails[1] = dateStr
             cell.textField.text = dateStr
         }
     }
     
     func addAvatar(){
         if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
-            print("Button capture")
-            
             imagePicker.delegate = self
             imagePicker.sourceType = .savedPhotosAlbum;
             imagePicker.allowsEditing = false
@@ -96,20 +101,73 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let chosenImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? DetailAvatarCell {
+                avatarChanged = true
                 cell.avatar.image = chosenImage
             }
         } else{
-            print("Something went wrong")
+            print("Something went wrong")//TODO: Do something?
         }
         
         self.dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func saveBtnClicked(_ sender: Any) {
+        var updateNeeded = false
+        for i in 0 ..< userDetails.count {
+            if userDetails[i].trim() != userDetailsOriginal[i] || avatarChanged {
+                updateNeeded = true
+                break
+            }
+        }
+        
+        if updateNeeded {
+            Utils.showLoadingIndicator()
+            let name = userDetails[0].trim()
+            let birthday = userDetails[1].trim()
+            let classOf = userDetails[2].trim()
+            let major = userDetails[3].trim()
+            
+            WCUserManager.saveCurrentUserDetails(name: name, birthday: birthday, classOf: classOf, major: major,
+                                                 completion: { (error) in
+                                                    if error != "" {
+                                                        print(error)
+                                                    } else {
+                                                        WCService.currentUser?.name = name
+                                                        WCService.currentUser?.birthday = birthday
+                                                        WCService.currentUser?.classOf = classOf
+                                                        WCService.currentUser?.major = major
+                                                    }
+                                                    DispatchQueue.main.async {
+                                                        Utils.dismissIndicator()
+                                                        self.navigationController?.popViewController(animated: true)
+                                                        let messageDict = ["message": "Saved successfully"]//TODO: Error?
+                                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
+                                                        self.delegate?.updateUserDetails()
+                                                    }
+                                                    
+                                                    
+            })
+        } else {
+            navigationController?.popViewController(animated: true)
+            let messageDict = ["message": "Nothing is changed"]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
+        }
+    }
+    
     func goBack() {
         for i in 0 ..< userDetails.count {
-            
+            if userDetails[i].trim() != userDetailsOriginal[i] || avatarChanged {
+                let alert = UIAlertController(title: nil, message: "You have unsaved changes. Are you sure about discarding them?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                    self.navigationController?.popViewController(animated: true)
+                }))
+                alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
         }
-        //navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func textFieldDidChange(textField: UITextField) {
@@ -166,6 +224,7 @@ extension UserDetailViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DetailInputCell") as! DetailInputCell
             
             cell.label.text = labelText[indexPath.row]
+            cell.textField.tag = indexPath.row
             cell.textField.text = userDetails[indexPath.row]
             cell.textField.placeholder = placeHolderText[indexPath.row]
             cell.textField.delegate = self

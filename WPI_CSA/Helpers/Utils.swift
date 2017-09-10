@@ -265,6 +265,10 @@ extension String {
         html.endEditing()
         return html
     }
+    
+    func trim() -> String {
+        return self.trimmingCharacters(in: .whitespaces)
+    }
 }
 
 extension NSAttributedString {

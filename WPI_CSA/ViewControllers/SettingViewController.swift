@@ -111,6 +111,20 @@ class SettingViewController: UIViewController {
             self.changePwdController.textFields![1].text = ""
             self.changePwdController.textFields![2].text = ""
         }))
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showToast(_:)),
+                                               name: NSNotification.Name.init("showToastOnSetting"), object: nil)
+    }
+    
+    func showToast(_ notification: NSNotification) {
+        if let message = notification.userInfo?["message"] as? String {
+            var style = ToastStyle()
+            style.messageAlignment = .center
+            DispatchQueue.main.async {
+                self.view.makeToast(message, duration: 3.0, position: .center, style: style)
+            }
+        }
+        
     }
     
     func reloadUserCell() {
@@ -185,6 +199,13 @@ class SettingViewController: UIViewController {
             confirmButton!.isEnabled = false
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? UserDetailViewController {
+            destinationViewController.delegate = self
+        }
+    }
+    
     
 }
 
@@ -397,5 +418,11 @@ extension SettingViewController: UITextFieldDelegate {
             }
         }
         return true
+    }
+}
+
+extension SettingViewController: UserDetailViewControllerDelegate {
+    func updateUserDetails() {
+        reloadUserCell()
     }
 }

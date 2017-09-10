@@ -792,7 +792,13 @@
                             <constraint firstItem="xBP-W3-bPW" firstAttribute="top" secondItem="ONi-GD-GE8" secondAttribute="bottom" id="tK4-Qa-UNW"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="User Details" id="F3N-0g-Gjx"/>
+                    <navigationItem key="navigationItem" title="User Details" id="F3N-0g-Gjx">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="84D-Eb-RWL">
+                            <connections>
+                                <action selector="saveBtnClicked:" destination="4KF-fK-y1k" id="hv6-GR-qcz"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="ONi-GD-GE8" id="fF2-qX-dAi"/>
                     </connections>
@@ -996,7 +1002,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IDENTY" id="Ec4-cn-YlU">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="identiCell" id="Ec4-cn-YlU">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ec4-cn-YlU" id="gr8-WO-F45">
