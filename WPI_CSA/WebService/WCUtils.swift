@@ -11,21 +11,26 @@ import Foundation
 //let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
 let serviceBase = "http://wc.fmning.com/" //********************TEST
 
+/*
+   Web request URL standard:
+   Create: create a new object and save to db
+   Update: update an existing object
+   Get: retrieve an existing object
+   Save: create a new object if does not exist. update if it exists
+*/
 let pathGetSalt = "login_for_salt"
 let pathLogin = "login"
 let pathRegisterSalt = "register_for_salt"
 let pathRegister = "register"
-//let pathGetUserDetails = "get_user_detail"
-let pathCreateUserDetails = "create_user_detail"
+let pathSaveUserDetails = "save_user_detail"
 let pathSendVerificationEmail = "send_verification_email"
-let pathChangePassword = "change_password"
+let pathChangePassword = "update_password"
 let pathCreateReport = "create_sg_report"
 let pathCreateArticle = "create_sg_article"
 let pathCreateImage = "create_image"
 
 
 let serverDown = "Server down"
-//let HTTPError = "Http API error"
 let respondFormatError = "Incorrect respond format"
 
 open class WCUtils{

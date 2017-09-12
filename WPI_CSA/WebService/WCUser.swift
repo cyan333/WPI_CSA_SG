@@ -165,7 +165,7 @@ open class WCUserManager{
                 return
             }
             
-            let opt = try HTTP.POST(serviceBase + pathCreateUserDetails, parameters: params)
+            let opt = try HTTP.POST(serviceBase + pathSaveUserDetails, parameters: params)
             opt.start { response in
                 if response.error != nil {
                     completion(serverDown)
