@@ -557,7 +557,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="342" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultAvatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Cyz-Ew-gfV">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cyz-Ew-gfV">
                                                     <rect key="frame" x="10" y="10" width="80" height="80"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="80" id="T1N-SK-Whs"/>
@@ -607,6 +607,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="avatar" destination="Cyz-Ew-gfV" id="vYS-19-0bd"/>
                                             <outlet property="emailLabel" destination="Q6W-1e-qgD" id="XIK-mE-FNF"/>
                                             <outlet property="emailVerifyLabel" destination="DYy-NU-Mpa" id="cQ9-oB-U0B"/>
                                             <outlet property="nameLabel" destination="MC9-aP-mGn" id="dLh-QM-DSX"/>

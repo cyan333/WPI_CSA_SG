@@ -216,6 +216,16 @@ extension UserDetailViewController: UITableViewDataSource {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DetailAvatarCell") as! DetailAvatarCell
             
+            if let avatarId = WCService.currentUser?.avatarId {
+                CacheManager.getImage(withName: "WCImage_\(avatarId)", completion: { (error, img) in
+                    DispatchQueue.main.async {
+                        cell.avatar.image = img
+                    }
+                })
+            } else {
+                cell.avatar.image = #imageLiteral(resourceName: "defaultAvatar.png")
+            }
+            
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(addAvatar))
             cell.avatar.addGestureRecognizer(tapGestureRecognizer)
             

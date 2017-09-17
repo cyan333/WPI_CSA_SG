@@ -110,7 +110,7 @@ open class CacheManager {
         
         let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                         .userDomainMask, true)[0] as NSString
-        
+        print(documentDirectoryPath)
         if Database.getCache(type: .Image, mappingId: id) != nil {
             let image = UIImage(contentsOfFile: documentDirectoryPath
                 .appendingPathComponent("imageCache/\(id).jpg"))

@@ -18,6 +18,7 @@ let serviceBase = "http://wc.fmning.com/" //********************TEST
    Get: retrieve an existing object
    Save: create a new object if does not exist. update if it exists
 */
+let pathGetVersionInfo = "get_version_info"
 let pathGetSalt = "login_for_salt"
 let pathLogin = "login"
 let pathRegisterSalt = "register_for_salt"
@@ -27,7 +28,8 @@ let pathSendVerificationEmail = "send_verification_email"
 let pathChangePassword = "update_password"
 let pathCreateReport = "create_sg_report"
 let pathCreateArticle = "create_sg_article"
-let pathCreateImage = "create_image"
+let pathGetImage = "get_image"
+let pathSaveTUImage = "save_type_unique_image"
 
 
 let serverDown = "Server down"

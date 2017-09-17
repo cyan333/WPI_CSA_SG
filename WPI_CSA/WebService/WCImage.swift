@@ -14,7 +14,7 @@ open class WCImageManager {
     open class func getImage(withId id: Int, completion: @escaping (_ error: String, _ image: UIImage?) -> Void) {
         do {
             let params = ["id" : id]
-            let opt = try HTTP.GET(serviceBase + "get_image", parameters: params)
+            let opt = try HTTP.GET(serviceBase + pathGetImage, parameters: params)
             opt.start{ response in
                 if let image = UIImage(data: response.data) {
                     completion("", image)
@@ -31,16 +31,29 @@ open class WCImageManager {
     }
     
     
-    open class func uploadImg(completion: @escaping (_ error: String) -> Void) {
+    open class func saveTypeUniqueImg(image: UIImage, type: String,
+                                      completion: @escaping (_ error: String, _ imageId: Int) -> Void) {
         do {
-            let params = ["file" : UIImageJPEGRepresentation(UIImage(named: "1_1.jpg")!, 1.0)]
-            let opt = try HTTP.POST(serviceBase + "fileup", parameters: params)
+            let imageData = UIImageJPEGRepresentation(image, 1)!
+            let base64 = imageData.base64EncodedString()
+            let params = ["accessToken": WCService.currentUser!.accessToken, "type": type,
+                          "image": base64]
+            let opt = try HTTP.POST(serviceBase + pathSaveTUImage, parameters: params)
             opt.start{ response in
-                completion("ok")
+                if response.error != nil {
+                    completion(serverDown, -1)
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String, -1)
+                }else{
+                    completion("", dict!["imageId"]! as! Int)
+                }
             }
         } catch let error{
             print (error.localizedDescription)
-            completion(serverDown)
+            completion(serverDown, -1)
         }
     }
 }

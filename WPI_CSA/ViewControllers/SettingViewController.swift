@@ -19,6 +19,7 @@ class SettingLoginCell: UITableViewCell {
 }
 
 class SettingUserCell: UITableViewCell {
+    @IBOutlet weak var avatar: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var emailVerifyLabel: UILabel!
@@ -288,6 +289,16 @@ extension SettingViewController : UITableViewDataSource {
                     labelText.append(statusString)
                     labelText.append(NSAttributedString(string: " Not Verified"))
                     cell.emailVerifyLabel.attributedText = labelText
+                }
+                
+                if let avatarId = user.avatarId {
+                    CacheManager.getImage(withName: "WCImage_\(avatarId)", completion: { (error, img) in
+                        DispatchQueue.main.async {
+                            cell.avatar.image = img
+                        }
+                    })
+                } else {
+                    cell.avatar.image = #imageLiteral(resourceName: "defaultAvatar.png")
                 }
                 
                 return cell

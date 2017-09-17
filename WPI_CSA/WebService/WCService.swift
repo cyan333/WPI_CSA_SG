@@ -16,7 +16,8 @@ open class WCService {
     open class func checkSoftwareVersion(version: String, completion: @escaping (_ status: String, _ title: String,
         _ msg: String, _ updates: String, _ version: String) -> Void){
         do {
-            let opt = try HTTP.GET(serviceBase + "get_version_info?version=" + version)
+            let params = ["version" : version]
+            let opt = try HTTP.GET(serviceBase + pathGetVersionInfo, parameters: params)
             opt.start{ response in
                 if response.error != nil {
                     completion(serverDown, "", "", "", "")

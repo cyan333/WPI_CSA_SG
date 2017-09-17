@@ -12,6 +12,7 @@ public class WCUser{
     var id: Int
     var username: String?
     var accessToken: String?
+    var avatarId: Int?
     var emailConfirmed = true
     var name = ""
     var birthday = ""
@@ -83,6 +84,9 @@ open class WCUserManager{
                     }
                     if let major = dict!["major"] as? String {
                         user.major = major
+                    }
+                    if let avatarId = dict!["avatarId"] as? Int {
+                        user.avatarId = avatarId
                     }
                     if user.name == "" {user.name = "Unknown"}
                     completion("", user)

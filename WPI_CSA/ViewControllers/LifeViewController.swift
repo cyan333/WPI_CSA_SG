@@ -31,15 +31,18 @@ class LifeViewController: UIViewController {
             }
          }*/
         
+        
+        
+        
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
     }
     
     @IBAction func click(_ sender: Any) {
         
-        WCImageManager.uploadImg { (error) in
-            print(error)
+        let img = UIImage(named: "1_1.jpg")
+        WCImageManager.saveTypeUniqueImg(image: img!, type: "Avatar") { (error, id) in
+            print(error + String(id))
         }
-        
         
         /*let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
