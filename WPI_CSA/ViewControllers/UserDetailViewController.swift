@@ -35,6 +35,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
                        WCService.currentUser!.classOf, WCService.currentUser!.major]
     var userDetailsOriginal = [String]()
     
+    var newAvatar: UIImage?
     var imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
@@ -103,6 +104,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
             if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? DetailAvatarCell {
                 avatarChanged = true
                 cell.avatar.image = chosenImage
+                self.newAvatar = chosenImage
             }
         } else{
             print("Something went wrong")//TODO: Do something?
@@ -112,15 +114,17 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
     }
     
     @IBAction func saveBtnClicked(_ sender: Any) {
-        var updateNeeded = false
+        var userDetailChanged = false
+        var userDetailUpdated = false
+        var avatarUpdated = false
         for i in 0 ..< userDetails.count {
-            if userDetails[i].trim() != userDetailsOriginal[i] || avatarChanged {
-                updateNeeded = true
+            if userDetails[i].trim() != userDetailsOriginal[i] {
+                userDetailChanged = true
                 break
             }
         }
         
-        if updateNeeded {
+        if userDetailChanged {
             Utils.showLoadingIndicator()
             let name = userDetails[0].trim()
             let birthday = userDetails[1].trim()
@@ -130,24 +134,55 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
             WCUserManager.saveCurrentUserDetails(name: name, birthday: birthday, classOf: classOf, major: major,
                                                  completion: { (error) in
                                                     if error != "" {
-                                                        print(error)
+                                                        print(error)//TODO: do something
                                                     } else {
                                                         WCService.currentUser?.name = name
                                                         WCService.currentUser?.birthday = birthday
                                                         WCService.currentUser?.classOf = classOf
                                                         WCService.currentUser?.major = major
                                                     }
-                                                    DispatchQueue.main.async {
-                                                        Utils.dismissIndicator()
-                                                        self.navigationController?.popViewController(animated: true)
-                                                        let messageDict = ["message": "Saved successfully"]//TODO: Error?
-                                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
-                                                        self.delegate?.updateUserDetails()
+                                                    userDetailUpdated = true
+                                                    
+                                                    if avatarUpdated {
+                                                        DispatchQueue.main.async {
+                                                            Utils.dismissIndicator()
+                                                            self.navigationController?.popViewController(animated: true)
+                                                            let messageDict = ["message": "Saved successfully"]//TODO: Error?
+                                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
+                                                            self.delegate?.updateUserDetails()
+                                                        }
                                                     }
                                                     
                                                     
             })
         } else {
+            userDetailUpdated = true
+        }
+        
+        if avatarChanged {
+            Utils.showLoadingIndicator()            
+            CacheManager.uploadImage(image: self.newAvatar!, type: "Avatar", completion: { (error, imgId) in
+                if error != "" {
+                    print(error)
+                }
+                WCService.currentUser?.avatarId = imgId
+                avatarUpdated = true
+                
+                if userDetailUpdated {
+                    DispatchQueue.main.async {
+                        Utils.dismissIndicator()
+                        self.navigationController?.popViewController(animated: true)
+                        let messageDict = ["message": "Saved successfully"]//TODO: Error?
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
+                        self.delegate?.updateUserDetails()
+                    }
+                }
+            })
+        } else {
+            avatarUpdated = true
+        }
+        
+        if !userDetailChanged && !avatarChanged{
             navigationController?.popViewController(animated: true)
             let messageDict = ["message": "Nothing is changed"]
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
@@ -195,6 +230,7 @@ extension UserDetailViewController: UITableViewDelegate {
             cell.textField.becomeFirstResponder()
         } else {
             tableView.endEditing(true)
+            addAvatar()
         }
     }
 }

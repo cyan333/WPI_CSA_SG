@@ -11,10 +11,7 @@ import Foundation
 
 var tableTopInset: CGFloat = 64
 
-let padding: CGFloat = 10
-let imgViewWidth: Int = 130
-let screenWidth: CGFloat = UIScreen.main.bounds.width
-let screenHeight: CGFloat = UIScreen.main.bounds.height
+
 //let coverImg = "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>"
 
 protocol MenuActionDelegate {

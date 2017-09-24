@@ -154,5 +154,28 @@ open class CacheManager {
         }
     }
     
+    open class func uploadImage(image: UIImage, type: String,
+                                completion: @escaping (_ error: String, _ id: Int?) -> Void) {
+        WCImageManager.saveTypeUniqueImg(image: image, type: "Avatar") { (error, id) in
+            if error == "" {
+                let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                                .userDomainMask, true)[0] as NSString
+                print(documentDirectoryPath)
+                let imgPath = documentDirectoryPath.appendingPathComponent("imageCache/\(id).jpg")
+                
+                do{
+                    try UIImageJPEGRepresentation(image, 1.0)?.write(to: URL(fileURLWithPath: imgPath),
+                                                                     options: .atomic)
+                    Database.createOrUpdateImageCache(imageId: id)
+                }catch let error{
+                    print(error.localizedDescription)
+                }
+                completion("", id)
+            } else {
+                completion(error, nil)
+            }
+        }
+    }
+    
 }
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class WCUser{
+open class WCUser{
     var id: Int
     var username: String?
     var accessToken: String?
