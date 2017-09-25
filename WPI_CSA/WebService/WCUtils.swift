@@ -35,6 +35,7 @@ let pathGetFeeds = "get_recent_feeds"
 
 let serverDown = "Server down"
 let respondFormatError = "Incorrect respond format"
+let noMoreFeedsError = "There are no more feeds."
 
 open class WCUtils{
     open class func convertToDictionary(data: Data) -> [String: Any]? {

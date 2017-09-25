@@ -20,6 +20,7 @@ class FeedCell: UITableViewCell {
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var type: UILabel!
     @IBOutlet weak var ownerName: UILabel!
+    @IBOutlet weak var createdAt: UILabel!
     
     @IBOutlet weak var coverShadow: UIView!
     @IBOutlet weak var avatarShadow: UIView!
@@ -28,14 +29,20 @@ class FeedCell: UITableViewCell {
 class LifeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
+    var refreshControl: UIRefreshControl!
     var loadingView: UIView!
     var flag = true
     
     var feedList = [WCFeed]()
+    var checkPoint: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        refreshControl = UIRefreshControl()
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        tableView.addSubview(refreshControl)
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
         
@@ -51,15 +58,24 @@ class LifeViewController: UIViewController {
                 }
             } else{
                 print("img nil")
-            }
+            } 
          }*/
         
         /*if let dateFromString = "2015-12-12T23:29:43.538550Z".dateFromISO8601 {
             print(dateFromString.iso8601)
         }*/
         
-        WCFeedManager.getRecentFeeds(withLimit: 5, andCheckPoint: "2016-12-13T00:59:43.139908Z") { (error, feedList, checkPoint) in
-            //         
+        WCFeedManager.getRecentFeeds(withLimit: 5, andCheckPoint: checkPoint) { (error, feedList, checkPoint) in
+            if error == "" {
+                self.feedList = feedList
+                self.checkPoint = checkPoint
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    self.loadingView.removeFromSuperview()
+                }
+            } else {
+                print(error)
+            }
         }
         
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
@@ -86,7 +102,11 @@ class LifeViewController: UIViewController {
         self.view.addSubview(loadingView)
     }
     
-    
+    func refresh(_ sender: Any) {
+        print(1)
+        
+        refreshControl.endRefreshing()        
+    }
     
     @IBAction func click(_ sender: Any) {
         
@@ -182,6 +202,7 @@ extension LifeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FeedCell") as! FeedCell
+        let feed = feedList[indexPath.row]
         
         cell.coverShadow.layer.shadowColor = UIColor.lightGray.cgColor
         cell.coverShadow.layer.shadowOpacity = 0.5
@@ -192,6 +213,11 @@ extension LifeViewController: UITableViewDataSource {
         cell.avatarShadow.layer.shadowOpacity = 0.5
         cell.avatarShadow.layer.shadowOffset = CGSize(width: -1, height: 1)
         cell.avatarShadow.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 80, height: 75)).cgPath
+        
+        cell.title.text = feed.title
+        cell.type.text = feed.type
+        cell.ownerName.text = String(feed.id)
+        cell.createdAt.text = feed.createdAt.toString
         
         return cell
     }

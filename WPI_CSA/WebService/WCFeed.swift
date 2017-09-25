@@ -13,35 +13,80 @@ open class WCFeed {
     var title: String
     var type: String
     var body: String
-    var createdAt: Int
+    var createdAt: Date // ISO-8601 formatted date string
     
-    init(id: Int, title: String, type: String, body: String, createdAt: Int){
+    init(id: Int, title: String, type: String, body: String, createdAt: Date){
         self.id = id
         self.title = title
         self.type = type
         self.body = body
         self.createdAt = createdAt
     }
+    
+    init() {
+        self.id = -1
+        self.title = ""
+        self.type = ""
+        self.body = ""
+        self.createdAt = Date()
+    }
 }
 
 open class WCFeedManager {
     
+    //This method needs to be error proof
     open class func getRecentFeeds(withLimit limit: Int, andCheckPoint checkPoint: String?,
-                             completion: @escaping (_ error: String, _ feedList: [WCFeed]?,
-                                                    _ checkPoint: String) -> Void) {
+                             completion: @escaping (_ error: String, _ feedList: [WCFeed],
+                                                    _ checkPoint: String?) -> Void) {
         do {
             var params = ["limit" : "5"]
             if let checkPoint = checkPoint {
                 params["checkPoint"] = checkPoint
             }
             let opt = try HTTP.GET(serviceBase + pathGetFeeds, parameters: params)
+            var feedList = [WCFeed]()
             opt.start{ response in
                 let dict = WCUtils.convertToDictionary(data: response.data)
-                dump(dict)
+                if let dict = dict {
+                    if let error = dict["error"] as? String {
+                        if error != "" {
+                            completion(error, feedList, nil)
+                        } else {
+                            if let rawList = dict["feedList"] as? [Any] {
+                                for feed in rawList {
+                                    if let feed = feed as? [String: Any] {
+                                        let wcFeed = WCFeed()
+                                        if let feedId = feed["feedId"] as? Int {
+                                            wcFeed.id = feedId
+                                        }
+                                        if let feedTitle = feed["feedTitle"] as? String {
+                                            wcFeed.title = feedTitle
+                                        }
+                                        if let feedType = feed["feedType"] as? String {
+                                            wcFeed.type = feedType
+                                        }
+                                        if let feedBody = feed["feedBody"] as? String {
+                                            wcFeed.body = feedBody
+                                        }
+                                        if let createdAt = (feed["createdAt"] as? String)?.dateFromISO8601 {
+                                            wcFeed.createdAt = createdAt
+                                        }
+                                        feedList.append(wcFeed)
+                                    }
+                                }
+                                completion("", feedList, dict["checkPoint"] as? String)
+                            } else {
+                                completion(respondFormatError, feedList, nil)
+                            }
+                        }
+                    }
+                } else {
+                    completion(respondFormatError, feedList, nil)
+                }
             }
         } catch let error {
             print(error.localizedDescription)
-            completion(serverDown, nil, "")
+            completion(serverDown, [WCFeed](), nil)
         }
     }
     

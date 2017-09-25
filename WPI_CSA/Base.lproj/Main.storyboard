@@ -1105,6 +1105,7 @@
                                             <outlet property="avatarShadow" destination="jxg-QY-sRt" id="pHD-Bz-Ysf"/>
                                             <outlet property="coverImage" destination="Jmy-Nn-bL7" id="IlG-Pr-LP9"/>
                                             <outlet property="coverShadow" destination="L3H-eB-t06" id="Fje-Kv-yvN"/>
+                                            <outlet property="createdAt" destination="Tqf-Yb-fM1" id="VTH-cG-sMp"/>
                                             <outlet property="ownerName" destination="TJ1-8y-aXj" id="8eh-oO-BNc"/>
                                             <outlet property="title" destination="qvg-8h-F4e" id="AuD-ni-fk3"/>
                                             <outlet property="type" destination="sjV-sP-PYo" id="hKL-Tb-jfQ"/>
