@@ -26,15 +26,29 @@ class FeedCell: UITableViewCell {
     @IBOutlet weak var avatarShadow: UIView!
 }
 
+class FeedLoadingCell: UITableViewCell {
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet weak var coverLabel: UILabel!
+}
+
 class LifeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var refreshControl: UIRefreshControl!
     var loadingView: UIView!
-    var flag = true
+    var serverDownView: UIView!
     
     var feedList = [WCFeed]()
     var checkPoint: String?
+    var serverDownFlag = false
+    var reloadingFlag = false
+    var keepLoadingFlag = false
+    var stopLoadingFlag = false
+    
+    var noMoreFeedMsg = "There are no more articles."
+    
+    let feedLoadLimit = 5
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,29 +75,17 @@ class LifeViewController: UIViewController {
             } 
          }*/
         
-        /*if let dateFromString = "2015-12-12T23:29:43.538550Z".dateFromISO8601 {
-            print(dateFromString.iso8601)
-        }*/
         
-        WCFeedManager.getRecentFeeds(withLimit: 5, andCheckPoint: checkPoint) { (error, feedList, checkPoint) in
-            if error == "" {
-                self.feedList = feedList
-                self.checkPoint = checkPoint
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.loadingView.removeFromSuperview()
-                }
-            } else {
-                print(error)
-            }
-        }
+        
         
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
         
         let loadingViewHeight = screenHeight - 113 // 49 + 64
         loadingView = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth,
                                      height: loadingViewHeight))
-        //loadingView.backgroundColor = .red
+        loadingView.backgroundColor = .white
+        let clickListener = UITapGestureRecognizer(target: self, action: #selector(refresh(_:)))
+        loadingView.addGestureRecognizer(clickListener)
         
         let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: screenWidth/2 - 60, y: loadingViewHeight/2 - 15,
                                                                      width: 30, height: 30))
@@ -96,27 +98,132 @@ class LifeViewController: UIViewController {
                                                  width: 80, height: 30))
         loadingLabel.text = "Loading ..."
         loadingLabel.textColor = .gray
-        //loadingLabel.backgroundColor = .green
         loadingView.addSubview(loadingLabel)
         
         self.view.addSubview(loadingView)
+        
+        serverDownView = UIView(frame: CGRect(x: screenWidth/2 - 150, y: loadingViewHeight/2 - 100,
+                                              width: 300, height: 200))
+        serverDownView.backgroundColor = .white
+        
+        let refreshImg = UIImageView(frame: CGRect(x: 90, y: 0, width: 120, height: 120))
+        refreshImg.image = #imageLiteral(resourceName: "Reload")
+        serverDownView.addSubview(refreshImg)
+        
+        let warningView = UITextView(frame: CGRect(x: 0, y: 130, width: 300, height: 50))
+        //warningView.backgroundColor = .red
+        warningView.text = "There is an network issue. Click anywhere to refresh the page.\nIf still doesn't work, please contact admin@fmning.com"
+        warningView.font = UIFont(name: (warningView.font?.fontName)!, size: 10)
+        warningView.textColor = .gray
+        warningView.textAlignment = .center
+        warningView.dataDetectorTypes = .all
+        warningView.isEditable = false
+        //warningView.isUserInteractionEnabled = false
+        serverDownView.addSubview(warningView)
+        
+        reloadingFlag = true
+        WCFeedManager.getRecentFeeds(withLimit: feedLoadLimit, andCheckPoint: checkPoint) {
+            (error, feedList, checkPoint) in
+            if error == "" {
+                self.feedList = feedList
+                self.checkPoint = checkPoint
+            } else {
+                print(error)// Do nothing if there are no feed
+            }
+            
+            DispatchQueue.main.async {
+                self.reloadingFlag = false
+                self.tableView.reloadData()
+                if error == serverDown {
+                    self.loadingView.addSubview(self.serverDownView)
+                } else {
+                    if feedList.count < self.feedLoadLimit{
+                        self.stopLoadingFlag = true
+                    }
+                    self.loadingView.removeFromSuperview()
+                }
+            }
+        }
+        
+        
     }
     
     func refresh(_ sender: Any) {
-        print(1)
+        if reloadingFlag {
+            return
+        } else {
+            stopLoadingFlag = false
+            reloadingFlag = true
+        }
         
-        refreshControl.endRefreshing()        
+        if serverDownFlag && sender is UITapGestureRecognizer {// Tap on screen when it shows server down
+            serverDownView.removeFromSuperview()
+        }
+        checkPoint = nil
+        WCFeedManager.getRecentFeeds(withLimit: feedLoadLimit, andCheckPoint: checkPoint) {
+            (error, feedList, checkPoint) in
+            if error == "" {
+                self.feedList = feedList
+                self.checkPoint = checkPoint
+            } else {
+                print(error)
+            }
+            DispatchQueue.main.async {
+                if error == serverDown {
+                    self.serverDownFlag = true
+                    self.loadingView.addSubview(self.serverDownView)
+                    self.view.addSubview(self.loadingView)
+                } else {
+                    if feedList.count < self.feedLoadLimit {
+                        self.stopLoadingFlag = true
+                    }
+                    self.loadingView.removeFromSuperview()
+                    self.serverDownFlag = false
+                }
+                self.reloadingFlag = false
+                self.tableView.reloadData()
+                self.refreshControl.endRefreshing()
+            }
+            
+        }
+        
+    }
+    
+    func keepLoading() {
+        if keepLoadingFlag {
+            return
+        } else {
+            keepLoadingFlag = false
+        }
+        
+        WCFeedManager.getRecentFeeds(withLimit: feedLoadLimit, andCheckPoint: checkPoint) {
+            (error, feedList, checkPoint) in
+            if error == "" {
+                self.feedList.append(contentsOf: feedList)
+                self.checkPoint = checkPoint
+            } else {
+                print(error)
+            }
+            DispatchQueue.main.async {
+                if error == serverDown {
+                    self.serverDownFlag = true
+                    self.loadingView.addSubview(self.serverDownView)
+                    self.view.addSubview(self.loadingView)
+                } else {
+                    if feedList.count < self.feedLoadLimit {
+                        self.stopLoadingFlag = true
+                    }
+                }
+                self.keepLoadingFlag = false
+                self.tableView.reloadData()
+            }
+            
+        }
+        
     }
     
     @IBAction func click(_ sender: Any) {
         
-        if flag {
-            flag = false
-            loadingView.removeFromSuperview()
-        } else {
-            flag = true
-            self.view.addSubview(loadingView)
-        }
         
         /*let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
@@ -176,50 +283,76 @@ class LifeViewController: UIViewController {
 }
 
 extension LifeViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
-        //print(1)
-        return 300
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
+        if indexPath.section == 0 {
+            return 300
+        } else {
+            return 44
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //let cell = tableView.cellForRow(at: indexPath) as! RegisterInputCell
-        //cell.textField.becomeFirstResponder()
-        //print(1)
         self.tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if !stopLoadingFlag && indexPath.section == 0 && indexPath.row == feedList.count - 1 {
+            keepLoading()
+        }
     }
     
 }
 
 extension LifeViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return feedList.count
+        if section == 0 {
+            return feedList.count
+        } else {
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FeedCell") as! FeedCell
-        let feed = feedList[indexPath.row]
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FeedCell") as! FeedCell
+            let feed = feedList[indexPath.row]
+            
+            cell.coverShadow.layer.shadowColor = UIColor.lightGray.cgColor
+            cell.coverShadow.layer.shadowOpacity = 0.5
+            cell.coverShadow.layer.shadowOffset = CGSize(width: -1, height: 1)
+            cell.coverShadow.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: screenWidth - 30, height: 200)).cgPath
+            
+            cell.avatarShadow.layer.shadowColor = UIColor.lightGray.cgColor
+            cell.avatarShadow.layer.shadowOpacity = 0.5
+            cell.avatarShadow.layer.shadowOffset = CGSize(width: -1, height: 1)
+            cell.avatarShadow.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 80, height: 75)).cgPath
+            
+            cell.title.text = feed.title
+            cell.type.text = feed.type
+            cell.ownerName.text = feed.ownerName
+            cell.createdAt.text = feed.createdAt.toString
+            
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FeedLoadingCell") as! FeedLoadingCell
+            
+            cell.activityIndicator.startAnimating()
+            if stopLoadingFlag {
+                cell.coverLabel.backgroundColor = .white
+                cell.coverLabel.text = noMoreFeedMsg
+            } else {
+                cell.coverLabel.backgroundColor = UIColor(white: 1, alpha: 0)
+                cell.coverLabel.text = ""
+            }
+            
+            return cell
         
-        cell.coverShadow.layer.shadowColor = UIColor.lightGray.cgColor
-        cell.coverShadow.layer.shadowOpacity = 0.5
-        cell.coverShadow.layer.shadowOffset = CGSize(width: -1, height: 1)
-        cell.coverShadow.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: screenWidth - 30, height: 200)).cgPath
+        }
         
-        cell.avatarShadow.layer.shadowColor = UIColor.lightGray.cgColor
-        cell.avatarShadow.layer.shadowOpacity = 0.5
-        cell.avatarShadow.layer.shadowOffset = CGSize(width: -1, height: 1)
-        cell.avatarShadow.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 80, height: 75)).cgPath
-        
-        cell.title.text = feed.title
-        cell.type.text = feed.type
-        cell.ownerName.text = String(feed.id)
-        cell.createdAt.text = feed.createdAt.toString
-        
-        return cell
     }
     
 

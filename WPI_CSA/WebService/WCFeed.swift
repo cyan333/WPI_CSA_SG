@@ -13,7 +13,9 @@ open class WCFeed {
     var title: String
     var type: String
     var body: String
-    var createdAt: Date // ISO-8601 formatted date string
+    var ownerId = -1
+    var ownerName = ""
+    var createdAt: Date
     
     init(id: Int, title: String, type: String, body: String, createdAt: Date){
         self.id = id
@@ -39,13 +41,17 @@ open class WCFeedManager {
                              completion: @escaping (_ error: String, _ feedList: [WCFeed],
                                                     _ checkPoint: String?) -> Void) {
         do {
-            var params = ["limit" : "5"]
+            var params = ["limit" : String(limit)]
             if let checkPoint = checkPoint {
                 params["checkPoint"] = checkPoint
             }
             let opt = try HTTP.GET(serviceBase + pathGetFeeds, parameters: params)
             var feedList = [WCFeed]()
             opt.start{ response in
+                if response.error != nil {
+                    completion(serverDown, feedList, nil)
+                    return
+                }
                 let dict = WCUtils.convertToDictionary(data: response.data)
                 if let dict = dict {
                     if let error = dict["error"] as? String {
@@ -70,6 +76,12 @@ open class WCFeedManager {
                                         }
                                         if let createdAt = (feed["createdAt"] as? String)?.dateFromISO8601 {
                                             wcFeed.createdAt = createdAt
+                                        }
+                                        if let ownerId = feed["ownerId"] as? Int {
+                                            wcFeed.ownerId = ownerId
+                                        }
+                                        if let ownerName = feed["ownerName"] as? String {
+                                            wcFeed.ownerName = ownerName
                                         }
                                         feedList.append(wcFeed)
                                     }
