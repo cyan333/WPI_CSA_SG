@@ -13,9 +13,11 @@ open class WCFeed {
     var title: String
     var type: String
     var body: String
+    var createdAt: Date
     var ownerId = -1
     var ownerName = ""
-    var createdAt: Date
+    var coverImgId: Int?
+    var avatarId: Int?
     
     init(id: Int, title: String, type: String, body: String, createdAt: Date){
         self.id = id
@@ -82,6 +84,12 @@ open class WCFeedManager {
                                         }
                                         if let ownerName = feed["ownerName"] as? String {
                                             wcFeed.ownerName = ownerName
+                                        }
+                                        if let coverImgId = feed["coverImgId"] as? Int {
+                                            wcFeed.coverImgId = coverImgId
+                                        }
+                                        if let avatarId = feed["avatarId"] as? Int {
+                                            wcFeed.avatarId = avatarId
                                         }
                                         feedList.append(wcFeed)
                                     }

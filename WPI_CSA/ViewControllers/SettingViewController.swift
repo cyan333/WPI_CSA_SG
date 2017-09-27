@@ -292,7 +292,7 @@ extension SettingViewController : UITableViewDataSource {
                 }
                 
                 if let avatarId = user.avatarId {
-                    CacheManager.getImage(withName: "WCImage_\(avatarId)", completion: { (error, img) in
+                    CacheManager.getImage(withName: avatarId.toWCImageId(), completion: { (error, img) in
                         DispatchQueue.main.async {
                             cell.avatar.image = img
                         }

@@ -275,6 +275,12 @@ extension String {
     }
 }
 
+extension Int {
+    func toWCImageId() -> String {
+        return "WCImage_\(self)"
+    }
+}
+
 extension NSAttributedString {
     func htmlString() -> String? {
         let documentAttributes = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType]

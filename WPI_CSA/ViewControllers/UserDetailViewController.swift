@@ -253,7 +253,7 @@ extension UserDetailViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DetailAvatarCell") as! DetailAvatarCell
             
             if let avatarId = WCService.currentUser?.avatarId {
-                CacheManager.getImage(withName: "WCImage_\(avatarId)", completion: { (error, img) in
+                CacheManager.getImage(withName: avatarId.toWCImageId(), completion: { (error, img) in
                     DispatchQueue.main.async {
                         cell.avatar.image = img
                     }

@@ -48,7 +48,7 @@ class LifeViewController: UIViewController {
     
     var noMoreFeedMsg = "There are no more articles."
     
-    let feedLoadLimit = 5
+    let feedLoadLimit = 3
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -335,6 +335,32 @@ extension LifeViewController: UITableViewDataSource {
             cell.type.text = feed.type
             cell.ownerName.text = feed.ownerName
             cell.createdAt.text = feed.createdAt.toString
+            
+            if let avatarId = feed.avatarId {
+                CacheManager.getImage(withName: avatarId.toWCImageId(), completion: { (error, image) in
+                    DispatchQueue.main.async {
+                        if error == "" {
+                            cell.avatar.image = image
+                        } else {
+                            cell.avatar.image = #imageLiteral(resourceName: "defaultAvatar.png")
+                        }
+                    }
+                    
+                })
+            } else {
+                cell.avatar.image = #imageLiteral(resourceName: "defaultAvatar.png")
+            }
+            
+            cell.coverImage.image = UIImage(color: .white)
+            if let coverId = feed.coverImgId {
+                CacheManager.getImage(withName: coverId.toWCImageId(), completion: { (error, image) in
+                    DispatchQueue.main.async {
+                        if error == "" {
+                            cell.coverImage.image = image
+                        }
+                    }
+                })
+            }
             
             return cell
         } else {
