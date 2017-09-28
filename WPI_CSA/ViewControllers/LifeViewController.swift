@@ -53,33 +53,22 @@ class LifeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //CacheManager.localDirInitiateSetup()
+        
+        let a = UIImage(named: "cover.jpg")
+        let b = NSData(data: UIImageJPEGRepresentation(a!, 1)!)
+        print("\(Double(b.length)/1024)")
+        
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.addSubview(refreshControl)
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
-        
-        //CacheManager.localDirInitiateSetup()
-    
-        /*CacheManager.getImage(withName: "WCImage_3") { (error, img ) in
-            if error != "" {
-                print(error)
-            } else if let img = img {
-                DispatchQueue.main.async {
-                    let a = UIImageView(image: img)
-                    self.tableView.backgroundView = a
-                }
-            } else{
-                print("img nil")
-            } 
-         }*/
-        
-        
-        
-        
+        //Checking version info
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
         
+        //Setting up loading view
         let loadingViewHeight = screenHeight - 113 // 49 + 64
         loadingView = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth,
                                      height: loadingViewHeight))
@@ -110,17 +99,17 @@ class LifeViewController: UIViewController {
         refreshImg.image = #imageLiteral(resourceName: "Reload")
         serverDownView.addSubview(refreshImg)
         
+        //Setting up warning view
         let warningView = UITextView(frame: CGRect(x: 0, y: 130, width: 300, height: 50))
-        //warningView.backgroundColor = .red
         warningView.text = "There is an network issue. Click anywhere to refresh the page.\nIf still doesn't work, please contact admin@fmning.com"
         warningView.font = UIFont(name: (warningView.font?.fontName)!, size: 10)
         warningView.textColor = .gray
         warningView.textAlignment = .center
         warningView.dataDetectorTypes = .all
         warningView.isEditable = false
-        //warningView.isUserInteractionEnabled = false
         serverDownView.addSubview(warningView)
         
+        //Requesting for feeds
         reloadingFlag = true
         WCFeedManager.getRecentFeeds(withLimit: feedLoadLimit, andCheckPoint: checkPoint) {
             (error, feedList, checkPoint) in
