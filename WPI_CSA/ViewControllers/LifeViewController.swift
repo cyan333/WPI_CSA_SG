@@ -59,6 +59,7 @@ class LifeViewController: UIViewController {
         let b = NSData(data: UIImageJPEGRepresentation(a!, 1)!)
         print("\(Double(b.length)/1024)")
         
+        
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -137,7 +138,7 @@ class LifeViewController: UIViewController {
         
     }
     
-    func refresh(_ sender: Any) {
+    @objc func refresh(_ sender: Any) {
         if reloadingFlag {
             return
         } else {

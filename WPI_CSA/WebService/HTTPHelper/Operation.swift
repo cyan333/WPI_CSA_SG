@@ -241,15 +241,15 @@ open class HTTP: Operation {
     fileprivate let stateLock = NSLock()
     
     // use the KVO mechanism to indicate that changes to "state" affect ready, executing, finished properties
-    class func keyPathsForValuesAffectingIsReady() -> Set<NSObject> {
+    @objc class func keyPathsForValuesAffectingIsReady() -> Set<NSObject> {
         return ["state" as NSObject]
     }
     
-    class func keyPathsForValuesAffectingIsExecuting() -> Set<NSObject> {
+    @objc class func keyPathsForValuesAffectingIsExecuting() -> Set<NSObject> {
         return ["state" as NSObject]
     }
     
-    class func keyPathsForValuesAffectingIsFinished() -> Set<NSObject> {
+    @objc class func keyPathsForValuesAffectingIsFinished() -> Set<NSObject> {
         return ["state" as NSObject]
     }
     
@@ -262,7 +262,7 @@ open class HTTP: Operation {
         }
         set(newState) {
             willChangeValue(forKey: "state")
-            stateLock.withCriticalScope { Void -> Void in
+            stateLock.withCriticalScope { //Void -> Void in   Commented out during swift 4.0 migration
                 guard _state != .finished else {
                     print("Invalid! - Attempted to back out of Finished State")
                     return
@@ -490,7 +490,7 @@ private func ==(lhs: HTTP.State, rhs: HTTP.State) -> Bool {
 
 // Lock for getting / setting state safely
 extension NSLock {
-    func withCriticalScope<T>(_ block: (Void) -> T) -> T {
+    func withCriticalScope<T>(_ block: () -> T) -> T {
         lock()
         let value = block()
         unlock()
@@ -648,9 +648,11 @@ public class DelegateManager: NSObject, URLSessionDataDelegate, URLSessionDownlo
 /**
  Handles providing singletons of NSURLSession.
  */
-class SharedSession {
-    static let defaultSession = URLSession(configuration: URLSessionConfiguration.default,
+//public is added here for swift 4.0 migration
+//TODO: This is a bug from apple. Check to remove public from future release.
+public class SharedSession {
+    public static let defaultSession = URLSession(configuration: URLSessionConfiguration.default,
                                            delegate: DelegateManager.sharedInstance, delegateQueue: nil)
-    static let ephemeralSession = URLSession(configuration: URLSessionConfiguration.ephemeral,
+    public static let ephemeralSession = URLSession(configuration: URLSessionConfiguration.ephemeral,
                                              delegate: DelegateManager.sharedInstance, delegateQueue: nil)
 }

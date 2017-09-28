@@ -108,7 +108,7 @@ class EditorViewController: UIViewController {
         }
     }
     
-    func applicationWillResignActive() {
+    @objc func applicationWillResignActive() {
         if let titleCell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? EditorTextCell,
             let articleCell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? EditorTextCell{
             self.saveArticle(title: titleCell.textView.attributedText, article: articleCell.textView.attributedText)
@@ -252,70 +252,70 @@ extension EditorViewController: UITextViewDelegate {
         if let cell = tableView.cellForRow(at: IndexPath(row: textView.tag, section: 0)) as? EditorTextCell {
             var textAttributes = cell.textView.typingAttributes
             
-            let fontSize = CGFloat(NumberFormatter().number(from: currentFontSize)!)
+            let fontSize = CGFloat(truncating: NumberFormatter().number(from: currentFontSize)!)
             
             switch currentFontStyle {
             case "thin":
                 if #available(iOS 8.2, *) {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                                 weight: UIFontWeightThin)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFont.Weight.thin)
                     
                 } else {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue-Thin", size: fontSize)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Thin", size: fontSize)
                 }
                 break
             case "medium":
                 if #available(iOS 8.2, *) {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                                 weight: UIFontWeightMedium)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFont.Weight.medium)
                 } else {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue-Medium", size: fontSize)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Medium", size: fontSize)
                 }
                 break
             case "bold":
                 if #available(iOS 8.2, *) {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                                 weight: UIFontWeightBold)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFont.Weight.bold)
                 } else {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue-Bold", size: fontSize)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Bold", size: fontSize)
                 }
                 break
             case "heavy":
                 if #available(iOS 8.2, *) {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                                 weight: UIFontWeightHeavy)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFont.Weight.heavy)
                 } else {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue-CondensedBlack", size: fontSize)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-CondensedBlack", size: fontSize)
                 }
                 break
             default:
                 if #available(iOS 8.2, *) {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont.systemFont(ofSize: fontSize,
-                                                                                 weight: UIFontWeightRegular)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                                                                                 weight: UIFont.Weight.regular)
                 } else {
-                    textAttributes["\(NSFontAttributeName)"] = UIFont(name: "HelveticaNeue", size: fontSize)
+                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue", size: fontSize)
                 }
                 break
             }
             
             switch currentFontColor {
             case "red":
-                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.red
+                textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.red
                 break
             case "blue":
-                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.blue
+                textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.blue
                 break
             case "yellow":
-                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.yellow
+                textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.yellow
                 break
             case "gray":
-                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.gray
+                textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.gray
                 break
             case "green":
-                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.green
+                textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.green
                 break
             default:
-                textAttributes["\(NSForegroundColorAttributeName)"] = UIColor.black
+                textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.black
                 break
             }
             
@@ -332,7 +332,7 @@ extension EditorViewController: UITextViewDelegate {
                 paragraphStyle.alignment = .left
                 break
             }
-            textAttributes["\(NSParagraphStyleAttributeName)"] = paragraphStyle
+            textAttributes["\(NSAttributedStringKey.paragraphStyle)"] = paragraphStyle
             cell.textView.typingAttributes = textAttributes
         }
     }

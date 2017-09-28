@@ -63,7 +63,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func keyboardWillShow(notification:NSNotification){
+    @objc func keyboardWillShow(notification:NSNotification){
         var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
         keyboardFrame = self.view.convert(keyboardFrame, from: nil)
@@ -73,13 +73,13 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
         self.tableView.contentInset = contentInset
     }
     
-    func keyboardWillHide(notification:NSNotification){
+    @objc func keyboardWillHide(notification:NSNotification){
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
         self.tableView.contentInset = contentInset
     }
     
     
-    func handleDatePicker(sender: UIDatePicker) {
+    @objc func handleDatePicker(sender: UIDatePicker) {
         if let cell = tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as? DetailInputCell {
             let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/YY"
@@ -89,7 +89,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
         }
     }
     
-    func addAvatar(){
+    @objc func addAvatar(){
         if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
             imagePicker.delegate = self
             imagePicker.sourceType = .savedPhotosAlbum;
@@ -189,7 +189,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
         }
     }
     
-    func goBack() {
+    @objc func goBack() {
         for i in 0 ..< userDetails.count {
             if userDetails[i].trim() != userDetailsOriginal[i] || avatarChanged {
                 let alert = UIAlertController(title: nil, message: "You have unsaved changes. Are you sure about discarding them?", preferredStyle: .alert)
@@ -205,7 +205,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
         navigationController?.popViewController(animated: true)
     }
     
-    func textFieldDidChange(textField: UITextField) {
+    @objc func textFieldDidChange(textField: UITextField) {
         userDetails[textField.tag] = textField.text!
     }
 }

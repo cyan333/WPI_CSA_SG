@@ -58,7 +58,7 @@ class SGViewController: UIViewController {
         
         
         navigationController?.hidesBarsOnSwipe = true
-        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
@@ -96,7 +96,7 @@ class SGViewController: UIViewController {
         UIApplication.shared.statusBarStyle = .lightContent
     }
     
-    func showToast(_ notification: NSNotification) {
+    @objc func showToast(_ notification: NSNotification) {
         if let message = notification.userInfo?["message"] as? String {
             var style = ToastStyle()
             style.messageAlignment = .center
@@ -107,7 +107,7 @@ class SGViewController: UIViewController {
         
     }
     
-    func lookInside() {
+    @objc func lookInside() {
         do{
             let database = try Database.connect()
             Utils.menuOrderList = []
@@ -128,7 +128,7 @@ class SGViewController: UIViewController {
         }
     }
     
-    func goToPreviousArticle() {
+    @objc func goToPreviousArticle() {
         do{
             let database = try Database.connect()
             self.article = database.getArticle(byMenuId: (article?.prevMenuId!)!)
@@ -145,7 +145,7 @@ class SGViewController: UIViewController {
         }
     }
     
-    func goToNextArticle() {
+    @objc func goToNextArticle() {
         do{
             let database = try Database.connect()
             self.article = database.getArticle(byMenuId: (self.article?.nextMenuId!)!)
@@ -174,7 +174,7 @@ class SGViewController: UIViewController {
                 addOrUpdateStatusBGView(viewController: self, color: themeColor)
                 navigationController?.navigationBar.setBackgroundImage(article.themeImage, for: .default)
                 UIApplication.shared.statusBarStyle = .lightContent
-                navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+                navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
                 menuBtn.setImage(#imageLiteral(resourceName: "MenuLight"), for: .normal)
                 actionBtn.setImage(#imageLiteral(resourceName: "ActionLight"), for: .normal)
                 if tableView.backgroundView is ColoredView {
@@ -189,7 +189,7 @@ class SGViewController: UIViewController {
                 addOrUpdateStatusBGView(viewController: self, color: defaultColor)
                 navigationController?.navigationBar.setBackgroundImage(article.themeImage, for: .default)
                 UIApplication.shared.statusBarStyle = .default
-                navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]
+                navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
                 menuBtn.setImage(#imageLiteral(resourceName: "MenuDefault"), for: .normal)
                 actionBtn.setImage(#imageLiteral(resourceName: "ActionDefault"), for: .normal)
                 if tableView.backgroundView is ColoredView {
@@ -326,19 +326,19 @@ extension SGViewController : UITableViewDataSource {
             if indexPath.row == article.paragraphs.count {
                 let paragraph = NSMutableParagraphStyle()
                 paragraph.alignment = .center
-                var attributes: [String : Any]
+                var attributes: [NSAttributedStringKey : Any]
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SGNavCell") as! SGNavCell
                 
                 if let themeColor = article.themeColor {
-                    attributes = [NSParagraphStyleAttributeName: paragraph,
-                                  NSForegroundColorAttributeName: UIColor.white]
+                    attributes = [NSAttributedStringKey.paragraphStyle: paragraph,
+                                  NSAttributedStringKey.foregroundColor: UIColor.white]
                     cell.prevBtn.layer.borderColor = UIColor.white.cgColor
                     cell.prevBtn.backgroundColor = themeColor
                     cell.nextBtn.layer.borderColor = UIColor.white.cgColor
                     cell.nextBtn.backgroundColor = themeColor
                 } else {
-                    attributes = [NSParagraphStyleAttributeName: paragraph]
+                    attributes = [NSAttributedStringKey.paragraphStyle: paragraph]
                     cell.prevBtn.layer.borderColor = self.view.tintColor.cgColor
                     cell.prevBtn.backgroundColor = .white
                     cell.nextBtn.layer.borderColor = self.view.tintColor.cgColor

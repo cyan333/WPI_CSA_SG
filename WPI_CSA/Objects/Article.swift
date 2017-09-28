@@ -51,13 +51,13 @@ class Article{
                 paragraphs.append(Paragraph(content: "".htmlAttributedString(ratio: .Enlarged), type: .Image, properties: convertTagToDictionary(text: matchs[i])))
                 break
             case .ImageText, .TextImage:
-                let imgStr = matchs[i].substring(to: matchs[i].index(matchs[i].endIndex, offsetBy: -9))
+                let imgStr = String(matchs[i][..<matchs[i].index(matchs[i].endIndex, offsetBy: -9)])
                 let separator = imgStr.range(of: ">")
-                paragraphs.append(Paragraph(content: imgStr.substring(from: separator!.upperBound)
+                paragraphs.append(Paragraph(content: String(imgStr[separator!.upperBound...])
                     .htmlAttributedString(ratio: .Enlarged),
                                             type: paraType,
                                             properties: convertTagToDictionary(text:
-                                                imgStr.substring(to: separator!.lowerBound))))
+                                                String(imgStr[..<separator!.lowerBound]))))
                 break
             case .Table:
                 let listItems = matchs[i].replacingOccurrences(of: "<tab>", with: "")
@@ -74,13 +74,13 @@ class Article{
                 }
                 break
             case .Div:
-                let divStr = matchs[i].substring(to: matchs[i].index(matchs[i].endIndex, offsetBy: -6))
+                let divStr = String(matchs[i][..<matchs[i].index(matchs[i].endIndex, offsetBy: -6)])
                 let separator = divStr.range(of: ">")
-                let paragraph = Paragraph(content: divStr.substring(from: separator!.upperBound)
+                let paragraph = Paragraph(content: String(divStr[separator!.upperBound...])
                     .htmlAttributedString(ratio: .Enlarged),
                                             type: .Div,
                                             properties: convertTagToDictionary(text:
-                                                divStr.substring(to: separator!.lowerBound)))
+                                                String(divStr[..<separator!.lowerBound])))
                 paragraphs.append(paragraph)
                 if let bgColor = paragraph.properties?["color"] as? String, themeColor == nil {
                     themeColor = UIColor(hexString: bgColor)

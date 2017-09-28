@@ -142,7 +142,7 @@ class RegisterViewController: UIViewController {
         }
     }
     
-    func keyboardWillShow(notification:NSNotification){
+    @objc func keyboardWillShow(notification:NSNotification){
         //give room at the bottom of the scroll view, so it doesn't cover up anything the user needs to tap
         var userInfo = notification.userInfo!
         var keyboardFrame:CGRect = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
@@ -153,13 +153,13 @@ class RegisterViewController: UIViewController {
         self.tableView.contentInset = contentInset
     }
     
-    func keyboardWillHide(notification:NSNotification){
+    @objc func keyboardWillHide(notification:NSNotification){
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
         self.tableView.contentInset = contentInset
     }
     
     
-    func handleDatePicker(sender: UIDatePicker) {
+    @objc func handleDatePicker(sender: UIDatePicker) {
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? RegisterInputCell {
             let formatter = DateFormatter()
             formatter.dateFormat = "MM/dd/YY"
@@ -169,7 +169,7 @@ class RegisterViewController: UIViewController {
         }
     }
     
-    func textFieldDidChange(textField: UITextField) {
+    @objc func textFieldDidChange(textField: UITextField) {
         switch textField.tag {
         case 0:
             username = textField.text

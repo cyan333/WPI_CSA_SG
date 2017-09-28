@@ -38,7 +38,7 @@ class Menu{
             jsonStr += ","
         }
         if (isParentMenu){
-            jsonStr = jsonStr.substring(to: jsonStr.index(before: jsonStr.endIndex))
+            jsonStr = String(jsonStr[..<jsonStr.index(before: jsonStr.endIndex)])
         }
         jsonStr += "]}"
         

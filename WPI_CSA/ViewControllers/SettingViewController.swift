@@ -117,7 +117,7 @@ class SettingViewController: UIViewController {
                                                name: NSNotification.Name.init("showToastOnSetting"), object: nil)
     }
     
-    func showToast(_ notification: NSNotification) {
+    @objc func showToast(_ notification: NSNotification) {
         if let message = notification.userInfo?["message"] as? String {
             var style = ToastStyle()
             style.messageAlignment = .center
@@ -128,13 +128,13 @@ class SettingViewController: UIViewController {
         
     }
     
-    func reloadUserCell() {
+    @objc func reloadUserCell() {
         OperationQueue.main.addOperation{
             self.tableView.reloadData()
         }
     }
     
-    func login(){
+    @objc func login(){
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingLoginCell{
             let username = cell.usernameField.text!
             let password = cell.passwordField.text!
@@ -165,12 +165,12 @@ class SettingViewController: UIViewController {
         }
     }
     
-    func reconnect(){
+    @objc func reconnect(){
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: true)
     }
     
     
-    func textFieldDidChange(textField: UITextField) {
+    @objc func textFieldDidChange(textField: UITextField) {
         switch textField.tag {
         case 1:
             oldPass = textField.text!

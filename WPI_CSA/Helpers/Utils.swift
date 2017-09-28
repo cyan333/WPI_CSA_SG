@@ -76,8 +76,8 @@ open class Utils {
                 alert.addAction(UIAlertAction(title: "Remind me later", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
                     let ind = version.index(version.endIndex, offsetBy: -3)
-                    if let prevVersion = Int(version.substring(from: ind)) {
-                        let prevVersionStr = version.substring(to: ind) + String(format: "%03d", prevVersion - 1)
+                    if let prevVersion = Int(String(version[ind...])) {
+                        let prevVersionStr = String(version[..<ind]) + String(format: "%03d", prevVersion - 1)
                         Utils.setParam(named: appVersion, withValue: prevVersionStr)
                     }else{
                         Utils.setParam(named: appVersion, withValue: version)//TODO: Do something here
@@ -247,17 +247,17 @@ extension String {
         guard let data = self.data(using: String.Encoding.utf16, allowLossyConversion: false) else { return nil }
         guard let html = try? NSMutableAttributedString(
             data: data,
-            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType],
+            options: [.documentType : NSAttributedString.DocumentType.html],
             documentAttributes: nil) else { return nil }
         html.beginEditing()
-        html.enumerateAttribute(NSFontAttributeName, in: NSMakeRange(0, html.length), options: .init(rawValue: 0)) {
+        html.enumerateAttribute(NSAttributedStringKey.font, in: NSMakeRange(0, html.length), options: .init(rawValue: 0)) {
             (value, range, stop) in
             if let font = value as? UIFont {
                 let fontRatio: CGFloat = ratio == .Normal ? 0.75 : 1.25
                 let fontName = font.fontName.hasSuffix("BoldMT") ? "Helvetica-Bold" : "Helvetica"
                 
                 let finalFont = UIFont(name: fontName, size: font.pointSize * fontRatio)!
-                html.addAttribute(NSFontAttributeName,
+                html.addAttribute(NSAttributedStringKey.font,
                                          value: finalFont,
                                          range: range)
             }
@@ -283,7 +283,7 @@ extension Int {
 
 extension NSAttributedString {
     func htmlString() -> String? {
-        let documentAttributes = [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType]
+        let documentAttributes = [NSAttributedString.DocumentAttributeKey.documentType: NSAttributedString.DocumentType.html]
         do {
             let htmlData = try self.data(from: NSMakeRange(0, self.length), documentAttributes:documentAttributes)
             if let htmlString = String(data:htmlData, encoding:String.Encoding.utf8) {
