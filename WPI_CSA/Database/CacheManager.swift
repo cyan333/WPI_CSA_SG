@@ -110,12 +110,12 @@ open class CacheManager {
         
         let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                         .userDomainMask, true)[0] as NSString
-        //print(documentDirectoryPath)
+        print(documentDirectoryPath)
         if Database.getCache(type: .Image, mappingId: id) != nil {
             let image = UIImage(contentsOfFile: documentDirectoryPath
                 .appendingPathComponent("imageCache/\(id).jpg"))
             if let image = image {
-                //print("image from local")
+                print("image from local")
                 Database.imageHit(id: id)
                 //Database.getImgHit(id: id)
                 completion("", image)
@@ -125,7 +125,7 @@ open class CacheManager {
             }
         }
         
-        //print("img from server")
+        print("img from server")
         do {
             let params = ["id" : id]
             let opt = try HTTP.GET(serviceBase + "get_image", parameters: params)
@@ -154,9 +154,15 @@ open class CacheManager {
         }
     }
     
-    open class func uploadImage(image: UIImage, type: String,
+    open class func uploadImage(image: UIImage, type: String, targetSize: Int? = nil,
                                 completion: @escaping (_ error: String, _ id: Int?) -> Void) {
-        WCImageManager.saveTypeUniqueImg(image: image, type: "Avatar") { (error, id) in
+        var compressRate: CGFloat = 1
+        if let targetSize = targetSize {
+            compressRate = image.compressRateForSize(target: targetSize)
+        }
+        
+        WCImageManager.saveTypeUniqueImg(image: image, type: type, compressRate: compressRate) {
+            (error, id) in
             if error == "" {
                 let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                                 .userDomainMask, true)[0] as NSString
@@ -164,8 +170,7 @@ open class CacheManager {
                 let imgPath = documentDirectoryPath.appendingPathComponent("imageCache/\(id).jpg")
                 
                 do{
-                    try UIImageJPEGRepresentation(image, 1.0)?.write(to: URL(fileURLWithPath: imgPath),
-                                                                     options: .atomic)
+                    try UIImageJPEGRepresentation(image, compressRate)?.write(to: URL(fileURLWithPath: imgPath), options: .atomic)
                     Database.createOrUpdateImageCache(imageId: id)
                 }catch let error{
                     print(error.localizedDescription)

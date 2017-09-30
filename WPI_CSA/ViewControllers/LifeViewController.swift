@@ -55,10 +55,21 @@ class LifeViewController: UIViewController {
         
         //CacheManager.localDirInitiateSetup()
         
-        let a = UIImage(named: "cover.jpg")
-        let b = NSData(data: UIImageJPEGRepresentation(a!, 1)!)
+        /*let a = UIImage(named: "test.jpg")
+        let data = UIImageJPEGRepresentation(a!, 0)
+        let b = NSData(data: data!)
         print("\(Double(b.length)/1024)")
         
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                        .userDomainMask, true)[0] as NSString
+        print(documentDirectoryPath)
+        let imgPath = documentDirectoryPath.appendingPathComponent("1.jpg")
+        do{
+            try data?.write(to: URL(fileURLWithPath: imgPath),
+                                                             options: .atomic)
+        }catch let error{
+            print(error.localizedDescription)
+        }*/
         
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")

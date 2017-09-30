@@ -341,6 +341,23 @@ public extension UIImage {
         guard let cgImage = image?.cgImage else { return nil }
         self.init(cgImage: cgImage)
     }
+    
+    func compressRateForSize(target: Int) -> CGFloat {
+        let data = NSData(data: UIImageJPEGRepresentation(self, 1)!)
+        let fullSize = data.length / 1024
+        let rate = fullSize / target
+        if rate == 0 {
+            return 1
+        } else if rate <= 2 {
+            return 0.75
+        } else if rate <= 4 {
+            return 0.5
+        } else if rate <= 8 {
+            return 0.25
+        } else {
+            return 0
+        }
+    }
 }
 
 extension Formatter {

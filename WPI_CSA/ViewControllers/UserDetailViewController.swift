@@ -161,7 +161,9 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
         
         if avatarChanged {
             Utils.showLoadingIndicator()
-            CacheManager.uploadImage(image: self.newAvatar!, type: "Avatar", completion: { (error, imgId) in
+            let a = UIImage(named: "test.jpg")
+            CacheManager.uploadImage(image: a!, type: "Avatar", targetSize:  250,
+                                     completion: { (error, imgId) in
                 if error != "" {
                     print(error)
                 }
@@ -316,7 +318,6 @@ extension UserDetailViewController: UITextFieldDelegate {
 
 extension UserDetailViewController : UINavigationBarDelegate {
     public func navigationBar(_ navigationBar: UINavigationBar, shouldPop item: UINavigationItem) -> Bool {
-        print(1)
         return false
     }
 }

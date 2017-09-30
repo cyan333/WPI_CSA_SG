@@ -31,10 +31,10 @@ open class WCImageManager {
     }
     
     
-    open class func saveTypeUniqueImg(image: UIImage, type: String,
+    open class func saveTypeUniqueImg(image: UIImage, type: String, compressRate: CGFloat = 1,
                                       completion: @escaping (_ error: String, _ imageId: Int) -> Void) {
         do {
-            let imageData = UIImageJPEGRepresentation(image, 1)!
+            let imageData = UIImageJPEGRepresentation(image, compressRate)!
             let base64 = imageData.base64EncodedString()
             let params = ["accessToken": WCService.currentUser!.accessToken, "type": type,
                           "image": base64]
