@@ -17,6 +17,10 @@ class FeedTitleCell: UITableViewCell {
 
 class FeedTextCell: UITableViewCell {
     @IBOutlet weak var textView: UITextView!
+}
+
+class FeedImageCell: UITableViewCell {
+    @IBOutlet weak var imgView: UIImageView!
     
 }
 
@@ -30,7 +34,7 @@ class FeedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        article = Article(content: feed.body)
+        article = Article(content: feed.body + "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>")
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
@@ -96,26 +100,70 @@ extension FeedViewController: UITableViewDataSource {
             
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FeedTextCell") as! FeedTextCell
-            
             let paragraph = article.paragraphs[indexPath.row]
-            cell.textView.attributedText = paragraph.content
-            
-            if paragraph.cellHeight == 0 {
-                let size = cell.textView.sizeThatFits(CGSize(width: screenWidth - padding * 2,
-                                                             height: .greatestFiniteMagnitude))
-                paragraph.textViewHeight = size.height
-                paragraph.cellHeight = size.height
+            switch paragraph.type {
+            case .Plain :
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FeedTextCell") as! FeedTextCell
+                
+                cell.textView.attributedText = paragraph.content
+                
+                if paragraph.cellHeight == 0 {
+                    let size = cell.textView.sizeThatFits(CGSize(width: screenWidth - padding * 2,
+                                                                 height: .greatestFiniteMagnitude))
+                    paragraph.textViewHeight = size.height
+                    paragraph.cellHeight = size.height
+                }
+                
+                let filteredConstraints = cell.textView.constraints.filter { $0.identifier == "feedTextCellHeight" }
+                if let heightConstraint = filteredConstraints.first {
+                    heightConstraint.constant = paragraph.textViewHeight
+                }
+                
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
+                
+                return cell
+            case .Image:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FeedImageCell") as! FeedImageCell
+                
+                if paragraph.cellHeight == 0 {
+                    if let imgWidth = paragraph.properties?["width"], let imgHeight = paragraph.properties?["height"] {
+                        if let imgWidthInt = Int(imgWidth as! String), let imgHeightInt = Int(imgHeight as! String) {
+                            
+                            paragraph.imgViewHeight = CGFloat(Int(screenWidth - padding * 2) * imgHeightInt / imgWidthInt)
+                        }
+                    }
+                    paragraph.cellHeight = paragraph.imgViewHeight + padding * 2
+                }
+                
+                if let imgName = paragraph.properties?["src"] {
+                    CacheManager.getImage(withName: imgName as! String,
+                                          completion: { (err, image) in
+                                            DispatchQueue.main.async {
+                                                cell.imgView.image = image
+                                            }
+                    })
+                    
+                    let filteredConstraints = cell.imgView.constraints.filter { $0.identifier == "feedImgCellHeight" }
+                    if let heightConstraint = filteredConstraints.first {
+                        heightConstraint.constant = paragraph.imgViewHeight
+                    }
+                }else{
+                    //TODO: friendly error message?
+                    print("Cannot read image")
+                }
+                
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
+                
+                return cell
+            default:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FeedTextCell") as! FeedTextCell
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
+                return cell
             }
             
-            let filteredConstraints = cell.textView.constraints.filter { $0.identifier == "feedTextCellHeight" }
-            if let heightConstraint = filteredConstraints.first {
-                heightConstraint.constant = paragraph.textViewHeight
-            }
             
-            cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
             
-            return cell
+            //feedTextCellHeight
             
         }
         

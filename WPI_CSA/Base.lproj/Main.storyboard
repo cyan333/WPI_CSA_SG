@@ -1294,7 +1294,7 @@
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES" lookupSuggestion="YES"/>
+                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" lookupSuggestion="YES"/>
                                                 </textView>
                                             </subviews>
                                             <constraints>
@@ -1306,6 +1306,38 @@
                                         <connections>
                                             <outlet property="textView" destination="AJa-th-gGX" id="4n5-yn-oxX"/>
                                         </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="80" id="1AW-IA-tfl" customClass="FeedImageCell" customModule="WPI_CSA" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="238" width="375" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1AW-IA-tfl" id="9yR-6y-Rxf">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0c6-2J-ihr">
+                                                    <rect key="frame" x="10" y="10" width="355" height="60"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="60" identifier="feedImgCellHeight" id="06k-th-vZj"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="0c6-2J-ihr" firstAttribute="leading" secondItem="9yR-6y-Rxf" secondAttribute="leading" constant="10" id="5T5-t3-WNM"/>
+                                                <constraint firstItem="0c6-2J-ihr" firstAttribute="top" secondItem="9yR-6y-Rxf" secondAttribute="top" constant="10" id="6pX-Xv-Pee"/>
+                                                <constraint firstAttribute="trailing" secondItem="0c6-2J-ihr" secondAttribute="trailing" constant="10" id="u9G-TZ-p8f"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="imgView" destination="0c6-2J-ihr" id="GO2-ht-Cca"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="YQw-2O-sts">
+                                        <rect key="frame" x="0.0" y="318" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YQw-2O-sts" id="syS-Do-Snz">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
