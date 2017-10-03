@@ -48,7 +48,7 @@ class Article{
             paraType = getParagraphType(string: matchs[i])
             switch paraType {
             case .Image:
-                paragraphs.append(Paragraph(content: "".htmlAttributedString(ratio: .Enlarged), type: .Image, properties: convertTagToDictionary(text: matchs[i])))
+                paragraphs.append(Paragraph(content: "".htmlAttributedString(ratio: .Enlarged), type: .Image, properties: matchs[i].getHtmlAttributes()))
                 break
             case .ImageText, .TextImage:
                 let imgStr = String(matchs[i][..<matchs[i].index(matchs[i].endIndex, offsetBy: -9)])
@@ -56,8 +56,7 @@ class Article{
                 paragraphs.append(Paragraph(content: String(imgStr[separator!.upperBound...])
                     .htmlAttributedString(ratio: .Enlarged),
                                             type: paraType,
-                                            properties: convertTagToDictionary(text:
-                                                String(imgStr[..<separator!.lowerBound]))))
+                                            properties: String(imgStr[..<separator!.lowerBound]).getHtmlAttributes()))
                 break
             case .Table:
                 let listItems = matchs[i].replacingOccurrences(of: "<tab>", with: "")
@@ -79,8 +78,7 @@ class Article{
                 let paragraph = Paragraph(content: String(divStr[separator!.upperBound...])
                     .htmlAttributedString(ratio: .Enlarged),
                                             type: .Div,
-                                            properties: convertTagToDictionary(text:
-                                                String(divStr[..<separator!.lowerBound])))
+                                            properties: String(divStr[..<separator!.lowerBound]).getHtmlAttributes())
                 paragraphs.append(paragraph)
                 if let bgColor = paragraph.properties?["color"] as? String, themeColor == nil {
                     themeColor = UIColor(hexString: bgColor)
@@ -119,31 +117,6 @@ class Article{
         }
     }
     
-        
-    func convertTagToDictionary(text: String) -> [String: Any]? {
-        let preText = text.hasSuffix(">") ? text : text + ">"
-        let processedText = preText.replacingOccurrences(of: "<img ", with: "{\"")
-            .replacingOccurrences(of: "<imgtxt ", with: "{\"")
-            .replacingOccurrences(of: "<txtimg ", with: "{\"")
-            .replacingOccurrences(of: "<div ", with: "{\"")
-            .replacingOccurrences(of: "/>", with: "}")
-            .replacingOccurrences(of: " />", with: "}")
-            .replacingOccurrences(of: ">", with: "}")
-            .replacingOccurrences(of: " >", with: "}")
-            .replacingOccurrences(of: "=\"", with: "\":\"")
-            .replacingOccurrences(of: "\" ", with: "\",\"")
-        //print(processedText)
-        if let data = processedText.data(using: .utf8) {
-            do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-            } catch {
-                //TODO: show friendly message?
-                print(error.localizedDescription)
-            }
-        }
-        return nil
-    }
-    
 }
 
 class Paragraph{
@@ -173,7 +146,7 @@ class Paragraph{
         self.type = type
     }
     
-    init(content: NSAttributedString?, type: ParagraphType, properties: [String: Any]?){
+    init(content: NSAttributedString?, type: ParagraphType, properties: [String: Any]){
         self.content = content
         self.type = type
         self.properties = properties

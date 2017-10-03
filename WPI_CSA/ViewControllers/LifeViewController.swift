@@ -55,21 +55,7 @@ class LifeViewController: UIViewController {
         
         //CacheManager.localDirInitiateSetup()
         
-        /*let a = UIImage(named: "test.jpg")
-        let data = UIImageJPEGRepresentation(a!, 0)
-        let b = NSData(data: data!)
-        print("\(Double(b.length)/1024)")
         
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
-                                                                        .userDomainMask, true)[0] as NSString
-        print(documentDirectoryPath)
-        let imgPath = documentDirectoryPath.appendingPathComponent("1.jpg")
-        do{
-            try data?.write(to: URL(fileURLWithPath: imgPath),
-                                                             options: .atomic)
-        }catch let error{
-            print(error.localizedDescription)
-        }*/
         
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
@@ -281,6 +267,14 @@ class LifeViewController: UIViewController {
         })
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? FeedViewController {
+            if let row = sender as? Int {
+                print(1)
+                destinationViewController.feed = feedList[row]
+            }
+        }
+    }
 }
 
 extension LifeViewController: UITableViewDelegate {
@@ -294,6 +288,9 @@ extension LifeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.section == 0 {
+            self.performSegue(withIdentifier: "FeedSegue", sender: indexPath.row)
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

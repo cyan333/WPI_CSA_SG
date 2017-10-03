@@ -270,6 +270,22 @@ extension String {
         return self.trimmingCharacters(in: .whitespaces)
     }
     
+    func getHtmlAttributes() -> [String: Any] {
+        var dic = [String: Any]()
+        let regex = try! NSRegularExpression(pattern: "[^ ]*[ ]*=[ ]*\".*?\"")
+        let matchs = regex.matches(in: self, range: NSRange(location: 0, length: self.count)).map{(self as NSString).substring(with: $0.range)}
+        
+        for i in 0 ..< matchs.count {
+            let index = matchs[i].range(of: "=")
+            let key = String(matchs[i][..<index!.lowerBound]).trim()
+            //TODO: Can there be double quote in value? Or that is \\" so won't be affected? Which means we need to replace that with \" ?
+            let value = String(matchs[i][index!.upperBound...]).replacingOccurrences(of: "\"", with: "").trim()
+            dic[key] = value
+        }
+        
+        return dic
+    }
+    
     var dateFromISO8601: Date? {
         return Formatter.iso8601.date(from: self)
     }

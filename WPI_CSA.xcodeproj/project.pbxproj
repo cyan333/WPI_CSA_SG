@@ -35,6 +35,7 @@
 		874F3D3B1EF6F4B100B47492 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */; };
 		874F3D3D1EF9AAE500B47492 /* WCArticle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874F3D3C1EF9AAE500B47492 /* WCArticle.swift */; };
 		874F3D791EFAEBE600B47492 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 874F3D781EFAEBE600B47492 /* Toast.swift */; };
+		87668F641F80A0640021478D /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87668F631F80A0640021478D /* FeedViewController.swift */; };
 		877E61581E8C4DD100B88831 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877E61571E8C4DD100B88831 /* Article.swift */; };
 		877FD5981E94300E00632887 /* menuExpanded.png in Resources */ = {isa = PBXBuildFile; fileRef = 877FD5961E94300E00632887 /* menuExpanded.png */; };
 		877FD5991E94300E00632887 /* menuCollapsed.png in Resources */ = {isa = PBXBuildFile; fileRef = 877FD5971E94300E00632887 /* menuCollapsed.png */; };
@@ -110,6 +111,7 @@
 		874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreviewViewController.swift; path = ViewControllers/PreviewViewController.swift; sourceTree = "<group>"; };
 		874F3D3C1EF9AAE500B47492 /* WCArticle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WCArticle.swift; path = WebService/WCArticle.swift; sourceTree = "<group>"; };
 		874F3D781EFAEBE600B47492 /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Toast.swift; path = Helpers/Toast.swift; sourceTree = "<group>"; };
+		87668F631F80A0640021478D /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedViewController.swift; path = ViewControllers/FeedViewController.swift; sourceTree = "<group>"; };
 		877E61571E8C4DD100B88831 /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Article.swift; path = Objects/Article.swift; sourceTree = "<group>"; };
 		877FD5961E94300E00632887 /* menuExpanded.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuExpanded.png; path = Icons/menuExpanded.png; sourceTree = "<group>"; };
 		877FD5971E94300E00632887 /* menuCollapsed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuCollapsed.png; path = Icons/menuCollapsed.png; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				8721CB561EE651D80023152A /* EditorViewController.swift */,
+				87668F631F80A0640021478D /* FeedViewController.swift */,
 				87D097571F53443400D78BF8 /* LifeViewController.swift */,
 				910CFDD31E80C1130005CC1D /* MenuViewController.swift */,
 				874F3D3A1EF6F4B100B47492 /* PreviewViewController.swift */,
@@ -473,6 +476,7 @@
 				871E35D01EBAF14C00EA483E /* Request.swift in Sources */,
 				910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */,
 				871E35CE1EBAAEB300EA483E /* Operation.swift in Sources */,
+				87668F641F80A0640021478D /* FeedViewController.swift in Sources */,
 				87CD3A4A1E8494E900C9E5F3 /* Menu.swift in Sources */,
 				87D097621F60D57F00D78BF8 /* UserDetailViewController.swift in Sources */,
 				87CAC3981ED3D62B004D0A97 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */,
