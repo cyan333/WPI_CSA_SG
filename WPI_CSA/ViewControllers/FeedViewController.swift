@@ -33,7 +33,7 @@ class FeedViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()//test
         article = Article(content: feed.body + "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>")
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
