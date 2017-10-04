@@ -58,6 +58,7 @@ class LifeViewController: UIViewController {
         //CacheManager.localDirInitiateSetup()
         
         
+        
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)

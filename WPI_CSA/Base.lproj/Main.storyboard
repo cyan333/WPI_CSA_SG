@@ -718,7 +718,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="ONi-GD-GE8">
-                                <rect key="frame" x="0.0" y="124" width="375" height="494"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="DetailAvatarCell" rowHeight="120" id="fB9-4p-VsY" customClass="DetailAvatarCell" customModule="WPI_CSA" customModuleProvider="target">
@@ -1331,12 +1331,24 @@
                                             <outlet property="imgView" destination="0c6-2J-ihr" id="GO2-ht-Cca"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedEventCell" id="YQw-2O-sts">
-                                        <rect key="frame" x="0.0" y="318" width="375" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeedEventCell" rowHeight="60" id="YQw-2O-sts">
+                                        <rect key="frame" x="0.0" y="318" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YQw-2O-sts" id="syS-Do-Snz">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7p7-Tr-M1B">
+                                                    <rect key="frame" x="5" y="0.0" width="365" height="59.5"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="7p7-Tr-M1B" firstAttribute="leading" secondItem="syS-Do-Snz" secondAttribute="leading" constant="5" id="1kg-iw-clw"/>
+                                                <constraint firstAttribute="trailing" secondItem="7p7-Tr-M1B" secondAttribute="trailing" constant="5" id="Hsz-PU-dhq"/>
+                                                <constraint firstItem="7p7-Tr-M1B" firstAttribute="top" secondItem="syS-Do-Snz" secondAttribute="top" id="RrA-Z1-Fuu"/>
+                                                <constraint firstAttribute="bottom" secondItem="7p7-Tr-M1B" secondAttribute="bottom" id="zOM-RQ-a5W"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
