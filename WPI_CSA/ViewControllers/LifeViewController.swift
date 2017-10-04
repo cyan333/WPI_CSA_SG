@@ -8,6 +8,8 @@
 
 import UIKit
 import EventKit
+import BraintreeDropIn
+import Braintree
 
 let padding: CGFloat = 10
 let imgViewWidth: Int = 130
@@ -54,7 +56,6 @@ class LifeViewController: UIViewController {
         super.viewDidLoad()
         
         //CacheManager.localDirInitiateSetup()
-        
         
         
         refreshControl = UIRefreshControl()

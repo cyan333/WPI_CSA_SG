@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27C82604EDE0AA2A7F7281B8 /* Pods_WPI_CSA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47898EBF3F9DD3C4396E8291 /* Pods_WPI_CSA.framework */; };
 		871E35B11EB19FF700EA483E /* 1_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35A61EB19FF700EA483E /* 1_1.jpg */; };
 		871E35B21EB19FF700EA483E /* 1_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35A71EB19FF700EA483E /* 1_2.jpg */; };
 		871E35B31EB19FF700EA483E /* 1_3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 871E35A81EB19FF700EA483E /* 1_3.jpg */; };
@@ -83,6 +84,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0ACB5DE4537CA1A8E5951E20 /* Pods-WPI_CSA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WPI_CSA.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WPI_CSA/Pods-WPI_CSA.debug.xcconfig"; sourceTree = "<group>"; };
+		47898EBF3F9DD3C4396E8291 /* Pods_WPI_CSA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WPI_CSA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		79CA04F284DC90608F342DEC /* Pods-WPI_CSA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WPI_CSA.release.xcconfig"; path = "Pods/Target Support Files/Pods-WPI_CSA/Pods-WPI_CSA.release.xcconfig"; sourceTree = "<group>"; };
 		871E35A61EB19FF700EA483E /* 1_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 1_1.jpg; path = SGImages/1_1.jpg; sourceTree = "<group>"; };
 		871E35A71EB19FF700EA483E /* 1_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 1_2.jpg; path = SGImages/1_2.jpg; sourceTree = "<group>"; };
 		871E35A81EB19FF700EA483E /* 1_3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = 1_3.jpg; path = SGImages/1_3.jpg; sourceTree = "<group>"; };
@@ -159,6 +163,8 @@
 		910CFDD11E80C1130005CC1D /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuHelper.swift; path = Helpers/MenuHelper.swift; sourceTree = "<group>"; };
 		910CFDD31E80C1130005CC1D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuViewController.swift; path = ViewControllers/MenuViewController.swift; sourceTree = "<group>"; };
 		910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PresentMenuAnimator.swift; path = Helpers/PresentMenuAnimator.swift; sourceTree = "<group>"; };
+		AA5E0F061F8494C2000ED356 /* libBraintree.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintree.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA5E0F081F8494CF000ED356 /* libBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintreeDropIn.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,12 +173,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				87ADA82C1E82300800EF81A4 /* libsqlite3.tbd in Frameworks */,
+				27C82604EDE0AA2A7F7281B8 /* Pods_WPI_CSA.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		12151F5FDCC5D878D93AD4F1 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0ACB5DE4537CA1A8E5951E20 /* Pods-WPI_CSA.debug.xcconfig */,
+				79CA04F284DC90608F342DEC /* Pods-WPI_CSA.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		871E35C21EBA5D5400EA483E /* WebService */ = {
 			isa = PBXGroup;
 			children = (
@@ -269,7 +285,10 @@
 		87ADA82A1E82300700EF81A4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AA5E0F081F8494CF000ED356 /* libBraintreeDropIn.a */,
+				AA5E0F061F8494C2000ED356 /* libBraintree.a */,
 				87ADA82B1E82300800EF81A4 /* libsqlite3.tbd */,
+				47898EBF3F9DD3C4396E8291 /* Pods_WPI_CSA.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -320,6 +339,7 @@
 				910CFDB31E80BF950005CC1D /* WPI_CSA */,
 				910CFDB21E80BF950005CC1D /* Products */,
 				87ADA82A1E82300700EF81A4 /* Frameworks */,
+				12151F5FDCC5D878D93AD4F1 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -358,9 +378,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 910CFDC31E80BF950005CC1D /* Build configuration list for PBXNativeTarget "WPI_CSA" */;
 			buildPhases = (
+				83574FD6E6FF1543BB1E4D0B /* [CP] Check Pods Manifest.lock */,
 				910CFDAD1E80BF950005CC1D /* Sources */,
 				910CFDAE1E80BF950005CC1D /* Frameworks */,
 				910CFDAF1E80BF950005CC1D /* Resources */,
+				FFFCA79CCCFC3B9105A68E21 /* [CP] Embed Pods Frameworks */,
+				35007B4CDFDCFFB9C7E94B68 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -448,6 +471,65 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		35007B4CDFDCFFB9C7E94B68 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-WPI_CSA/Pods-WPI_CSA-resources.sh",
+				"$PODS_CONFIGURATION_BUILD_DIR/BraintreeDropIn/Braintree-UIKit-Localization.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WPI_CSA/Pods-WPI_CSA-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		83574FD6E6FF1543BB1E4D0B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WPI_CSA-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FFFCA79CCCFC3B9105A68E21 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-WPI_CSA/Pods-WPI_CSA-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Braintree/Braintree.framework",
+				"${BUILT_PRODUCTS_DIR}/BraintreeDropIn/BraintreeDropIn.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Braintree.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BraintreeDropIn.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WPI_CSA/Pods-WPI_CSA-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		910CFDAD1E80BF950005CC1D /* Sources */ = {
@@ -626,6 +708,7 @@
 		};
 		910CFDC41E80BF950005CC1D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0ACB5DE4537CA1A8E5951E20 /* Pods-WPI_CSA.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -646,6 +729,7 @@
 		};
 		910CFDC51E80BF950005CC1D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79CA04F284DC90608F342DEC /* Pods-WPI_CSA.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
