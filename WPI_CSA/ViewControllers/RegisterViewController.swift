@@ -52,6 +52,11 @@ class RegisterViewController: UIViewController {
             return
         }
         
+        if name.count > 20 {
+            Utils.show(alertMessage: "Name needs to be less that 20 characters", onViewController: self)
+            return
+        }
+        
         guard let password = password else{
             Utils.show(alertMessage: "Unknown error", onViewController: self)
             return
@@ -77,7 +82,7 @@ class RegisterViewController: UIViewController {
         
         if let major = major{
             if major.characters.count > 10 {
-                Utils.show(alertMessage: "Please user abbreviation for major, like CS, ECE, etc", onViewController: self)
+                Utils.show(alertMessage: "Please use abbreviation for major, like CS, ECE, etc", onViewController: self)
                 return
             }
         }

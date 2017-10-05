@@ -114,6 +114,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
     }
     
     @IBAction func saveBtnClicked(_ sender: Any) {
+        tableView.endEditing(true)
         var userDetailChanged = false
         var userDetailUpdated = false
         var avatarUpdated = false
@@ -125,12 +126,31 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
         }
         
         if userDetailChanged {
-            Utils.showLoadingIndicator()
             let name = userDetails[0].trim()
             let birthday = userDetails[1].trim()
             let classOf = userDetails[2].trim()
             let major = userDetails[3].trim()
             
+            if name == "" {
+                Utils.show(alertMessage: "You must enter your name", onViewController: self)
+                return
+            }
+            if name.count > 20 {
+                Utils.show(alertMessage: "Name needs to be less that 20 characters", onViewController: self)
+                return
+            }
+            
+            if Int(classOf) == nil || classOf.characters.count != 4 {
+                Utils.show(alertMessage: "Graduation year must be a four digits number", onViewController: self)
+                return
+            }
+            
+            if major.count > 10 {
+                Utils.show(alertMessage: "Please use abbreviation for major, like CS, ECE, etc", onViewController: self)
+                return
+            }
+            
+            Utils.showLoadingIndicator()
             WCUserManager.saveCurrentUserDetails(name: name, birthday: birthday, classOf: classOf, major: major,
                                                  completion: { (error) in
                                                     if error != "" {
