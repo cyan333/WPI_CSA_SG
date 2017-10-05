@@ -263,7 +263,6 @@ extension EditorViewController: UITextViewDelegate {
                 } else {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Thin", size: fontSize)
                 }
-                break
             case "medium":
                 if #available(iOS 8.2, *) {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
@@ -271,7 +270,6 @@ extension EditorViewController: UITextViewDelegate {
                 } else {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Medium", size: fontSize)
                 }
-                break
             case "bold":
                 if #available(iOS 8.2, *) {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
@@ -279,7 +277,6 @@ extension EditorViewController: UITextViewDelegate {
                 } else {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Bold", size: fontSize)
                 }
-                break
             case "heavy":
                 if #available(iOS 8.2, *) {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
@@ -287,7 +284,6 @@ extension EditorViewController: UITextViewDelegate {
                 } else {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-CondensedBlack", size: fontSize)
                 }
-                break
             default:
                 if #available(iOS 8.2, *) {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
@@ -295,28 +291,21 @@ extension EditorViewController: UITextViewDelegate {
                 } else {
                     textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue", size: fontSize)
                 }
-                break
             }
             
             switch currentFontColor {
             case "red":
                 textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.red
-                break
             case "blue":
                 textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.blue
-                break
             case "yellow":
                 textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.yellow
-                break
             case "gray":
                 textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.gray
-                break
             case "green":
                 textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.green
-                break
             default:
                 textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.black
-                break
             }
             
             //let editorAlignment = ["left", "center", "right"]
@@ -324,13 +313,10 @@ extension EditorViewController: UITextViewDelegate {
             switch currentAlignment {
             case "center":
                 paragraphStyle.alignment = .center
-                break
             case "right":
                 paragraphStyle.alignment = .right
-                break
             default:
                 paragraphStyle.alignment = .left
-                break
             }
             textAttributes["\(NSAttributedStringKey.paragraphStyle)"] = paragraphStyle
             cell.textView.typingAttributes = textAttributes

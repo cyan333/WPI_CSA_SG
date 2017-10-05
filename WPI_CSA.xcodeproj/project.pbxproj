@@ -81,6 +81,7 @@
 		910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD11E80C1130005CC1D /* MenuHelper.swift */; };
 		910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD31E80C1130005CC1D /* MenuViewController.swift */; };
 		910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */; };
+		AA3CBF351F86A284007BEEBC /* RequestMocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CBF341F86A284007BEEBC /* RequestMocker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -163,6 +164,7 @@
 		910CFDD11E80C1130005CC1D /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuHelper.swift; path = Helpers/MenuHelper.swift; sourceTree = "<group>"; };
 		910CFDD31E80C1130005CC1D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuViewController.swift; path = ViewControllers/MenuViewController.swift; sourceTree = "<group>"; };
 		910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PresentMenuAnimator.swift; path = Helpers/PresentMenuAnimator.swift; sourceTree = "<group>"; };
+		AA3CBF341F86A284007BEEBC /* RequestMocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestMocker.swift; path = WebService/RequestMocker.swift; sourceTree = "<group>"; };
 		AA5E0F061F8494C2000ED356 /* libBraintree.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintree.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5E0F081F8494CF000ED356 /* libBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintreeDropIn.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -199,6 +201,7 @@
 				8732FE021EBC1F6800B1CDB1 /* WCService.swift */,
 				87DE3FC11EC41DF800BB49EB /* WCUser.swift */,
 				8732FE061EBD07A600B1CDB1 /* WCUtils.swift */,
+				AA3CBF341F86A284007BEEBC /* RequestMocker.swift */,
 			);
 			name = WebService;
 			sourceTree = "<group>";
@@ -554,6 +557,7 @@
 				8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */,
 				877E61581E8C4DD100B88831 /* Article.swift in Sources */,
 				871E35CA1EBA73A400EA483E /* StatusCode.swift in Sources */,
+				AA3CBF351F86A284007BEEBC /* RequestMocker.swift in Sources */,
 				910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */,
 				871E35D01EBAF14C00EA483E /* Request.swift in Sources */,
 				910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */,

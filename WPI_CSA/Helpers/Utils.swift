@@ -198,7 +198,7 @@ open class Utils {
     }
     
     open class func checkPasswordStrength(password: String) -> String{
-        if password.characters.count < 6 {
+        if password.count < 6 {
             return "Password must contain at least 6 chars"
         } else {
             let letters = NSCharacterSet.letters
@@ -240,6 +240,38 @@ enum AppMode{
 enum FontRatio{
     case Normal
     case Enlarged
+}
+
+@IBDesignable extension UIView {
+    
+    @IBInspectable var borderWidth: CGFloat {
+        set {
+            layer.borderWidth = newValue
+        }
+        get {
+            return layer.borderWidth
+        }
+    }
+    
+    @IBInspectable var cornerRadius: CGFloat {
+        set {
+            layer.cornerRadius = newValue
+        }
+        get {
+            return layer.cornerRadius
+        }
+    }
+    
+    @IBInspectable var borderColor: UIColor? {
+        set {
+            guard let uiColor = newValue else { return }
+            layer.borderColor = uiColor.cgColor
+        }
+        get {
+            guard let color = layer.borderColor else { return nil }
+            return UIColor(cgColor: color)
+        }
+    }
 }
 
 extension String {
@@ -317,7 +349,7 @@ extension UIColor {
         var int = UInt32()
         Scanner(string: hex).scanHexInt32(&int)
         let a, r, g, b: UInt32
-        switch hex.characters.count {
+        switch hex.count {
         case 3: // RGB (12-bit)
             (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
         case 6: // RGB (24-bit)

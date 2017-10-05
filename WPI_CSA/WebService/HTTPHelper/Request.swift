@@ -244,7 +244,7 @@ extension NSMutableURLRequest {
         let queryString = parameters.createPairs(nil).map({ (pair) in
             return pair.escapedValue
         }).joined(separator: "&")
-        if let u = self.url , queryString.characters.count > 0 {
+        if let u = self.url , queryString.count > 0 {
             let para = u.query != nil ? "&" : "?"
             self.url = URL(string: "\(u.absoluteString)\(para)\(queryString)")
         }

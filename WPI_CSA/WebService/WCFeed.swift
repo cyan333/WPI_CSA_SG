@@ -42,6 +42,11 @@ open class WCFeedManager {
     open class func getRecentFeeds(withLimit limit: Int, andCheckPoint checkPoint: String?,
                              completion: @escaping (_ error: String, _ feedList: [WCFeed],
                                                     _ checkPoint: String?) -> Void) {
+        if localMode {
+            let mock = RequestMocker.getFakeResponse(forRequestPath: pathGetFeeds)
+            completion(mock[0] as! String, mock[1] as! [WCFeed], mock[2] as? String)
+            return
+        }
         do {
             var params = ["limit" : String(limit)]
             if let checkPoint = checkPoint {

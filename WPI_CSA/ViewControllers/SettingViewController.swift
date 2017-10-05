@@ -174,15 +174,11 @@ class SettingViewController: UIViewController {
         switch textField.tag {
         case 1:
             oldPass = textField.text!
-            break
         case 2:
             newPass = textField.text!
-            break
         case 3:
             confirmNewPass = textField.text!
-            break
-        default:
-            break
+        default: break
         }
         var error = ""
         if oldPass == "" {
@@ -309,17 +305,13 @@ extension SettingViewController : UITableViewDataSource {
             case 0:
                 cell.linkLabel.text = "Facebook"
                 cell.linkIcon.image = UIImage(named: "Facebook.png")
-                break
             case 1:
                 cell.linkLabel.text = "Instagram"
                 cell.linkIcon.image = UIImage(named: "Instagram.png")
-                break
             case 2:
                 cell.linkLabel.text = "YouTube"
                 cell.linkIcon.image = UIImage(named: "YouTube.png")
-                break
-            default:
-                break
+            default: break
             }
             return cell
         }else if indexPath.section == 2 {
@@ -356,7 +348,6 @@ extension SettingViewController : UITableViewDelegate {
                 } else {
                     UIApplication.shared.openURL(URL(string: "https://www.facebook.com/wpi.csa")!)
                 }
-                break
             case 1:
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: "https://www.instagram.com/wpicsa")!,
@@ -364,7 +355,6 @@ extension SettingViewController : UITableViewDelegate {
                 } else {
                     UIApplication.shared.openURL(URL(string: "https://www.instagram.com/wpicsa")!)
                 }
-                break
             case 2:
                 if #available(iOS 10.0, *) {
                     UIApplication.shared.open(URL(string: "https://www.youtube.com/user/CSAWPI")!,
@@ -372,9 +362,7 @@ extension SettingViewController : UITableViewDelegate {
                 } else {
                     UIApplication.shared.openURL(URL(string: "https://www.youtube.com/user/CSAWPI")!)
                 }
-                break
-            default:
-                break
+            default: break
             }
         } else if indexPath.section == 2 {
             if indexPath.row == 0 {

@@ -140,7 +140,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
                 return
             }
             
-            if Int(classOf) == nil || classOf.characters.count != 4 {
+            if Int(classOf) == nil || classOf.count != 4 {
                 Utils.show(alertMessage: "Graduation year must be a four digits number", onViewController: self)
                 return
             }

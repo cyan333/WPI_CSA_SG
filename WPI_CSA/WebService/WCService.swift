@@ -15,6 +15,12 @@ open class WCService {
     
     open class func checkSoftwareVersion(version: String, completion: @escaping (_ status: String, _ title: String,
         _ msg: String, _ updates: String, _ version: String) -> Void){
+        if localMode {
+            let mock = RequestMocker.getFakeResponse(forRequestPath: pathGetVersionInfo)
+            completion(mock[0] as! String, mock[1] as! String, mock[2] as! String,
+                       mock[3] as! String, mock[4] as! String)
+            return
+        }
         do {
             let params = ["version" : version]
             let opt = try HTTP.GET(serviceBase + pathGetVersionInfo, parameters: params)

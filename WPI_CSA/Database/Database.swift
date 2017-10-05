@@ -154,9 +154,7 @@ class Database {
             switch type {
             case .Image, .PDF:
                 query += "WHERE TYPE = '\(type.rawValue)' AND MAPPING_ID = \(id)"
-                break
-            default:
-                break
+            default: break
             }
             
             var queryStatement: OpaquePointer? = nil

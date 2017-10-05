@@ -74,14 +74,14 @@ class RegisterViewController: UIViewController {
         }
         
         if let classOf = classOf {
-            if Int(classOf) == nil || classOf.characters.count != 4 {
+            if Int(classOf) == nil || classOf.count != 4 {
                 Utils.show(alertMessage: "Graduation year must be a four digits number", onViewController: self)
                 return
             }
         }
         
         if let major = major{
-            if major.characters.count > 10 {
+            if major.count > 10 {
                 Utils.show(alertMessage: "Please use abbreviation for major, like CS, ECE, etc", onViewController: self)
                 return
             }
@@ -178,24 +178,17 @@ class RegisterViewController: UIViewController {
         switch textField.tag {
         case 0:
             username = textField.text
-            break
         case 1:
             name = textField.text
-            break
         case 2:
             password = textField.text
-            break
         case 3:
             confirm = textField.text
-            break
         case 5:
             classOf = textField.text
-            break
         case 6:
             major = textField.text
-            break
-        default:
-            break
+        default: break
         }
     }
     

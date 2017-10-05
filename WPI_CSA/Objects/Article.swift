@@ -32,7 +32,7 @@ class Article{
         
         let regex = try! NSRegularExpression(pattern:
             "(<img.*?\\/>)|(<imgtxt.*?<\\/imgtxt>)|(<txtimg.*?<\\/txtimg>)|(<tab.*?<\\/tab>)|(<div.*?<\\/div>)")
-        let matchs = regex.matches(in: content, range: NSRange(location: 0, length: content.characters.count))
+        let matchs = regex.matches(in: content, range: NSRange(location: 0, length: content.count))
             .map{(content as NSString).substring(with: $0.range)}
         let count = matchs.count
         
@@ -40,7 +40,7 @@ class Article{
             let parts = content.components(separatedBy: matchs[i])
             let first = parts[0]
             var paraType = ParagraphType.Plain
-            if first.characters.count > 0 {
+            if first.count > 0 {
                 paraType = getParagraphType(string: first)
                 paragraphs.append(Paragraph(content: first.htmlAttributedString(ratio: .Enlarged), type: paraType))
             }
@@ -49,7 +49,6 @@ class Article{
             switch paraType {
             case .Image:
                 paragraphs.append(Paragraph(content: "".htmlAttributedString(ratio: .Enlarged), type: .Image, properties: matchs[i].getHtmlAttributes()))
-                break
             case .ImageText, .TextImage:
                 let imgStr = String(matchs[i][..<matchs[i].index(matchs[i].endIndex, offsetBy: -9)])
                 let separator = imgStr.range(of: ">")
@@ -57,7 +56,6 @@ class Article{
                     .htmlAttributedString(ratio: .Enlarged),
                                             type: paraType,
                                             properties: String(imgStr[..<separator!.lowerBound]).getHtmlAttributes()))
-                break
             case .Table:
                 let listItems = matchs[i].replacingOccurrences(of: "<tab>", with: "")
                     .replacingOccurrences(of: "</tab>", with: "")
@@ -71,7 +69,6 @@ class Article{
                     }
                     paragraphs[paragraphs.count - 1].separatorType = .Full
                 }
-                break
             case .Div:
                 let divStr = String(matchs[i][..<matchs[i].index(matchs[i].endIndex, offsetBy: -6)])
                 let separator = divStr.range(of: ">")
@@ -84,9 +81,7 @@ class Article{
                     themeColor = UIColor(hexString: bgColor)
                     themeImage = UIImage(color: themeColor!)!
                 }
-                break
-            default:
-                break
+            default: break
             }
             
             content = parts[1]
