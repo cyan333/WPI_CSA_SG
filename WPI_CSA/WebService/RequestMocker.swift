@@ -24,12 +24,11 @@ open class RequestMocker {
             
             let feed2 = WCFeed(id: 3, title: "Title 3", type: "Event",
                                body: "Moment test 3 with very long description like this hahahahahaha hahahahahahahhaha hahahahhaha wa haha very long line1line2\\nline3line4\\nline5",
-                               createdAt: "2017-01-09T05:00:00Z".dateFromISO8601!)
+                               createdAt: "2017-01-09T17:34:12.215Z".dateFromISO8601!)
             feed2.ownerId = 4
             feed2.ownerName = "Amy"
             feed2.avatarId = 13
             feed2.coverImgId = 35
-            
             return ["", [feed1, feed2], ""]
         default:
             return []

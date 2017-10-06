@@ -110,12 +110,12 @@ open class CacheManager {
         
         let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                         .userDomainMask, true)[0] as NSString
-        print(documentDirectoryPath)
+        //print(documentDirectoryPath)
         if Database.getCache(type: .Image, mappingId: id) != nil {
             let image = UIImage(contentsOfFile: documentDirectoryPath
                 .appendingPathComponent("imageCache/\(id).jpg"))
             if let image = image {
-                print("image from local")
+                //print("image from local")
                 Database.imageHit(id: id)
                 //Database.getImgHit(id: id)
                 completion("", image)
@@ -125,7 +125,7 @@ open class CacheManager {
             }
         }
         
-        print("img from server")
+        //print("img from server")
         do {
             let params = ["id" : id]
             let opt = try HTTP.GET(serviceBase + "get_image", parameters: params)

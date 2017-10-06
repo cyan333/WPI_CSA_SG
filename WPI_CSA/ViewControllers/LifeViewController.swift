@@ -121,14 +121,14 @@ class LifeViewController: UIViewController {
             }
             
             DispatchQueue.main.async {
+                if feedList.count < self.feedLoadLimit{
+                    self.stopLoadingFlag = true
+                }
                 self.reloadingFlag = false
                 self.tableView.reloadData()
                 if error == serverDown {
                     self.loadingView.addSubview(self.serverDownView)
                 } else {
-                    if feedList.count < self.feedLoadLimit{
-                        self.stopLoadingFlag = true
-                    }
                     self.loadingView.removeFromSuperview()
                 }
             }
