@@ -81,6 +81,7 @@
 		910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD11E80C1130005CC1D /* MenuHelper.swift */; };
 		910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD31E80C1130005CC1D /* MenuViewController.swift */; };
 		910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */; };
+		AA210ADF1F89EEB100B28BC4 /* WCEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA210ADE1F89EEB100B28BC4 /* WCEvent.swift */; };
 		AA3CBF351F86A284007BEEBC /* RequestMocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CBF341F86A284007BEEBC /* RequestMocker.swift */; };
 /* End PBXBuildFile section */
 
@@ -164,6 +165,7 @@
 		910CFDD11E80C1130005CC1D /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuHelper.swift; path = Helpers/MenuHelper.swift; sourceTree = "<group>"; };
 		910CFDD31E80C1130005CC1D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuViewController.swift; path = ViewControllers/MenuViewController.swift; sourceTree = "<group>"; };
 		910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PresentMenuAnimator.swift; path = Helpers/PresentMenuAnimator.swift; sourceTree = "<group>"; };
+		AA210ADE1F89EEB100B28BC4 /* WCEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WCEvent.swift; path = WebService/WCEvent.swift; sourceTree = "<group>"; };
 		AA3CBF341F86A284007BEEBC /* RequestMocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestMocker.swift; path = WebService/RequestMocker.swift; sourceTree = "<group>"; };
 		AA5E0F061F8494C2000ED356 /* libBraintree.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintree.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5E0F081F8494CF000ED356 /* libBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintreeDropIn.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -196,6 +198,7 @@
 			children = (
 				871E35C31EBA5D6300EA483E /* HTTPHelper */,
 				874F3D3C1EF9AAE500B47492 /* WCArticle.swift */,
+				AA210ADE1F89EEB100B28BC4 /* WCEvent.swift */,
 				87D097631F70CC5A00D78BF8 /* WCFeed.swift */,
 				87D097511F4A68B800D78BF8 /* WCImage.swift */,
 				8732FE021EBC1F6800B1CDB1 /* WCService.swift */,
@@ -547,6 +550,7 @@
 				87D097601F5A3C9300D78BF8 /* Cache.swift in Sources */,
 				87D097581F53443400D78BF8 /* LifeViewController.swift in Sources */,
 				87D097521F4A68B800D78BF8 /* WCImage.swift in Sources */,
+				AA210ADF1F89EEB100B28BC4 /* WCEvent.swift in Sources */,
 				871E35C71EBA67CB00EA483E /* Upload.swift in Sources */,
 				874F3D3B1EF6F4B100B47492 /* PreviewViewController.swift in Sources */,
 				87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */,

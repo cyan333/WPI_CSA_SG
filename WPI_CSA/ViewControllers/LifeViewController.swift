@@ -272,7 +272,6 @@ class LifeViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? FeedViewController {
             if let row = sender as? Int {
-                print(1)
                 destinationViewController.feed = feedList[row]
             }
         }

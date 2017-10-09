@@ -28,13 +28,14 @@ class FeedViewController: UIViewController {
     
     var feed: WCFeed!
     var article: Article!
+    var event: WCEvent?
     var titleHeight: CGFloat = 80
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()//test
-        article = Article(content: feed.body + "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>")
+        article = Article(content: feed.body)// + "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>")
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
@@ -44,6 +45,19 @@ class FeedViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
+        if feed.type == "Event"{
+            WCEventManager.getEvent(withMappingId: feed.id, completion: { (error, event) in
+                if error == "" {
+                    self.event = event
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                } else {
+                    print(error)//TODO: Do something here
+                }
+            })
+        }
+        
     }
 }
 

@@ -318,8 +318,14 @@ extension String {
         return dic
     }
     
-    var dateFromISO8601: Date? {
-        return Formatter.iso8601.date(from: self)
+    var dateFromISO8601: Date {
+        if let date = Formatter.iso8601.date(from: self){
+            return date
+        } else if let date = Formatter.iso8601Partial.date(from: self){
+            return date
+        } else {
+            return Formatter.iso8601Partial.date(from: "1900-01-01T00:00:00Z")!
+        }
     }
 }
 
@@ -416,14 +422,23 @@ extension Formatter {
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
         return formatter
+        
+    }()
+    
+    static let iso8601Partial: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)// This is a must for partial date parsing
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        return formatter
     }()
     
     static let normal: DateFormatter = {
         let formatter = DateFormatter()
-        //formatter.calendar = Calendar(identifier: .iso8601)
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        //formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter
     }()
 }
