@@ -29,6 +29,11 @@ open class WCEvent {
 
 open class WCEventManager {
     open class func getEvent(withMappingId id: Int, completion: @escaping (_ error: String, _ event: WCEvent?) -> Void) {
+        if localMode{
+            let mock = RequestMocker.getFakeResponse(forRequestPath: pathGetEvent)
+            completion(mock[0] as! String, mock[1] as? WCEvent)
+            return
+        }
         do {
             let params = ["mappingId" : id]
             let opt = try HTTP.GET(serviceBase + pathGetEvent, parameters: params)

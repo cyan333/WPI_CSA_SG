@@ -30,6 +30,9 @@ open class RequestMocker {
             feed2.avatarId = 13
             feed2.coverImgId = 35
             return ["", [feed1, feed2], ""]
+        case pathGetEvent:
+            let event = WCEvent(id: 1, title: "Dragon night 2018", startTime: Date(), endTime: Date(), location: "fuller")
+            return ["", event]
         default:
             return []
         }

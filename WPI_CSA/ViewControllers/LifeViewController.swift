@@ -57,8 +57,16 @@ class LifeViewController: UIViewController {
         
         //CacheManager.localDirInitiateSetup()
         
+        /*TESTING AREA STARTS*/
+        let edt = "2006-05-01T10:41:00.485Z" // GMT-4
+        let edtTime = edt.dateFromISO8601
+        print(edtTime.)
         
+        let est = "2016-12-14T10:34:12.215Z" // GMT-5
+        let estTime = est.dateFromISO8601
+        print(estTime)
         
+        /*TESTING AREA ENDS*/
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)

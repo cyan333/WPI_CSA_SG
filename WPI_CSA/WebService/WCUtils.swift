@@ -12,7 +12,7 @@ import Foundation
 let serviceBase = "http://wc.fmning.com/" //********************TEST
 
 //If enabled, most of the HTTP request will return faked local value, instead of making network calls
-let localMode = false
+let localMode = true
 
 /*
    Web request URL standard:
