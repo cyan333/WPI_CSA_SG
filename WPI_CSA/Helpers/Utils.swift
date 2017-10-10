@@ -446,7 +446,7 @@ extension Formatter {
 
 extension Date {
     var iso8601: String {
-        return Formatter.iso8601.string(from: self)
+        return Formatter.iso8601Partial.string(from: self)
     }
     
     var toString: String {
