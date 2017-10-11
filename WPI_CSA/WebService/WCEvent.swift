@@ -48,13 +48,13 @@ open class WCEventManager {
                 }else{
                     let id = dict!["id"]! as! Int
                     let title = dict!["title"]! as! String
-                    let startTime = (dict!["startTime"]! as! String).dateFromISO8601
-                    let endTime = (dict!["endTime"]! as! String).dateFromISO8601
+                    let startTime = (dict!["startTime"]! as! String).Iso8601DateUTC
+                    let endTime = (dict!["endTime"]! as! String).Iso8601DateUTC
                     let location = dict!["location"]! as! String
                     
                     let event = WCEvent(id: id, title: title, startTime: startTime, endTime: endTime, location: location)
                     event.ownerId = dict!["ownerId"]! as? Int
-                    event.createdAt = (dict!["createdAt"]! as! String).dateFromISO8601
+                    event.createdAt = (dict!["createdAt"]! as! String).Iso8601DateUTC
                     
                     completion("", event)
                 }

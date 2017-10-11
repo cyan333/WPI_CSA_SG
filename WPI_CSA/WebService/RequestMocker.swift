@@ -16,7 +16,7 @@ open class RequestMocker {
         case pathGetFeeds:
             let feed1 = WCFeed(id: 9, title: "Title 9", type: "Event",
                                body: "Create red by user 11 i.e. Myself",
-                               createdAt: "2017-02-21T02:12:21.534Z".dateFromISO8601)
+                               createdAt: "2017-02-21T02:12:21.534Z".Iso8601DateUTC)
             feed1.ownerId = 11
             feed1.ownerName = "Fangming Ning"
             feed1.avatarId = 41
@@ -24,7 +24,7 @@ open class RequestMocker {
             
             let feed2 = WCFeed(id: 3, title: "Title 3", type: "Event",
                                body: "Moment test 3 with very long description like this hahahahahaha hahahahahahahhaha hahahahhaha wa haha very long line1line2\\nline3line4\\nline5",
-                               createdAt: "2017-01-09T17:34:12.215Z".dateFromISO8601)
+                               createdAt: "2017-01-09T17:34:12.215Z".Iso8601DateUTC)
             feed2.ownerId = 4
             feed2.ownerName = "Amy"
             feed2.avatarId = 13

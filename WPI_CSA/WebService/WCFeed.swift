@@ -81,7 +81,7 @@ open class WCFeedManager {
                                         if let feedBody = feed["feedBody"] as? String {
                                             wcFeed.body = feedBody
                                         }
-                                        if let createdAt = (feed["createdAt"] as? String)?.dateFromISO8601 {
+                                        if let createdAt = (feed["createdAt"] as? String)?.Iso8601DateUTC {
                                             wcFeed.createdAt = createdAt
                                         }
                                         if let ownerId = feed["ownerId"] as? Int {

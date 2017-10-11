@@ -57,37 +57,12 @@ class LifeViewController: UIViewController {
         
         //CacheManager.localDirInitiateSetup()
         
-        /*TESTING AREA STARTS*/
+        /*============================== TESTING AREA STARTS ==============================*/
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        dateFormatter.timeZone = TimeZone.current
         
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        df.timeZone = TimeZone(abbreviation: "UTC")
         
-        let edt = "2006-05-01T10:41:00.485Z" // GMT-4
-        let edtTime = edt.dateFromISO8601
-        print("UTC time \(edtTime)")
-        let edtStr = dateFormatter.string(from: edtTime)
-        print("EDT time " + edtStr)
-        let edtAgain = df.date(from: edtStr)!
-        print(edtAgain)
+        /*============================== TESTING AREA ENDS ==============================*/
         
-        let est = "2016-12-14T10:34:12.215Z" // GMT-5
-        let estTime = est.dateFromISO8601
-        print("UTC time \(estTime)")
-        let estStr = dateFormatter.string(from: estTime)
-        print("EST time " + estStr)
-        let estAgain = df.date(from: estStr)!
-        print(estAgain)
-        
-        let a = Date()
-        print()
-        print(a.iso8601)
-        
-        /*TESTING AREA ENDS*/
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)

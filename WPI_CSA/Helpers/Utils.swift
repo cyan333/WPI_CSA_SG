@@ -302,6 +302,7 @@ extension String {
         return self.trimmingCharacters(in: .whitespaces)
     }
     
+    
     func getHtmlAttributes() -> [String: Any] {
         var dic = [String: Any]()
         let regex = try! NSRegularExpression(pattern: "[^ ]*[ ]*=[ ]*\".*?\"")
@@ -318,13 +319,14 @@ extension String {
         return dic
     }
     
-    var dateFromISO8601: Date {
-        if let date = Formatter.iso8601.date(from: self){
+    
+    var Iso8601DateUTC: Date {
+        if let date = Formatter.iso8601FullUTC.date(from: self){
             return date
-        } else if let date = Formatter.iso8601Partial.date(from: self){
+        } else if let date = Formatter.iso8601AbbrUTC.date(from: self){
             return date
         } else {
-            return Formatter.iso8601Partial.date(from: "1900-01-01T00:00:00Z")!
+            return Formatter.iso8601AbbrUTC.date(from: "1970-01-01T00:00:00Z")!
         }
     }
 }
@@ -415,41 +417,69 @@ public extension UIImage {
 }
 
 extension Formatter {
-    static let iso8601: DateFormatter = {
+    /**
+     UTC Time formatter that converts iso-8601 with millisecond.
+     Mainly used to convert full iso-8601 time string from server to swift date in UTC timezone
+     Examples:
+     "2017-01-09T17:34:12.215Z".Iso8601DateUTC returns UTC Date 2017-01-09 17:34:12
+     Formatter.iso8601FullUTC.string(from: AboveDate) returns 2017-01-09T12:34:12.215-05:00
+     */
+    static let iso8601FullUTC: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .iso8601)
-        //formatter.locale = Locale(identifier: "en_US_POSIX")
-        //formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(abbreviation: "GMT")
         formatter.timeZone = TimeZone(identifier: "America/New_York")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
         return formatter
         
     }()
     
-    static let iso8601Partial: DateFormatter = {
+    /**
+     UTC Time formatter that converts iso-8601 without millisecond.
+     Mainly used to convert abbreviated iso-8601 time string from server to swift date in UTC timezone
+     Examples:
+     "2017-01-09T17:34:12.215Z".Iso8601DateUTC returns UTC Date 2017-01-09 17:34:12
+     Formatter.iso8601AbbrUTC.string(from: AboveDate) returns 2017-01-09T17:34:12Z
+     */
+    static let iso8601AbbrUTC: DateFormatter = {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .iso8601)
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)// This is a must for partial date parsing
+        formatter.timeZone = TimeZone(abbreviation: "GMT")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         return formatter
     }()
     
-    static let normal: DateFormatter = {
+    /**
+     Formatter with local time zone that converts simplified date
+     Mainly used to convert UTC Date object to local time string and display on UI, vice versa
+     This local time zone will handle all timezone changes.
+     Examples:
+     
+     EDT: Adding offsets for GMT-4 between Mar to Nov
+     Formatter.abbrLocalZone.date(from: "2006/05/01 10:41:00") returns 2006-05-01 14:41:00 UTC
+     Formatter.abbrLocalZone.string(from: AboveDate) returns 2006/05/01 10:41:00
+     
+     EST: Adding offsets for GMT-G between Nov to Mar
+     Formatter.abbrLocalZone.date(from: "2006/12/01 10:41:00") returns 2006-12-01 15:41:00 UTC
+     Formatter.abbrLocalZone.string(from: AboveDate) returns 2006/05/01 10:41:00
+     */
+    static let abbrLocalZone: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.timeZone = TimeZone.current
         return formatter
     }()
 }
 
 extension Date {
     var iso8601: String {
-        return Formatter.iso8601Partial.string(from: self)
+        return Formatter.iso8601AbbrUTC.string(from: self)
     }
     
     var toString: String {
-        return Formatter.normal.string(from: self)
+        return Formatter.abbrLocalZone.string(from: self)
     }
 }
