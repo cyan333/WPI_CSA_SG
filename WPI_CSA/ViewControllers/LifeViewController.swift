@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import EventKit
 import BraintreeDropIn
 import Braintree
 
@@ -246,32 +245,7 @@ class LifeViewController: UIViewController {
         }*/
     }
     
-    func addEventToCalendar(title: String, description: String?, startDate: Date, endDate: Date, completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
-        let eventStore = EKEventStore()
-        print(55)
-        eventStore.requestAccess(to: .event, completion: { (granted, error) in
-            if (granted) && (error == nil) {
-                print(1)
-                let event = EKEvent(eventStore: eventStore)
-                event.title = title
-                event.startDate = startDate
-                event.endDate = endDate
-                event.notes = description
-                event.calendar = eventStore.defaultCalendarForNewEvents
-                do {
-                    print(2)
-                    try eventStore.save(event, span: .thisEvent)
-                    print(3)
-                } catch let e  {
-                    completion?(false, e)
-                    return
-                }
-                completion?(true, nil)
-            } else {
-                completion?(false, error )
-            }
-        })
-    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destinationViewController = segue.destination as? FeedViewController {

@@ -40,6 +40,7 @@ let pathGetEvent = "get_event"
 let serverDown = "Server down"
 let respondFormatError = "Incorrect respond format"
 let noMoreFeedsError = "There are no more feeds."
+let noEventError = "The event you are looking for does not exist."
 
 open class WCUtils{
     open class func convertToDictionary(data: Data) -> [String: Any]? {

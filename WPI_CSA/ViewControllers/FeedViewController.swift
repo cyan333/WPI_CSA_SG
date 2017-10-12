@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import EventKit
 
 class FeedTitleCell: UITableViewCell {
     @IBOutlet weak var title: UITextView!
@@ -21,7 +22,13 @@ class FeedTextCell: UITableViewCell {
 
 class FeedImageCell: UITableViewCell {
     @IBOutlet weak var imgView: UIImageView!
-    
+}
+
+class FeedEventCell: UITableViewCell {
+    @IBOutlet weak var title: UITextView!
+    @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var location: UILabel!
+    @IBOutlet weak var button: UIButton!
 }
 
 class FeedViewController: UIViewController {
@@ -53,20 +60,80 @@ class FeedViewController: UIViewController {
                         self.tableView.reloadData()
                     }
                 } else {
-                    print(error)//TODO: Do something here
+                    if error != noEventError {
+                        print(error)//TODO: Do something here
+                    }
                 }
             })
         }
         
     }
+    
+    func addEventToCalendar(title: String, description: String?, startDate: Date, endDate: Date, completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
+        let eventStore = EKEventStore()
+        print(55)
+        eventStore.requestAccess(to: .event, completion: { (granted, error) in
+            if (granted) && (error == nil) {
+                print(1)
+                let event = EKEvent(eventStore: eventStore)
+                event.title = title
+                event.startDate = startDate
+                event.endDate = endDate
+                event.notes = description
+                event.calendar = eventStore.defaultCalendarForNewEvents
+                do {
+                    print(2)
+                    try eventStore.save(event, span: .thisEvent)
+                    print(3)
+                } catch let e  {
+                    completion?(false, e)
+                    return
+                }
+                completion?(true, nil)
+            } else {
+                completion?(false, error )
+            }
+        })
+    }
+    
+    @objc func addToCalendar() {
+        if let event = event {
+            let eventStore = EKEventStore()
+            
+            // Use an event store instance to create and properly configure an NSPredicate
+            let eventsPredicate = eventStore.predicateForEvents(withStart: event.startTime, end: event.endTime,
+                                                                calendars: [eventStore.defaultCalendarForNewEvents!])
+            
+            let a = eventStore.events(matching: eventsPredicate)
+            
+            
+            for e in a {
+                print(e.title)
+            }
+            
+            addEventToCalendar(title: "CSA event", description: "Come here on thursday",
+                               startDate: event.startTime, endDate: event.endTime) { (status, error) in
+                                if status {
+                                    print("ok")
+                                }else{
+                                    print(error?.localizedDescription ?? "nil")
+                                }
+            }
+        } else {
+            Utils.show(alertMessage: "Internal error. Please contact admin@fmning.com", onViewController: self)//TODO: Put his msg in common place
+        }
+    }
+    
 }
 
 extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
         if indexPath.section == 0 {
             return titleHeight + 60
-        } else {
+        } else if indexPath.section == 1 {
             return article.paragraphs[indexPath.row].cellHeight
+        } else {
+            return 160
         }
     }
     
@@ -80,14 +147,20 @@ extension FeedViewController: UITableViewDelegate {
 
 extension FeedViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        var count = 2
+        if event != nil {
+            count += 1
+        }
+        return count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
-        } else {
+        } else if section == 1 {
             return article.paragraphs.count
+        } else {
+            return 1
         }
     }
     
@@ -113,7 +186,7 @@ extension FeedViewController: UITableViewDataSource {
             }
             
             return cell
-        } else {
+        } else if indexPath.section == 1 {
             let paragraph = article.paragraphs[indexPath.row]
             switch paragraph.type {
             case .Plain :
@@ -179,6 +252,18 @@ extension FeedViewController: UITableViewDataSource {
             
             //feedTextCellHeight
             
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FeedEventCell") as! FeedEventCell
+            
+            if let event = event {
+                cell.title.text = event.title
+                cell.date.text = event.startTime.toString + " to " + event.endTime.toString
+                cell.location.text = "Location: " + event.location
+                cell.button.addTarget(self, action: #selector(addToCalendar), for: .touchUpInside)
+            }
+            
+            cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
+            return cell
         }
         
     }
