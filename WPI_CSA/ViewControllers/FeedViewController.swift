@@ -69,56 +69,54 @@ class FeedViewController: UIViewController {
         
     }
     
-    func addEventToCalendar(title: String, description: String?, startDate: Date, endDate: Date, completion: ((_ success: Bool, _ error: Error?) -> Void)? = nil) {
-        let eventStore = EKEventStore()
-        print(55)
-        eventStore.requestAccess(to: .event, completion: { (granted, error) in
-            if (granted) && (error == nil) {
-                print(1)
-                let event = EKEvent(eventStore: eventStore)
-                event.title = title
-                event.startDate = startDate
-                event.endDate = endDate
-                event.notes = description
-                event.calendar = eventStore.defaultCalendarForNewEvents
-                do {
-                    print(2)
-                    try eventStore.save(event, span: .thisEvent)
-                    print(3)
-                } catch let e  {
-                    completion?(false, e)
-                    return
-                }
-                completion?(true, nil)
-            } else {
-                completion?(false, error )
-            }
-        })
-    }
     
     @objc func addToCalendar() {
         if let event = event {
             let eventStore = EKEventStore()
             
-            // Use an event store instance to create and properly configure an NSPredicate
-            let eventsPredicate = eventStore.predicateForEvents(withStart: event.startTime, end: event.endTime,
-                                                                calendars: [eventStore.defaultCalendarForNewEvents!])
+            eventStore.requestAccess(to: .event, completion: { (granted, error) in
+                if granted {
+                    //Deplicate check
+                    let eventsPredicate = eventStore.predicateForEvents(withStart: event.startTime, end: event.endTime,
+                                                                        calendars: [eventStore.defaultCalendarForNewEvents!])
+                    let matches = eventStore.events(matching: eventsPredicate)
+                    
+                    
+                    for e in matches {
+                        if e.title == event.title {
+                            var style = ToastStyle()
+                            style.messageAlignment = .center
+                            DispatchQueue.main.async {
+                                self.view.makeToast("Already added to calendar", duration: 2.0, position: .center, style: style)
+                            }
+                            return
+                        }
+                    }
+                    
+                    //Added to calendar
+                    let calendarEvent = EKEvent(eventStore: eventStore)
+                    calendarEvent.title = event.title
+                    calendarEvent.startDate = event.startTime
+                    calendarEvent.endDate = event.endTime
+                    calendarEvent.location = event.location
+                    calendarEvent.alarms = [EKAlarm(relativeOffset: -86400)] //24 hour before
+                    calendarEvent.calendar = eventStore.defaultCalendarForNewEvents
+                    do {
+                        try eventStore.save(calendarEvent, span: .thisEvent)
+                        var style = ToastStyle()
+                        style.messageAlignment = .center
+                        DispatchQueue.main.async {
+                            self.view.makeToast("Added to calendar successfully", duration: 2.0, position: .center, style: style)
+                        }
+                    } catch let e  {
+                        Utils.show(alertMessage: "Failed to save event. \(e.localizedDescription)", onViewController: self)
+                    }
+                } else {
+                    Utils.show(alertMessage: "We don't have access for your calendar. Please either reinstall the app or reset app privacy by Settings -> General -> Reset -> Reset Location & Privacy", onViewController: self)
+                }
+                
+            })
             
-            let a = eventStore.events(matching: eventsPredicate)
-            
-            
-            for e in a {
-                print(e.title)
-            }
-            
-            addEventToCalendar(title: "CSA event", description: "Come here on thursday",
-                               startDate: event.startTime, endDate: event.endTime) { (status, error) in
-                                if status {
-                                    print("ok")
-                                }else{
-                                    print(error?.localizedDescription ?? "nil")
-                                }
-            }
         } else {
             Utils.show(alertMessage: "Internal error. Please contact admin@fmning.com", onViewController: self)//TODO: Put his msg in common place
         }

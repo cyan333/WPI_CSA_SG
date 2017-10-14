@@ -33,7 +33,7 @@
 		</dict>
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
-	<string>$(PRODUCT_NAME) calendar events</string>
+	<string>Please click on OK for us to add events to your calendar</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Fk you for no camera access</string>
 	<key>NSPhotoLibraryUsageDescription</key>
