@@ -19,6 +19,8 @@ open class WCFeed {
     var coverImgId: Int?
     var avatarId: Int?
     
+    var event: WCEvent?
+    
     init(id: Int, title: String, type: String, body: String, createdAt: Date){
         self.id = id
         self.title = title
@@ -43,7 +45,7 @@ open class WCFeedManager {
                              completion: @escaping (_ error: String, _ feedList: [WCFeed],
                                                     _ checkPoint: String?) -> Void) {
         if localMode {
-            let mock = RequestMocker.getFakeResponse(forRequestPath: pathGetFeeds)
+            let mock = RequestMocker.getFakeResponse(forRequestPath: pathGetRecentFeeds)
             completion(mock[0] as! String, mock[1] as! [WCFeed], mock[2] as? String)
             return
         }
@@ -52,7 +54,7 @@ open class WCFeedManager {
             if let checkPoint = checkPoint {
                 params["checkPoint"] = checkPoint
             }
-            let opt = try HTTP.GET(serviceBase + pathGetFeeds, parameters: params)
+            let opt = try HTTP.GET(serviceBase + pathGetRecentFeeds, parameters: params)
             var feedList = [WCFeed]()
             opt.start{ response in
                 if response.error != nil {
@@ -114,5 +116,62 @@ open class WCFeedManager {
             completion(serverDown, [WCFeed](), nil)
         }
     }
+    
+    open class func getFeed(withId id: Int, completion: @escaping (_ error: String, _ feed: WCFeed?) -> Void) {
+        if localMode {
+            let mock = RequestMocker.getFakeResponse(forRequestPath: pathGetFeed)
+            completion(mock[0] as! String, mock[1] as? WCFeed)
+            return
+        }
+        do {
+            let params = ["id" : id]
+            let opt = try HTTP.GET(serviceBase + pathGetFeed, parameters: params)
+            opt.start{ response in
+                if response.error != nil {
+                    completion(serverDown, nil)
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if let dict = dict {
+                    if let error = dict["error"] as? String {
+                        if error != "" {
+                            completion(error, nil)
+                        } else {
+                            let id = dict["id"] as! Int
+                            let title = dict["title"] as! String
+                            let type = dict["feedType"] as! String
+                            let body = dict["feedBody"] as! String
+                            let createdAt = (dict["createdAt"] as! String).Iso8601DateUTC
+                            let feed = WCFeed(id: id, title: title, type: type, body: body, createdAt: createdAt)
+                            
+                            if let eventDic = dict["event"] as? [String : Any] {
+                                let id = eventDic["id"] as! Int
+                                let title = eventDic["title"] as! String
+                                let startTime = (eventDic["startTime"] as! String).Iso8601DateUTC
+                                let endTime = (eventDic["endTime"] as! String).Iso8601DateUTC
+                                let location = eventDic["location"] as! String
+                                
+                                let event = WCEvent(id: id, title: title, startTime: startTime,
+                                                    endTime: endTime, location: location)
+                                event.ownerId = eventDic["ownerId"] as? Int
+                                event.createdAt = (eventDic["createdAt"] as! String).Iso8601DateUTC
+                                event.description = eventDic["description"] as! String
+                                event.fee = eventDic["fee"] as! Int
+                                
+                                feed.event = event
+                            }
+                            completion("", feed)
+                        }
+                    }
+                } else {
+                    completion(respondFormatError, nil)
+                }
+            }
+        } catch let error {
+            print(error.localizedDescription)
+            completion(serverDown, nil)
+        }
+    }
+    
     
 }

@@ -33,8 +33,9 @@ let pathCreateReport = "create_sg_report"
 let pathCreateArticle = "create_sg_article"
 let pathGetImage = "get_image"
 let pathSaveTUImage = "save_type_unique_image"
-let pathGetFeeds = "get_recent_feeds"
+let pathGetRecentFeeds = "get_recent_feeds"
 let pathGetEvent = "get_event"
+let pathGetFeed = "get_feed"
 
 
 let serverDown = "Server down"

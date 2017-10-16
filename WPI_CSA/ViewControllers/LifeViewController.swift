@@ -225,7 +225,7 @@ class LifeViewController: UIViewController {
             } else if (result?.isCancelled == true) {
                 print("CANCELLED")
             } else if let result = result {
-                print(result.paymentMethod?.nonce)
+                print(result.paymentMethod?.nonce ?? "no nonce")
                 // Use the BTDropInResult properties to update your UI
                 // result.paymentOptionType
                 // result.paymentMethod

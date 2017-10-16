@@ -31,6 +31,10 @@ class FeedEventCell: UITableViewCell {
     @IBOutlet weak var button: UIButton!
 }
 
+class FeedButtonCell: UITableViewCell {
+    @IBOutlet weak var button: UIButton!
+}
+
 class FeedViewController: UIViewController {
     
     var feed: WCFeed!
@@ -96,6 +100,7 @@ class FeedViewController: UIViewController {
                     //Added to calendar
                     let calendarEvent = EKEvent(eventStore: eventStore)
                     calendarEvent.title = event.title
+                    calendarEvent.notes = event.description
                     calendarEvent.startDate = event.startTime
                     calendarEvent.endDate = event.endTime
                     calendarEvent.location = event.location
@@ -131,7 +136,11 @@ extension FeedViewController: UITableViewDelegate {
         } else if indexPath.section == 1 {
             return article.paragraphs[indexPath.row].cellHeight
         } else {
-            return 160
+            if indexPath.row == 0 {
+                return 160
+            } else {
+                return 44
+            }
         }
     }
     
@@ -158,7 +167,7 @@ extension FeedViewController: UITableViewDataSource {
         } else if section == 1 {
             return article.paragraphs.count
         } else {
-            return 1
+            return 2
         }
     }
     
@@ -251,17 +260,27 @@ extension FeedViewController: UITableViewDataSource {
             //feedTextCellHeight
             
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FeedEventCell") as! FeedEventCell
-            
-            if let event = event {
-                cell.title.text = event.title
-                cell.date.text = event.startTime.toString + " to " + event.endTime.toString
-                cell.location.text = "Location: " + event.location
-                cell.button.addTarget(self, action: #selector(addToCalendar), for: .touchUpInside)
+            if indexPath.row == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FeedEventCell") as! FeedEventCell
+                
+                if let event = event {
+                    cell.title.text = event.title
+                    cell.date.text = event.startTime.toString + " to " + event.endTime.toString
+                    cell.location.text = "Location: " + event.location
+                    cell.button.addTarget(self, action: #selector(addToCalendar), for: .touchUpInside)
+                }
+                
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "FeedButtonCell") as! FeedButtonCell
+                
+                cell.button.setTitle("Free. Add to wallet.", for: .normal)
+                
+                cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
+                return cell
             }
             
-            cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
-            return cell
         }
         
     }

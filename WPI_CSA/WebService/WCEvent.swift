@@ -11,9 +11,11 @@ import Foundation
 open class WCEvent {
     var id: Int
     var title: String
+    var description: String
     var startTime: Date
     var endTime: Date
     var location: String
+    var fee: Int
     var ownerId: Int?
     var createdAt: Date?
     
@@ -23,6 +25,8 @@ open class WCEvent {
         self.startTime = startTime
         self.endTime = endTime
         self.location = location
+        self.description = ""
+        self.fee = 0
     }
     
 }
@@ -55,6 +59,8 @@ open class WCEventManager {
                     let event = WCEvent(id: id, title: title, startTime: startTime, endTime: endTime, location: location)
                     event.ownerId = dict!["ownerId"]! as? Int
                     event.createdAt = (dict!["createdAt"]! as! String).Iso8601DateUTC
+                    event.description = dict!["description"]! as! String
+                    event.fee = dict!["fee"]! as! Int
                     
                     completion("", event)
                 }
