@@ -215,34 +215,27 @@ class LifeViewController: UIViewController {
     }
     
     @IBAction func click(_ sender: Any) {
+        let clientToken = "sandbox_5sx62kcq_wnbj3bx4nwmtyz77"
         
-        
-        /*let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        let start = formatter.date(from: "2017/08/27 18:00")
-        let end = formatter.date(from: "2017/08/27 22:00")
-        
-        let eventStore = EKEventStore()
-        
-        // Use an event store instance to create and properly configure an NSPredicate
-        let eventsPredicate = eventStore.predicateForEvents(withStart: start!, end: end!,
-                                                            calendars: [eventStore.defaultCalendarForNewEvents])
-        
-        let a = eventStore.events(matching: eventsPredicate)
-        
-        
-        for e in a {
-            print(e.title)
+        let request =  BTDropInRequest()
+        let dropIn = BTDropInController(authorization: clientToken, request: request)
+        { (controller, result, error) in
+            if (error != nil) {
+                print("ERROR")
+            } else if (result?.isCancelled == true) {
+                print("CANCELLED")
+            } else if let result = result {
+                print(result.paymentMethod?.nonce)
+                // Use the BTDropInResult properties to update your UI
+                // result.paymentOptionType
+                // result.paymentMethod
+                // result.paymentIcon
+                // result.paymentDescription
+            }
+            controller.dismiss(animated: true, completion: nil)
         }
+        self.present(dropIn!, animated: true, completion: nil)
         
-        addEventToCalendar(title: "CSA event", description: "Come here on thursday",
-                           startDate: start!, endDate: end!) { (status, error) in
-                            if status {
-                                print("ok")
-                            }else{
-                                print(error?.localizedDescription ?? "nil")
-                            }
-        }*/
     }
     
     
