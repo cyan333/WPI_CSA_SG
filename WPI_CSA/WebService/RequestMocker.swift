@@ -30,6 +30,26 @@ open class RequestMocker {
             feed2.avatarId = 13
             feed2.coverImgId = 35
             return ["", [feed1, feed2], ""]
+        case pathGetFeed:
+            let feed = WCFeed(id: 9, title: "Title 9", type: "Event",
+                               body: "Create red by user 11 i.e. Myself",
+                               createdAt: "2017-02-21T02:12:21.534Z".Iso8601DateUTC)
+            feed.ownerId = 11
+            feed.ownerName = "Fangming Ning"
+            feed.avatarId = 41
+            feed.coverImgId = 20
+            
+            let sTime = "2018-04-10T22:00:00Z".Iso8601DateUTC
+            let eTime = "2018-04-11T02:00:00Z".Iso8601DateUTC
+            let event = WCEvent(id: 1, title: "Dragon night 2018", startTime: sTime, endTime: eTime,
+                                location: "Aldem Hall")
+            event.ownerId = 11
+            event.createdAt = "2017-10-15T23:01:31.732580Z".Iso8601DateUTC
+            event.description = "This is dragon night event for 2018, hosted by CSA. There will be chinese shows and food."
+            event.fee = 0
+            
+            feed.event = event
+            return ["", feed]
         case pathGetEvent:
             let sTime = "2018-04-10T22:00:00Z".Iso8601DateUTC
             let eTime = "2018-04-11T02:00:00Z".Iso8601DateUTC

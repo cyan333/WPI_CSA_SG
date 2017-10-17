@@ -37,8 +37,8 @@ class LifeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var refreshControl: UIRefreshControl!
-    var loadingView: UIView!
-    var serverDownView: UIView!
+    var loadingView: LoadingView!
+    //var serverDownView: UIView!
     
     var feedList = [WCFeed]()
     var checkPoint: String?
@@ -72,45 +72,11 @@ class LifeViewController: UIViewController {
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: false)
         
         //Setting up loading view
-        let loadingViewHeight = screenHeight - 113 // 49 + 64
-        loadingView = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth,
-                                     height: loadingViewHeight))
-        loadingView.backgroundColor = .white
+        loadingView = LoadingView(frame: CGRect(x: 0, y: 64, width: screenWidth,
+                                     height: screenHeight - 113))// 49 + 64
         let clickListener = UITapGestureRecognizer(target: self, action: #selector(refresh(_:)))
         loadingView.addGestureRecognizer(clickListener)
-        
-        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: screenWidth/2 - 60, y: loadingViewHeight/2 - 15,
-                                                                     width: 30, height: 30))
-        loadingIndicator.activityIndicatorViewStyle = .gray
-        loadingIndicator.startAnimating()
-        loadingView.addSubview(loadingIndicator)
-        
-        
-        let loadingLabel = UILabel(frame: CGRect(x: screenWidth/2 - 30, y: loadingViewHeight/2 - 15,
-                                                 width: 80, height: 30))
-        loadingLabel.text = "Loading ..."
-        loadingLabel.textColor = .gray
-        loadingView.addSubview(loadingLabel)
-        
         self.view.addSubview(loadingView)
-        
-        serverDownView = UIView(frame: CGRect(x: screenWidth/2 - 150, y: loadingViewHeight/2 - 100,
-                                              width: 300, height: 200))
-        serverDownView.backgroundColor = .white
-        
-        let refreshImg = UIImageView(frame: CGRect(x: 90, y: 0, width: 120, height: 120))
-        refreshImg.image = #imageLiteral(resourceName: "Reload")
-        serverDownView.addSubview(refreshImg)
-        
-        //Setting up warning view
-        let warningView = UITextView(frame: CGRect(x: 0, y: 130, width: 300, height: 50))
-        warningView.text = "There is an network issue. Click anywhere to refresh the page.\nIf still doesn't work, please contact admin@fmning.com"
-        warningView.font = UIFont(name: (warningView.font?.fontName)!, size: 10)
-        warningView.textColor = .gray
-        warningView.textAlignment = .center
-        warningView.dataDetectorTypes = .all
-        warningView.isEditable = false
-        serverDownView.addSubview(warningView)
         
         //Requesting for feeds
         reloadingFlag = true
@@ -130,7 +96,7 @@ class LifeViewController: UIViewController {
                 self.reloadingFlag = false
                 self.tableView.reloadData()
                 if error == serverDown {
-                    self.loadingView.addSubview(self.serverDownView)
+                    self.loadingView.showServerDownView()
                 } else {
                     self.loadingView.removeFromSuperview()
                 }
@@ -141,6 +107,7 @@ class LifeViewController: UIViewController {
     }
     
     @objc func refresh(_ sender: Any) {
+        print(1)
         if reloadingFlag {
             return
         } else {
@@ -149,7 +116,7 @@ class LifeViewController: UIViewController {
         }
         
         if serverDownFlag && sender is UITapGestureRecognizer {// Tap on screen when it shows server down
-            serverDownView.removeFromSuperview()
+            loadingView.removeServerDownView()
         }
         checkPoint = nil
         WCFeedManager.getRecentFeeds(withLimit: feedLoadLimit, andCheckPoint: checkPoint) {
@@ -163,7 +130,7 @@ class LifeViewController: UIViewController {
             DispatchQueue.main.async {
                 if error == serverDown {
                     self.serverDownFlag = true
-                    self.loadingView.addSubview(self.serverDownView)
+                    self.loadingView.showServerDownView()
                     self.view.addSubview(self.loadingView)
                 } else {
                     if feedList.count < self.feedLoadLimit {
@@ -199,7 +166,7 @@ class LifeViewController: UIViewController {
             DispatchQueue.main.async {
                 if error == serverDown {
                     self.serverDownFlag = true
-                    self.loadingView.addSubview(self.serverDownView)
+                    self.loadingView.showServerDownView()
                     self.view.addSubview(self.loadingView)
                 } else {
                     if feedList.count < self.feedLoadLimit {
