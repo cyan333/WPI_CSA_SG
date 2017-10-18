@@ -36,6 +36,7 @@ let pathSaveTUImage = "save_type_unique_image"
 let pathGetRecentFeeds = "get_recent_feeds"
 let pathGetEvent = "get_event"
 let pathGetFeed = "get_feed"
+let pathGetPass = "get_pass"
 
 
 let serverDown = "Server down"

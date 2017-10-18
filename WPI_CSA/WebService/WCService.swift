@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import PassKit
 
 
 open class WCService {
@@ -81,6 +81,26 @@ open class WCService {
         } catch let err{
             print(err)
             completion(serverDown)
+        }
+    }
+    
+    open class func getPass(withId id: Int, completion: @escaping (_ error: String, _ pass: PKPass?) -> Void) {
+        do {
+            let params = ["mappingId" : id]
+            let opt = try HTTP.GET(serviceBase + pathGetPass, parameters: params)
+            opt.start{ response in
+                if response.error != nil {
+                    completion(serverDown, nil)
+                    return
+                }
+                var error: NSError?
+                let pass = PKPass(data: response.data, error: &error)
+                print(error?.localizedDescription ?? "no error")
+                completion("", pass)
+            }
+        } catch let error {
+            print(error.localizedDescription)
+            completion(serverDown, nil)
         }
     }
     

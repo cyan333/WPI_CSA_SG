@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PassKit
 import BraintreeDropIn
 import Braintree
 
@@ -33,7 +34,7 @@ class FeedLoadingCell: UITableViewCell {
     @IBOutlet weak var coverLabel: UILabel!
 }
 
-class LifeViewController: UIViewController {
+class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
     @IBOutlet weak var tableView: UITableView!
     
     var refreshControl: UIRefreshControl!
@@ -181,7 +182,7 @@ class LifeViewController: UIViewController {
         
     }
     
-    @IBAction func click(_ sender: Any) {
+    @IBAction func click(_ sender: Any) {/*
         let clientToken = "sandbox_5sx62kcq_wnbj3bx4nwmtyz77"
         
         let request =  BTDropInRequest()
@@ -201,7 +202,17 @@ class LifeViewController: UIViewController {
             }
             controller.dismiss(animated: true, completion: nil)
         }
-        self.present(dropIn!, animated: true, completion: nil)
+        self.present(dropIn!, animated: true, completion: nil)*/
+        
+        WCService.getPass(withId: 1) { (error, pass) in
+            let pkvc = PKAddPassesViewController(pass: pass!)
+            pkvc.delegate = self
+            self.present(pkvc, animated: true, completion: {() -> Void in
+                // Do any cleanup here
+                //self.hideLoading()
+                
+            })
+        }
         
     }
     
