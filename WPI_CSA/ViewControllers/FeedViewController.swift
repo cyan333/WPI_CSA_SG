@@ -40,39 +40,80 @@ class FeedViewController: UIViewController {
     var feed: WCFeed!
     var article: Article!
     var event: WCEvent?
+    
+    var reloadingFlag = true //Loading from the beginning
+    var loadingView: LoadingView!
     var titleHeight: CGFloat = 80
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
-        super.viewDidLoad()//test
-        article = Article(content: feed.body)// + "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>")
+        super.viewDidLoad()
+        article = Article(content: "")// + "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>")
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
-        DispatchQueue.global(qos: .background).async {
-            self.article.processContent()
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-        if feed.type == "Event"{
-            WCEventManager.getEvent(withMappingId: feed.id, completion: { (error, event) in
-                if error == "" {
+        //Setting up loading view
+        loadingView = LoadingView(frame: CGRect(x: 0, y: 64, width: screenWidth,
+                                                height: screenHeight - 113))// 49 + 64
+        let clickListener = UITapGestureRecognizer(target: self, action: #selector(refresh(_:)))
+        loadingView.addGestureRecognizer(clickListener)
+        self.view.addSubview(loadingView)
+        
+        WCFeedManager.getFeed(withId: feed.id) { (error, feed) in
+            if error == "" {
+                self.article = Article(content: feed!.body)
+                self.article.processContent()
+                if let event = feed?.event {
                     self.event = event
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                } else {
-                    if error != noEventError {
-                        print(error)//TODO: Do something here
-                    }
                 }
-            })
+            } else {
+                print(error) //TODO: Do something here
+            }
+            self.reloadingFlag = false
+            DispatchQueue.main.async {
+                if error == "" {
+                    self.loadingView.removeFromSuperview()
+                    self.tableView.reloadData()
+                } else if error == serverDown {
+                    self.loadingView.showServerDownView()
+                }
+            }
         }
         
     }
     
+    @objc func refresh(_ sender: Any) {
+        if reloadingFlag {
+            return
+        } else {
+            self.loadingView.removeServerDownView()
+            reloadingFlag = true
+        }
+        
+        WCFeedManager.getFeed(withId: feed.id) { (error, feed) in
+            if error == "" {
+                self.article = Article(content: feed!.body)
+                self.article.processContent()
+                if let event = feed?.event {
+                    self.event = event
+                }
+            } else {
+                print(error) //TODO: Do something here
+            }
+            
+            self.reloadingFlag = false
+            DispatchQueue.main.async {
+                if error == "" {
+                    self.loadingView.removeFromSuperview()
+                    self.tableView.reloadData()
+                } else if error == serverDown {
+                    self.loadingView.showServerDownView()
+                }
+            }
+        }
+        
+    }
     
     @objc func addToCalendar() {
         if let event = event {
@@ -125,6 +166,10 @@ class FeedViewController: UIViewController {
         } else {
             Utils.show(alertMessage: "Internal error. Please contact admin@fmning.com", onViewController: self)//TODO: Put his msg in common place
         }
+    }
+    
+    @objc func payAndGetTicket() {
+        print(1)
     }
     
 }
@@ -278,6 +323,7 @@ extension FeedViewController: UITableViewDataSource {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FeedButtonCell") as! FeedButtonCell
                 
                 cell.button.setTitle("Free. Add to wallet.", for: .normal)
+                cell.button.addTarget(self, action: #selector(payAndGetTicket), for: .touchUpInside)
                 
                 cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
                 return cell

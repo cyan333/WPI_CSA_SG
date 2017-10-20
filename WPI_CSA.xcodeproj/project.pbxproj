@@ -83,6 +83,7 @@
 		910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */; };
 		AA210ADF1F89EEB100B28BC4 /* WCEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA210ADE1F89EEB100B28BC4 /* WCEvent.swift */; };
 		AA3CBF351F86A284007BEEBC /* RequestMocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CBF341F86A284007BEEBC /* RequestMocker.swift */; };
+		AA88DB961F95A08400BFF6CB /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA88DB951F95A08400BFF6CB /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -169,6 +170,7 @@
 		AA3CBF341F86A284007BEEBC /* RequestMocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestMocker.swift; path = WebService/RequestMocker.swift; sourceTree = "<group>"; };
 		AA5E0F061F8494C2000ED356 /* libBraintree.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintree.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA5E0F081F8494CF000ED356 /* libBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintreeDropIn.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA88DB951F95A08400BFF6CB /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoadingView.swift; path = Helpers/LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +230,7 @@
 				87D0975B1F5721D000D78BF8 /* ColoredView.swift */,
 				910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */,
 				910CFDCF1E80C1130005CC1D /* Interactor.swift */,
+				AA88DB951F95A08400BFF6CB /* LoadingView.swift */,
 				910CFDD11E80C1130005CC1D /* MenuHelper.swift */,
 				910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */,
 				874F3D781EFAEBE600B47492 /* Toast.swift */,
@@ -561,6 +564,7 @@
 				8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */,
 				877E61581E8C4DD100B88831 /* Article.swift in Sources */,
 				871E35CA1EBA73A400EA483E /* StatusCode.swift in Sources */,
+				AA88DB961F95A08400BFF6CB /* LoadingView.swift in Sources */,
 				AA3CBF351F86A284007BEEBC /* RequestMocker.swift in Sources */,
 				910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */,
 				871E35D01EBAF14C00EA483E /* Request.swift in Sources */,

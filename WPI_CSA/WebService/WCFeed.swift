@@ -71,17 +71,14 @@ open class WCFeedManager {
                                 for feed in rawList {
                                     if let feed = feed as? [String: Any] {
                                         let wcFeed = WCFeed()
-                                        if let feedId = feed["feedId"] as? Int {
+                                        if let feedId = feed["id"] as? Int {
                                             wcFeed.id = feedId
                                         }
-                                        if let feedTitle = feed["feedTitle"] as? String {
+                                        if let feedTitle = feed["title"] as? String {
                                             wcFeed.title = feedTitle
                                         }
-                                        if let feedType = feed["feedType"] as? String {
+                                        if let feedType = feed["type"] as? String {
                                             wcFeed.type = feedType
-                                        }
-                                        if let feedBody = feed["feedBody"] as? String {
-                                            wcFeed.body = feedBody
                                         }
                                         if let createdAt = (feed["createdAt"] as? String)?.Iso8601DateUTC {
                                             wcFeed.createdAt = createdAt
@@ -139,8 +136,8 @@ open class WCFeedManager {
                         } else {
                             let id = dict["id"] as! Int
                             let title = dict["title"] as! String
-                            let type = dict["feedType"] as! String
-                            let body = dict["feedBody"] as! String
+                            let type = dict["type"] as! String
+                            let body = dict["body"] as! String
                             let createdAt = (dict["createdAt"] as! String).Iso8601DateUTC
                             let feed = WCFeed(id: id, title: title, type: type, body: body, createdAt: createdAt)
                             
