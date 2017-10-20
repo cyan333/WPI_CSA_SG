@@ -15,7 +15,7 @@ open class WCEvent {
     var startTime: Date
     var endTime: Date
     var location: String
-    var fee: Int
+    var fee: Int?
     var ownerId: Int?
     var createdAt: Date?
     
@@ -26,7 +26,6 @@ open class WCEvent {
         self.endTime = endTime
         self.location = location
         self.description = ""
-        self.fee = 0
     }
     
 }
@@ -60,7 +59,9 @@ open class WCEventManager {
                     event.ownerId = dict!["ownerId"]! as? Int
                     event.createdAt = (dict!["createdAt"]! as! String).Iso8601DateUTC
                     event.description = dict!["description"]! as! String
-                    event.fee = dict!["fee"]! as! Int
+                    if let fee = dict!["fee"] as? Int {
+                        event.fee = fee
+                    }
                     
                     completion("", event)
                 }

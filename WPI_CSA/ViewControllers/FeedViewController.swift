@@ -167,7 +167,11 @@ extension FeedViewController: UITableViewDataSource {
         } else if section == 1 {
             return article.paragraphs.count
         } else {
-            return 2
+            if event!.fee == nil{
+                return 1
+            } else {
+                return 2
+            }
         }
     }
     
@@ -263,12 +267,10 @@ extension FeedViewController: UITableViewDataSource {
             if indexPath.row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FeedEventCell") as! FeedEventCell
                 
-                if let event = event {
-                    cell.title.text = event.title
-                    cell.date.text = event.startTime.toString + " to " + event.endTime.toString
-                    cell.location.text = "Location: " + event.location
-                    cell.button.addTarget(self, action: #selector(addToCalendar), for: .touchUpInside)
-                }
+                cell.title.text = event!.title
+                cell.date.text = event!.startTime.toString + " to " + event!.endTime.toString
+                cell.location.text = "Location: " + event!.location
+                cell.button.addTarget(self, action: #selector(addToCalendar), for: .touchUpInside)
                 
                 cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
                 return cell
