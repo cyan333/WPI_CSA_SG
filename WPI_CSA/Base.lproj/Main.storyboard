@@ -1183,13 +1183,7 @@
                             <constraint firstAttribute="trailing" secondItem="nHf-u7-nht" secondAttribute="trailing" id="wzU-dM-XZn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Life" id="mDj-Mt-16d">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="cMr-hi-JRt">
-                            <connections>
-                                <action selector="click:" destination="9on-QE-tze" id="epq-Xr-ZV8"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Life" id="mDj-Mt-16d"/>
                     <connections>
                         <outlet property="tableView" destination="nHf-u7-nht" id="Ush-MF-8pH"/>
                         <segue destination="5Fj-cT-BYS" kind="show" identifier="FeedSegue" id="CE4-df-35I"/>
@@ -1739,7 +1733,7 @@
         <scene sceneID="Zpd-CS-8Rj">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1j6-aj-J4X" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Life" image="Forum" id="cdh-vR-EkY"/>
+                    <tabBarItem key="tabBarItem" title="Life" image="CSALogo" id="cdh-vR-EkY"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bbA-cv-6M6">
                         <autoresizingMask key="autoresizingMask"/>
@@ -1757,7 +1751,7 @@
     <resources>
         <image name="ActionLight" width="25" height="25"/>
         <image name="AddAvatar" width="25" height="25"/>
-        <image name="Forum" width="25" height="25"/>
+        <image name="CSALogo" width="30" height="30"/>
         <image name="MenuLight" width="25" height="25"/>
         <image name="SG" width="25" height="25"/>
         <image name="Setting" width="25" height="25"/>

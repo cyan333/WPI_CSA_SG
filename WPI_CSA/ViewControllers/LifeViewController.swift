@@ -54,7 +54,6 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         //CacheManager.localDirInitiateSetup()
         
         /*============================== TESTING AREA STARTS ==============================*/
