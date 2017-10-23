@@ -12,7 +12,7 @@ import UIKit
 
 //Format: AppMajorVerion.AppSubVersion.ContentVersion
 //Update this number results server version update
-let baseVersion = "1.02.001"
+let baseVersion = "1.03.001"
 
 //All application parameters are declared here
 let appVersion = "appVersion"

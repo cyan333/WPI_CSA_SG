@@ -84,19 +84,29 @@ open class WCService {
         }
     }
     
-    open class func getPass(withId id: Int, completion: @escaping (_ error: String, _ pass: PKPass?) -> Void) {
+    open class func getTicket(withId id: Int, completion: @escaping (_ error: String, _ pass: PKPass?) -> Void) {
         do {
-            let params = ["mappingId" : id]
-            let opt = try HTTP.GET(serviceBase + pathGetPass, parameters: params)
+            let params = ["id" : id, "accessToken": WCService.currentUser!.accessToken!] as [String : Any]
+            let opt = try HTTP.POST(serviceBase + pathGetTicket , parameters: params)
             opt.start{ response in
                 if response.error != nil {
                     completion(serverDown, nil)
                     return
                 }
-                var error: NSError?
-                let pass = PKPass(data: response.data, error: &error)
-                print(error?.localizedDescription ?? "no error")
-                completion("", pass)
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String, nil)
+                }else{
+                    var error: NSError?
+                    let base64 = dict!["ticket"] as! String
+                    let pass = PKPass(data: Data(base64Encoded:base64, options: .ignoreUnknownCharacters)!, error: &error)
+                    
+                    if error == nil {
+                        completion("", pass)
+                    } else {
+                        completion(error!.localizedDescription, nil)
+                    }
+                }
             }
         } catch let error {
             print(error.localizedDescription)

@@ -153,7 +153,9 @@ open class WCFeedManager {
                                 event.ownerId = eventDic["ownerId"] as? Int
                                 event.createdAt = (eventDic["createdAt"] as! String).Iso8601DateUTC
                                 event.description = eventDic["description"] as! String
-                                event.fee = eventDic["fee"] as! Int
+                                if let fee = eventDic["fee"] as? Double {
+                                    event.fee = fee
+                                }
                                 
                                 feed.event = event
                             }

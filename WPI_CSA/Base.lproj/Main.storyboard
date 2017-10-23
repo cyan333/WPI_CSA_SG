@@ -830,7 +830,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RegisterLabelCell" rowHeight="80" id="vjU-q6-DEx">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RegisterAvatarCell" rowHeight="80" id="vjU-q6-DEx" customClass="RegisterAvatarCell" customModule="WPI_CSA" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vjU-q6-DEx" id="eyn-eo-Jkg">
@@ -838,7 +838,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to CSA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vKu-26-mMy">
-                                                    <rect key="frame" x="98" y="30" width="254" height="21"/>
+                                                    <rect key="frame" x="108" y="30" width="244" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="HuW-nD-iXg"/>
                                                     </constraints>
@@ -846,11 +846,11 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="defaultAvatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="Jus-2E-97s">
-                                                    <rect key="frame" x="23" y="10" width="60" height="60"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AddAvatar" translatesAutoresizingMaskIntoConstraints="NO" id="Jus-2E-97s">
+                                                    <rect key="frame" x="23" y="5" width="70" height="70"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="60" id="K8F-VE-uu2"/>
-                                                        <constraint firstAttribute="height" constant="60" id="ZpY-cJ-g5k"/>
+                                                        <constraint firstAttribute="width" constant="70" id="K8F-VE-uu2"/>
+                                                        <constraint firstAttribute="height" constant="70" id="ZpY-cJ-g5k"/>
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
@@ -862,6 +862,9 @@
                                                 <constraint firstItem="vKu-26-mMy" firstAttribute="centerY" secondItem="eyn-eo-Jkg" secondAttribute="centerY" id="xgh-4F-Qz2"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="avatar" destination="Jus-2E-97s" id="CUA-fQ-WKU"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RegisterInputCell" id="MPA-sL-bM9" customClass="RegisterInputCell" customModule="WPI_CSA" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="135.5" width="375" height="44"/>
@@ -1753,6 +1756,7 @@
     </scenes>
     <resources>
         <image name="ActionLight" width="25" height="25"/>
+        <image name="AddAvatar" width="25" height="25"/>
         <image name="Forum" width="25" height="25"/>
         <image name="MenuLight" width="25" height="25"/>
         <image name="SG" width="25" height="25"/>

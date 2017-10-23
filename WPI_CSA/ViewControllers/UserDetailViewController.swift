@@ -181,8 +181,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
         
         if avatarChanged {
             Utils.showLoadingIndicator()
-            let a = UIImage(named: "test.jpg")
-            CacheManager.uploadImage(image: a!, type: "Avatar", targetSize:  250,
+            CacheManager.uploadImage(image: self.newAvatar!, type: "Avatar", targetSize:  250,
                                      completion: { (error, imgId) in
                 if error != "" {
                     print(error)

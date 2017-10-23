@@ -8,12 +8,16 @@
 
 import UIKit
 
+class RegisterAvatarCell: UITableViewCell {
+    @IBOutlet weak var avatar: UIImageView!
+}
+
 class RegisterInputCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var textField: UITextField!
 }
 
-class RegisterViewController: UIViewController {
+class RegisterViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     @IBOutlet weak var tableView: UITableView!
     
     let sectionOffset = 4
@@ -27,6 +31,9 @@ class RegisterViewController: UIViewController {
     var birthday: String?
     var classOf: String?
     var major: String?
+    
+    var newAvatar: UIImage?
+    var imagePicker = UIImagePickerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,52 +100,75 @@ class RegisterViewController: UIViewController {
                 WCUserManager.register(forUsername: username,
                                        andEncryptedPassword: WCUtils.md5(password + salt),
                                        completion: { (error, user) in
-                                        if error == "" {
-                                            WCService.currentUser = user
-                                            Utils.appMode = .LoggedOn
-                                            WCUserManager.saveCurrentUserDetails(name: name, birthday: self.birthday, classOf: self.classOf, major: self.major, completion: { (error) in
-                                                if error == "" {
-                                                    WCService.currentUser!.name = name
-                                                    if let birthday = self.birthday {
-                                                        WCService.currentUser!.birthday = birthday
-                                                    }
-                                                    if let classOf = self.classOf {
-                                                        WCService.currentUser!.birthday = classOf
-                                                    }
-                                                    if let major = self.major {
-                                                        WCService.currentUser!.birthday = major
-                                                    }
-                                                    Utils.setParam(named: savedUsername, withValue: username)
-                                                    Utils.setParam(named: savedPassword,
-                                                                   withValue: WCUtils.md5(password + salt))
-                                                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                                    Utils.dismissIndicator()
-                                                    OperationQueue.main.addOperation{
-                                                        let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
-                                                            " with a link to confirm your email. Please click on the link in 24 hours. " +
-                                                            "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
-                                                        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
-                                                            self.dismiss(animated: true, completion: nil)
-                                                        }))
-                                                        self.present(alert, animated: true, completion: nil)
-                                                    }
-                                                }else{
-                                                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                                    Utils.dismissIndicator()
-                                                    OperationQueue.main.addOperation{
-                                                        let alert = UIAlertController(title: nil, message: "User created but name is not stored correctly. " + error, preferredStyle: .alert)
-                                                        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
-                                                            self.dismiss(animated: true, completion: nil)
-                                                        }))
-                                                        self.present(alert, animated: true, completion: nil)
-                                                    }
-                                                }
-                                                
-                                            })
-                                        }else{
-                                            Utils.dismissIndicator()
-                                            Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                    if error == "" {
+                        WCService.currentUser = user
+                        Utils.appMode = .LoggedOn
+                        WCUserManager.saveCurrentUserDetails(name: name, birthday: self.birthday, classOf: self.classOf, major: self.major, completion: { (error) in
+                            if error == "" {
+                                WCService.currentUser!.name = name
+                                if let birthday = self.birthday {
+                                    WCService.currentUser!.birthday = birthday
+                                }
+                                if let classOf = self.classOf {
+                                    WCService.currentUser!.birthday = classOf
+                                }
+                                if let major = self.major {
+                                    WCService.currentUser!.birthday = major
+                                }
+                                Utils.setParam(named: savedUsername, withValue: username)
+                                Utils.setParam(named: savedPassword,
+                                               withValue: WCUtils.md5(password + salt))
+                                if let avatar = self.newAvatar {
+                                    CacheManager.uploadImage(image: avatar, type: "Avatar", targetSize:  250,
+                                                             completion: { (error, imgId) in
+                                        if error != "" {
+                                            print(error)
                                         }
+                                        WCService.currentUser!.avatarId = imgId
+                                        NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                                        Utils.dismissIndicator()
+                                        OperationQueue.main.addOperation{
+                                            let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
+                                                " with a link to confirm your email. Please click on the link in 24 hours. " +
+                                                "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
+                                            alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                                                self.dismiss(animated: true, completion: nil)
+                                            }))
+                                            self.present(alert, animated: true, completion: nil)
+                                        }
+                                        
+                                    })
+                                } else {
+                                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                                    Utils.dismissIndicator()
+                                    OperationQueue.main.addOperation{
+                                        let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
+                                            " with a link to confirm your email. Please click on the link in 24 hours. " +
+                                            "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
+                                        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                                            self.dismiss(animated: true, completion: nil)
+                                        }))
+                                        self.present(alert, animated: true, completion: nil)
+                                    }
+                                }
+                                
+                            }else{
+                                NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                                Utils.dismissIndicator()
+                                OperationQueue.main.addOperation{
+                                    let alert = UIAlertController(title: nil, message: "User created but name is not stored correctly. " + error, preferredStyle: .alert)
+                                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                                        self.dismiss(animated: true, completion: nil)
+                                    }))
+                                    self.present(alert, animated: true, completion: nil)
+                                }
+                            }
+                            
+                        })
+                    }else{
+                        Utils.dismissIndicator()
+                        Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                    }
                 })
             } else {
                 Utils.dismissIndicator()
@@ -192,6 +222,19 @@ class RegisterViewController: UIViewController {
         }
     }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let chosenImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            self.newAvatar = chosenImage
+            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? RegisterAvatarCell {
+                cell.avatar.image = chosenImage
+            }
+        } else{
+            print("Something went wrong")//TODO: Do something?
+        }
+        
+        self.dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 extension RegisterViewController: UITableViewDelegate {
@@ -205,21 +248,26 @@ extension RegisterViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        /*if section == 0{
-            return 25
-        } else if section == 1 {
-            return 35
+        if section == 0 {
+            return 30
         } else {
             return 20
-        }*/
-        return 20
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
+        if indexPath.section == 0 {
+            if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
+                imagePicker.delegate = self
+                imagePicker.sourceType = .savedPhotosAlbum;
+                imagePicker.allowsEditing = false
+                
+                self.present(imagePicker, animated: true, completion: nil)
+            }
+        } else if indexPath.section < 3 {
             let cell = tableView.cellForRow(at: indexPath) as! RegisterInputCell
             cell.textField.becomeFirstResponder()
-        }else if indexPath.section == 3 {
+        } else if indexPath.section == 3 {
             tableView.deselectRow(at: indexPath, animated: true)
             registerUser()
         }
@@ -243,7 +291,11 @@ extension RegisterViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterLabelCell")!
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RegisterAvatarCell") as! RegisterAvatarCell
+            
+            if let avatar = self.newAvatar {
+                cell.avatar.image = avatar
+            }
             
             return cell
         }else if indexPath.section == 1 {
@@ -300,7 +352,9 @@ extension RegisterViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 1 {
+        if section == 0 {
+            return "avatar"
+        } else if section == 1 {
             return "required"
         } else if section == 2 {
             return "optional"

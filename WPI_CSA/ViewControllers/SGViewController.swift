@@ -72,17 +72,9 @@ class SGViewController: UIViewController {
         coverPage = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49))
         coverPage?.image = UIImage(named: "cover.jpg")
         coverPage?.isUserInteractionEnabled = true
-        let viewBtn = UIButton(frame: CGRect(x: screenWidth/2 - 70, y: screenHeight/2,
-                                                  width: 140, height: 40))
-        viewBtn.setTitle("Look inside", for: .normal)
-        viewBtn.titleLabel?.font = UIFont(name: "Helvetica", size: 24)
-        viewBtn.setTitleColor(.white, for: .normal)
-        viewBtn.setTitleColor(UIColor(hexString: "999999"), for: .highlighted)
-        viewBtn.layer.borderWidth = 2
-        viewBtn.layer.cornerRadius = 10
-        viewBtn.layer.borderColor = UIColor.white.cgColor
-        viewBtn.addTarget(self, action:#selector(lookInside), for: .touchUpInside)
-        coverPage?.addSubview(viewBtn)
+        let lookInsideRecognizer = UITapGestureRecognizer(target: self, action: #selector(lookInside))
+        coverPage?.addGestureRecognizer(lookInsideRecognizer)
+        
         self.view.addSubview(coverPage!)
         
         
@@ -220,7 +212,7 @@ class SGViewController: UIViewController {
                 let alert = UIAlertController(title: nil, message: "No user logged in. Please login so that we can get back to you and keep track of reports.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Login & Register", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in
-                    self.tabBarController?.selectedIndex = 1
+                    self.tabBarController?.selectedIndex = 2
                 }))
                 alert.addAction(UIAlertAction(title: "Report anyway", style: .default, handler: {
                     (alert: UIAlertAction!) -> Void in

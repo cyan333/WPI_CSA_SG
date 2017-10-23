@@ -204,14 +204,14 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
         }
         self.present(dropIn!, animated: true, completion: nil)*/
         
-        WCService.getPass(withId: 1) { (error, pass) in
-            let pkvc = PKAddPassesViewController(pass: pass!)
-            pkvc.delegate = self
-            self.present(pkvc, animated: true, completion: {() -> Void in
-                // Do any cleanup here
-                //self.hideLoading()
-                
-            })
+        WCService.getTicket(withId: 1) { (error, pass) in
+            if error == ""{
+                let pkvc = PKAddPassesViewController(pass: pass!)
+                pkvc.delegate = self
+                self.present(pkvc, animated: true)
+            } else {
+                Utils.show(alertMessage: error, onViewController: self)
+            }
         }
         
     }

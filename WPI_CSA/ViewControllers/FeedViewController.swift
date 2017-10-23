@@ -8,6 +8,7 @@
 
 import UIKit
 import EventKit
+import PassKit
 
 class FeedTitleCell: UITableViewCell {
     @IBOutlet weak var title: UITextView!
@@ -35,7 +36,7 @@ class FeedButtonCell: UITableViewCell {
     @IBOutlet weak var button: UIButton!
 }
 
-class FeedViewController: UIViewController {
+class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
     
     var feed: WCFeed!
     var article: Article!
@@ -169,7 +170,63 @@ class FeedViewController: UIViewController {
     }
     
     @objc func payAndGetTicket() {
-        print(1)
+        if event!.fee! > 0 {
+            Utils.show(alertMessage: "If you see this message and your app is the latest version, please contact admin@fmning.com",
+                       onViewController: self)
+        } else if Utils.appMode != .LoggedOn{
+            Utils.show(alertMessage: "You have to log to buy ticket", onViewController: self)
+        } else {
+            guard let username = WCService.currentUser?.username else {
+                Utils.show(alertMessage: "Unknown error. Please contact admin@fmning.com", onViewController: self)
+                return
+            }
+            if !username.trim().lowercased().hasSuffix("@wpi.edu") {
+                Utils.show(alertMessage: "To get free ticket, you have to log in with your wpi email, with the email verified.",
+                           onViewController: self)
+            } else if !WCService.currentUser!.emailConfirmed {
+                Utils.show(alertMessage: "Please go to App Setting and verify your email before buying ticket", onViewController: self)
+            } else {
+                Utils.showLoadingIndicator()
+                WCPaymentManager.makePayment(for: "Event", withId: event!.id, paying: event!.fee!,
+                                             completion: { (error, status, ticketStatus, ticketId, ticket) in
+                    Utils.dismissIndicator()
+                    if error != "" {
+                        Utils.show(alertMessage: error, onViewController: self)
+                    } else {
+                        if status == "ok" {
+                            if ticketStatus == "ok" {
+                                let ticketView = PKAddPassesViewController(pass: ticket!)
+                                ticketView.delegate = self
+                                self.present(ticketView, animated: true)
+                            } else {
+                                Utils.show(alertMessage: "Transaction is successful. " + ticketStatus
+                                    + "Please contact admin@fmning.com", onViewController: self)
+                            }
+                        } else if status == "AlreadyPaid"{
+                            let alert = UIAlertController(title: nil, message: "You have already paid for it. Do you want to download ticket again?", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                                (alert: UIAlertAction!) -> Void in
+                                Utils.showLoadingIndicator()
+                                WCService.getTicket(withId: ticketId!, completion: { (error, ticket) in
+                                    Utils.dismissIndicator()
+                                    if error == "" {
+                                        let ticketView = PKAddPassesViewController(pass: ticket!)
+                                        ticketView.delegate = self
+                                        self.present(ticketView, animated: true)
+                                    } else {
+                                        Utils.show(alertMessage: error, onViewController: self)
+                                    }
+                                })
+                            }))
+                            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                        } else {
+                            Utils.show(alertMessage: "Unknown status " + status, onViewController: self)
+                        }
+                    }
+                })
+            }
+        }
     }
     
 }
@@ -321,8 +378,12 @@ extension FeedViewController: UITableViewDataSource {
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FeedButtonCell") as! FeedButtonCell
+                if event!.fee == 0 {
+                    cell.button.setTitle("Free - Get ticket", for: .normal)
+                } else {
+                    cell.button.setTitle("$\(event!.fee!) - Pay and get ticket", for: .normal)
+                }
                 
-                cell.button.setTitle("Free. Add to wallet.", for: .normal)
                 cell.button.addTarget(self, action: #selector(payAndGetTicket), for: .touchUpInside)
                 
                 cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
