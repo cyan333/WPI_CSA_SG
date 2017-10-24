@@ -1335,11 +1335,11 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7p7-Tr-M1B">
                                                     <rect key="frame" x="10" y="10" width="355" height="119.5"/>
                                                     <subviews>
-                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Event title" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="T8z-79-uZ4">
+                                                        <textView clipsSubviews="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Event title" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="T8z-79-uZ4">
                                                             <rect key="frame" x="5" y="0.0" width="345" height="35"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="35" id="fXN-fd-m4Q"/>
+                                                                <constraint firstAttribute="height" constant="35" identifier="feedEventTitleHeight" id="fXN-fd-m4Q"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="21"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>

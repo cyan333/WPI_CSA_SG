@@ -44,13 +44,14 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
     
     var reloadingFlag = true //Loading from the beginning
     var loadingView: LoadingView!
-    var titleHeight: CGFloat = 80
+    var feedTitleHeight: CGFloat = 80
+    var feedEventTitleHeight: CGFloat = 35
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        article = Article(content: "")// + "<img src=\"cover.jpg\" height=\"1836\" width=\"1200\"/>")
+        article = Article(content: "")
         
         tableView.tableFooterView = UIView(frame: CGRect.zero)
         
@@ -234,12 +235,12 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
 extension FeedViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
         if indexPath.section == 0 {
-            return titleHeight + 60
+            return feedTitleHeight + 60
         } else if indexPath.section == 1 {
             return article.paragraphs[indexPath.row].cellHeight
         } else {
             if indexPath.row == 0 {
-                return 160
+                return 125 + feedEventTitleHeight
             } else {
                 return 44
             }
@@ -284,7 +285,7 @@ extension FeedViewController: UITableViewDataSource {
             cell.title.text = feed.title
             let size = cell.title.sizeThatFits(CGSize(width: screenWidth - padding * 2,
                                                       height: .greatestFiniteMagnitude))
-            titleHeight = size.height
+            feedTitleHeight = size.height
             
             cell.type.text = " " + feed.type + " "
             cell.type.layer.borderWidth = 1
@@ -295,7 +296,7 @@ extension FeedViewController: UITableViewDataSource {
             
             let filteredConstraints = cell.title.constraints.filter { $0.identifier == "feedTitleHeight" }
             if let heightConstraint = filteredConstraints.first {
-                heightConstraint.constant = titleHeight
+                heightConstraint.constant = feedTitleHeight
             }
             
             return cell
@@ -368,11 +369,20 @@ extension FeedViewController: UITableViewDataSource {
         } else {
             if indexPath.row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "FeedEventCell") as! FeedEventCell
-                
+                //feedEventTitleHeight
                 cell.title.text = event!.title
+                let size = cell.title.sizeThatFits(CGSize(width: screenWidth - padding * 3,
+                                                          height: .greatestFiniteMagnitude))
+                feedEventTitleHeight = size.height
+                
                 cell.date.text = event!.startTime.toString + " to " + event!.endTime.toString
                 cell.location.text = "Location: " + event!.location
                 cell.button.addTarget(self, action: #selector(addToCalendar), for: .touchUpInside)
+                
+                let filteredConstraints = cell.title.constraints.filter { $0.identifier == "feedEventTitleHeight" }
+                if let heightConstraint = filteredConstraints.first {
+                    heightConstraint.constant = feedEventTitleHeight
+                }
                 
                 cell.separatorInset = UIEdgeInsets(top: 0, left: screenWidth, bottom: 0, right: 0)
                 return cell
