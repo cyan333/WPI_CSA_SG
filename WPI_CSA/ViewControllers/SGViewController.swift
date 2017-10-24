@@ -70,6 +70,7 @@ class SGViewController: UIViewController {
         addOrUpdateStatusBGView(viewController: self, color: .clear)
         
         coverPage = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49))
+        coverPage?.contentMode = .scaleAspectFill
         coverPage?.image = UIImage(named: "cover.jpg")
         coverPage?.isUserInteractionEnabled = true
         let lookInsideRecognizer = UITapGestureRecognizer(target: self, action: #selector(lookInside))
