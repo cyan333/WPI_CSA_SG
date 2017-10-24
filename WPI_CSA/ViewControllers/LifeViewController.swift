@@ -271,7 +271,7 @@ extension LifeViewController: UITableViewDataSource {
             cell.coverShadow.layer.shadowColor = UIColor.lightGray.cgColor
             cell.coverShadow.layer.shadowOpacity = 0.5
             cell.coverShadow.layer.shadowOffset = CGSize(width: -1, height: 1)
-            cell.coverShadow.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: screenWidth - 30, height: 200)).cgPath
+            cell.coverShadow.layer.shadowPath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: screenWidth - 33, height: 200)).cgPath
             
             cell.avatarShadow.layer.shadowColor = UIColor.lightGray.cgColor
             cell.avatarShadow.layer.shadowOpacity = 0.5

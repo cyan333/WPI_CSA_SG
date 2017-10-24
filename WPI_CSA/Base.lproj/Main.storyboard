@@ -1094,15 +1094,15 @@
                                                 <constraint firstItem="TJ1-8y-aXj" firstAttribute="top" secondItem="fxs-gq-aXP" secondAttribute="bottom" constant="8" id="FqG-gR-8VD"/>
                                                 <constraint firstItem="Tqf-Yb-fM1" firstAttribute="leading" secondItem="gr8-WO-F45" secondAttribute="leadingMargin" constant="10" id="SPO-Sc-81v"/>
                                                 <constraint firstItem="fxs-gq-aXP" firstAttribute="top" secondItem="gr8-WO-F45" secondAttribute="topMargin" constant="165" id="U3C-Lw-RKh"/>
-                                                <constraint firstItem="L3H-eB-t06" firstAttribute="leading" secondItem="gr8-WO-F45" secondAttribute="leadingMargin" constant="10" id="U4D-rA-iFL"/>
+                                                <constraint firstItem="L3H-eB-t06" firstAttribute="leading" secondItem="gr8-WO-F45" secondAttribute="leading" constant="18" id="U4D-rA-iFL"/>
                                                 <constraint firstItem="sjV-sP-PYo" firstAttribute="leading" secondItem="gr8-WO-F45" secondAttribute="leadingMargin" constant="10" id="WAe-sB-lvt"/>
-                                                <constraint firstItem="Jmy-Nn-bL7" firstAttribute="leading" secondItem="gr8-WO-F45" secondAttribute="leadingMargin" constant="10" id="Y3Q-ma-KQJ"/>
+                                                <constraint firstItem="Jmy-Nn-bL7" firstAttribute="leading" secondItem="gr8-WO-F45" secondAttribute="leading" constant="18" id="Y3Q-ma-KQJ"/>
                                                 <constraint firstItem="L3H-eB-t06" firstAttribute="top" secondItem="gr8-WO-F45" secondAttribute="topMargin" constant="10" id="YPz-y6-LyW"/>
                                                 <constraint firstItem="Jmy-Nn-bL7" firstAttribute="top" secondItem="gr8-WO-F45" secondAttribute="topMargin" constant="10" id="aoe-ju-XE7"/>
                                                 <constraint firstItem="sjV-sP-PYo" firstAttribute="top" secondItem="qvg-8h-F4e" secondAttribute="bottom" id="csB-5N-5g4"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="Jmy-Nn-bL7" secondAttribute="trailing" constant="10" id="g13-hK-EYX"/>
+                                                <constraint firstAttribute="trailing" secondItem="Jmy-Nn-bL7" secondAttribute="trailing" constant="18" id="g13-hK-EYX"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="fxs-gq-aXP" secondAttribute="trailing" constant="30" id="gVz-N9-W2o"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="L3H-eB-t06" secondAttribute="trailing" constant="10" id="kfw-QA-9Mz"/>
+                                                <constraint firstAttribute="trailing" secondItem="L3H-eB-t06" secondAttribute="trailing" constant="18" id="kfw-QA-9Mz"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="TJ1-8y-aXj" secondAttribute="trailing" id="qqf-Xw-1hC"/>
                                                 <constraint firstItem="qvg-8h-F4e" firstAttribute="top" secondItem="Jmy-Nn-bL7" secondAttribute="bottom" constant="12" id="soP-cD-04P"/>
                                                 <constraint firstItem="fxs-gq-aXP" firstAttribute="leading" secondItem="qvg-8h-F4e" secondAttribute="trailing" constant="10" id="zmc-wb-jAz"/>
@@ -1751,7 +1751,7 @@
     <resources>
         <image name="ActionLight" width="25" height="25"/>
         <image name="AddAvatar" width="25" height="25"/>
-        <image name="CSALogo" width="30" height="30"/>
+        <image name="CSALogo" width="48" height="33"/>
         <image name="MenuLight" width="25" height="25"/>
         <image name="SG" width="25" height="25"/>
         <image name="Setting" width="25" height="25"/>
