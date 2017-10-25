@@ -125,6 +125,9 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
             }
         }
         
+        userDetailUpdated = !userDetailChanged
+        avatarUpdated = !avatarChanged
+        
         if userDetailChanged {
             let name = userDetails[0].trim()
             let birthday = userDetails[1].trim()
@@ -140,7 +143,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
                 return
             }
             
-            if Int(classOf) == nil || classOf.count != 4 {
+            if classOf != "" && (Int(classOf) == nil || classOf.count != 4) {
                 Utils.show(alertMessage: "Graduation year must be a four digits number", onViewController: self)
                 return
             }
@@ -175,8 +178,6 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
                                                     
                                                     
             })
-        } else {
-            userDetailUpdated = true
         }
         
         if avatarChanged {
@@ -199,8 +200,6 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
                     }
                 }
             })
-        } else {
-            avatarUpdated = true
         }
         
         if !userDetailChanged && !avatarChanged{

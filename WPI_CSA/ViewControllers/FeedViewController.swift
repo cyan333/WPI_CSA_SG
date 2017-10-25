@@ -171,7 +171,10 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
     }
     
     @objc func payAndGetTicket() {
-        if event!.fee! > 0 {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            Utils.show(alertMessage: "This feature is not supported from iPad",
+                       onViewController: self)
+        } else if event!.fee! > 0 {
             Utils.show(alertMessage: "If you see this message and your app is the latest version, please contact admin@fmning.com",
                        onViewController: self)
         } else if Utils.appMode != .LoggedOn{

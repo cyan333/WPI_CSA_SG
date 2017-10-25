@@ -256,41 +256,25 @@ extension EditorViewController: UITextViewDelegate {
             
             switch currentFontStyle {
             case "thin":
-                if #available(iOS 8.2, *) {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
                                                                                  weight: UIFont.Weight.thin)
-                    
-                } else {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Thin", size: fontSize)
-                }
+                
             case "medium":
-                if #available(iOS 8.2, *) {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
                                                                                  weight: UIFont.Weight.medium)
-                } else {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Medium", size: fontSize)
-                }
+            
             case "bold":
-                if #available(iOS 8.2, *) {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
                                                                                  weight: UIFont.Weight.bold)
-                } else {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-Bold", size: fontSize)
-                }
+                
             case "heavy":
-                if #available(iOS 8.2, *) {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
                                                                                  weight: UIFont.Weight.heavy)
-                } else {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue-CondensedBlack", size: fontSize)
-                }
+                
             default:
-                if #available(iOS 8.2, *) {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
+                textAttributes["\(NSAttributedStringKey.font)"] = UIFont.systemFont(ofSize: fontSize,
                                                                                  weight: UIFont.Weight.regular)
-                } else {
-                    textAttributes["\(NSAttributedStringKey.font)"] = UIFont(name: "HelveticaNeue", size: fontSize)
-                }
+                
             }
             
             switch currentFontColor {

@@ -42,11 +42,6 @@ class MenuViewController : UIViewController {
         
         searchController.searchBar.tintColor = .white
         searchController.searchBar.subviews[0].subviews.flatMap(){ $0 as? UITextField }.first?.tintColor = .lightGray
-        /*if #available(iOS 9.0, *) {
-            UITextField.appearance(whenContainedInInstancesOf: [type(of: searchController.searchBar)]).tintColor = .black
-        } else {
-            // Fallback on earlier versions
-        }*/
         
         tableView.tableHeaderView = searchController.searchBar
         

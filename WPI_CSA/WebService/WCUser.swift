@@ -34,6 +34,11 @@ open class WCUserManager{
     
     open class func getSaltForUser(withUsername username: String,
                                    completion: @escaping (_ error: String, _ salt: String) -> Void) {
+        if localMode {
+            let mock = RequestMocker.getFakeResponse(forRequestPath: pathGetSalt)
+            completion(mock[0] as! String, mock[1] as! String)
+            return
+        }
         do {
             let params = ["username" : username]
             let opt = try HTTP.POST(serviceBase + pathGetSalt, parameters: params)
@@ -57,6 +62,11 @@ open class WCUserManager{
     
     open class func loginUser(withUsername username: String, andPassword password: String,
                               completion: @escaping (_ error: String, _ user: WCUser?) -> Void){
+        if localMode {
+            let mock = RequestMocker.getFakeResponse(forRequestPath: pathLogin)
+            completion(mock[0] as! String, mock[1] as? WCUser)
+            return
+        }
         do {
             let params = ["username" : username, "password" : password]
             let opt = try HTTP.POST(serviceBase + pathLogin, parameters: params)
@@ -149,6 +159,11 @@ open class WCUserManager{
     }
     
     open class func saveCurrentUserDetails(name: String?, birthday: String?, classOf: String?, major: String?, completion: @escaping (_ error: String) -> Void){
+        if localMode {
+            let mock = RequestMocker.getFakeResponse(forRequestPath: pathSaveUserDetails)
+            completion(mock[0] as! String)
+            return
+        }
         do {
             var params = ["accessToken": WCService.currentUser!.accessToken]
             if let name = name {
