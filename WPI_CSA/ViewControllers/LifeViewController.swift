@@ -181,7 +181,10 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
         
     }
     
-    @IBAction func click(_ sender: Any) {/*
+    @IBAction func click(_ sender: Any) {
+        print(1)
+        
+        /*
         let clientToken = "sandbox_5sx62kcq_wnbj3bx4nwmtyz77"
         
         let request =  BTDropInRequest()
@@ -203,15 +206,13 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
         }
         self.present(dropIn!, animated: true, completion: nil)*/
         
-        WCService.getTicket(withId: 1) { (error, pass) in
-            if error == ""{
-                let pkvc = PKAddPassesViewController(pass: pass!)
-                pkvc.delegate = self
-                self.present(pkvc, animated: true)
-            } else {
-                Utils.show(alertMessage: error, onViewController: self)
-            }
+        WCService.getTestTicket { (ticket) in
+            let pkvc = PKAddPassesViewController(pass: ticket!)
+            pkvc.delegate = self
+            self.present(pkvc, animated: true)
         }
+        
+        
         
     }
     

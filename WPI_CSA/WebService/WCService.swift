@@ -123,6 +123,21 @@ open class WCService {
         }
     }
     
+    //This is a test method
+    open class func getTestTicket(completion: @escaping (_ ticket: PKPass?) -> Void) {
+        do {
+            let opt = try HTTP.GET(serviceBase + "get_pass")
+            opt.start{ response in
+                var error: NSError?
+                let ticket = PKPass(data: response.data, error: &error)
+                
+                completion(ticket)
+            }
+        } catch let error {
+            print(error.localizedDescription)
+            completion(nil)
+        }
+    }
     
 }
 

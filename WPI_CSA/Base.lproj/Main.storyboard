@@ -1180,7 +1180,13 @@
                             <constraint firstAttribute="trailing" secondItem="nHf-u7-nht" secondAttribute="trailing" id="wzU-dM-XZn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Life" id="mDj-Mt-16d"/>
+                    <navigationItem key="navigationItem" title="Life" id="mDj-Mt-16d">
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="cth-rv-F2R">
+                            <connections>
+                                <action selector="click:" destination="9on-QE-tze" id="AtZ-vn-xcE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="nHf-u7-nht" id="Ush-MF-8pH"/>
                         <segue destination="5Fj-cT-BYS" kind="show" identifier="FeedSegue" id="CE4-df-35I"/>
