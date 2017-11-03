@@ -9,6 +9,8 @@
 import UIKit
 import EventKit
 import PassKit
+import Braintree
+import BraintreeDropIn
 
 class FeedTitleCell: UITableViewCell {
     @IBOutlet weak var title: UITextView!
@@ -174,11 +176,29 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
         if UIDevice.current.userInterfaceIdiom == .pad {
             Utils.show(alertMessage: "This feature is not supported from iPad",
                        onViewController: self)
-        } else if event!.fee! > 0 {
-            Utils.show(alertMessage: "If you see this message and your app is the latest version, please contact admin@fmning.com",
-                       onViewController: self)
         } else if Utils.appMode != .LoggedOn{
             Utils.show(alertMessage: "You have to log to buy ticket", onViewController: self)
+        } else if event!.fee! > 0 {
+            let clientToken = "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77"
+            
+            let request =  BTDropInRequest()
+            let dropIn = BTDropInController(authorization: clientToken, request: request)
+            { (controller, result, error) in
+                if (error != nil) {
+                    print("ERROR")
+                } else if (result?.isCancelled == true) {
+                    print("CANCELLED")
+                } else if let result = result {
+                    print(result.paymentMethod?.nonce ?? "no nonce")
+                    // Use the BTDropInResult properties to update your UI
+                    // result.paymentOptionType
+                    // result.paymentMethod
+                    // result.paymentIcon
+                    // result.paymentDescription
+                }
+                controller.dismiss(animated: true, completion: nil)
+            }
+            self.present(dropIn!, animated: true, completion: nil)
         } else {
             guard let username = WCService.currentUser?.username else {
                 Utils.show(alertMessage: "Unknown error. Please contact admin@fmning.com", onViewController: self)
