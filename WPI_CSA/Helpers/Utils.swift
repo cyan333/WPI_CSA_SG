@@ -483,3 +483,37 @@ extension Date {
         return Formatter.abbrLocalZone.string(from: self)
     }
 }
+
+extension FileManager {
+    
+    func fileSizeAtPath(path: String) -> Int64 {
+        do {
+            let fileAttributes = try attributesOfItem(atPath: path)
+            let fileSizeNumber = fileAttributes[FileAttributeKey.size] as? NSNumber
+            let fileSize = fileSizeNumber?.int64Value
+            return fileSize!
+        } catch {
+            print("error reading filesize, NSFileManager extension fileSizeAtPath")
+            return 0
+        }
+    }
+    
+    func folderSizeAtPath(path: String) -> Int64 {
+        var size : Int64 = 0
+        do {
+            let files = try subpathsOfDirectory(atPath: path)
+            for i in 0 ..< files.count {
+                size += fileSizeAtPath(path:path.appending("/"+files[i]))
+            }
+        } catch {
+            print("error reading directory, NSFileManager extension folderSizeAtPath")
+        }
+        return size
+    }
+    
+    func format(size: Int64) -> String {
+        let folderSizeStr = ByteCountFormatter.string(fromByteCount: size, countStyle: ByteCountFormatter.CountStyle.file)
+        return folderSizeStr
+    }
+    
+}

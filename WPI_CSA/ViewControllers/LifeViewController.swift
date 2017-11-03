@@ -58,7 +58,26 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
         
         /*============================== TESTING AREA STARTS ==============================*/
         
+	let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                        .userDomainMask, true)[0] as NSString
+        let filePath = documentDirectoryPath.appendingPathComponent("imageCache")
+        var fileSize : UInt64
         
+        do {
+            //return [FileAttributeKey : Any]
+            let attr = try FileManager.default.attributesOfItem(atPath: filePath)
+            fileSize = attr[FileAttributeKey.size] as! UInt64
+            
+            //if you convert to NSDictionary, you can get file size old way as well.
+            let dict = attr as NSDictionary
+            fileSize = dict.fileSize()
+            print(fileSize)
+            
+            print(FileManager.default.folderSizeAtPath(path: filePath))
+
+        } catch {
+            print("Error: \(error)")
+        }
         
         /*============================== TESTING AREA ENDS ==============================*/
         
