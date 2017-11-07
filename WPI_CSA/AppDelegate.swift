@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
-        if url.scheme?.localizedCaseInsensitiveCompare("ccom.fmning.WPI-CSA.payments") == .orderedSame {
+        if url.scheme?.localizedCaseInsensitiveCompare("com.fmning.WPI-CSA.payments") == .orderedSame {
             return BTAppSwitch.handleOpen(url, options: options)
         }
         return false
