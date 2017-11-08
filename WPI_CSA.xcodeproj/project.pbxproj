@@ -80,6 +80,8 @@
 		910CFDD71E80C1130005CC1D /* MenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD11E80C1130005CC1D /* MenuHelper.swift */; };
 		910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDD31E80C1130005CC1D /* MenuViewController.swift */; };
 		910CFDDB1E80C13A0005CC1D /* PresentMenuAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */; };
+		AA0645691FB165FD0048A0F9 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0645681FB165FD0048A0F9 /* EditorView.swift */; };
+		AA06456B1FB175330048A0F9 /* EditorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA06456A1FB175330048A0F9 /* EditorButton.swift */; };
 		AA210ADF1F89EEB100B28BC4 /* WCEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA210ADE1F89EEB100B28BC4 /* WCEvent.swift */; };
 		AA3CBF351F86A284007BEEBC /* RequestMocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3CBF341F86A284007BEEBC /* RequestMocker.swift */; };
 		AA5740F91F9D678D00350911 /* WCPayment.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5740F81F9D678D00350911 /* WCPayment.swift */; };
@@ -165,6 +167,8 @@
 		910CFDD11E80C1130005CC1D /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuHelper.swift; path = Helpers/MenuHelper.swift; sourceTree = "<group>"; };
 		910CFDD31E80C1130005CC1D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuViewController.swift; path = ViewControllers/MenuViewController.swift; sourceTree = "<group>"; };
 		910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PresentMenuAnimator.swift; path = Helpers/PresentMenuAnimator.swift; sourceTree = "<group>"; };
+		AA0645681FB165FD0048A0F9 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditorView.swift; path = Helpers/EditorView.swift; sourceTree = "<group>"; };
+		AA06456A1FB175330048A0F9 /* EditorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditorButton.swift; path = Helpers/EditorButton.swift; sourceTree = "<group>"; };
 		AA210ADE1F89EEB100B28BC4 /* WCEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WCEvent.swift; path = WebService/WCEvent.swift; sourceTree = "<group>"; };
 		AA3CBF341F86A284007BEEBC /* RequestMocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestMocker.swift; path = WebService/RequestMocker.swift; sourceTree = "<group>"; };
 		AA5740F81F9D678D00350911 /* WCPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WCPayment.swift; path = WebService/WCPayment.swift; sourceTree = "<group>"; };
@@ -230,6 +234,8 @@
 				87CAC3941ED3D5A4004D0A97 /* ActivityIndicator */,
 				87D0975B1F5721D000D78BF8 /* ColoredView.swift */,
 				910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */,
+				AA06456A1FB175330048A0F9 /* EditorButton.swift */,
+				AA0645681FB165FD0048A0F9 /* EditorView.swift */,
 				910CFDCF1E80C1130005CC1D /* Interactor.swift */,
 				AA88DB951F95A08400BFF6CB /* LoadingView.swift */,
 				910CFDD11E80C1130005CC1D /* MenuHelper.swift */,
@@ -553,12 +559,14 @@
 				87D097581F53443400D78BF8 /* LifeViewController.swift in Sources */,
 				87D097521F4A68B800D78BF8 /* WCImage.swift in Sources */,
 				AA210ADF1F89EEB100B28BC4 /* WCEvent.swift in Sources */,
+				AA0645691FB165FD0048A0F9 /* EditorView.swift in Sources */,
 				871E35C71EBA67CB00EA483E /* Upload.swift in Sources */,
 				874F3D3B1EF6F4B100B47492 /* PreviewViewController.swift in Sources */,
 				87DE3FC21EC41DF800BB49EB /* WCUser.swift in Sources */,
 				910CFDB51E80BF950005CC1D /* AppDelegate.swift in Sources */,
 				87CAC3961ED3D61D004D0A97 /* NVActivityIndicatorView.swift in Sources */,
 				910CFDD91E80C1130005CC1D /* MenuViewController.swift in Sources */,
+				AA06456B1FB175330048A0F9 /* EditorButton.swift in Sources */,
 				874F3D791EFAEBE600B47492 /* Toast.swift in Sources */,
 				8732FE031EBC1F6800B1CDB1 /* WCService.swift in Sources */,
 				877E61581E8C4DD100B88831 /* Article.swift in Sources */,

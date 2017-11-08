@@ -201,7 +201,10 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
     }
     
     @IBAction func click(_ sender: Any) {
-        print(1)
+        let editor = EditorView(frame: CGRect(x: 0, y: 100, width: screenWidth, height: 44))
+        self.view.addSubview(editor)
+        
+       
         
         /*
         let clientToken = "sandbox_5sx62kcq_wnbj3bx4nwmtyz77"
@@ -225,11 +228,13 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
         }
         self.present(dropIn!, animated: true, completion: nil)*/
         
+        
+        /*
         WCService.getTestTicket { (ticket) in
             let pkvc = PKAddPassesViewController(pass: ticket!)
             pkvc.delegate = self
             self.present(pkvc, animated: true)
-        }
+        }*/
         
         
         
