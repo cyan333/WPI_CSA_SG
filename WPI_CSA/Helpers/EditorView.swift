@@ -13,6 +13,15 @@ open class EditorView: UIView {
     private var toolbar: UIToolbar
     private var backgroundToolbar: UIToolbar
     
+    let editorFontSize = ["15", "17", "20", "22", "25", "30", "35", "40", "48", "56", "72"]
+    let editorFontColor = ["black", "red", "blue", "yellow", "gray", "green"]
+    let editorAlignment = ["left", "center", "right"]
+    
+    var bold = false
+    var italic = false
+    var underline = false
+    var textAlign = 1
+    
     
     public override init(frame: CGRect) {
         toolbarScroll = UIScrollView()
@@ -60,39 +69,39 @@ open class EditorView: UIView {
             
             switch (i){
             case 0:
-                button = EditorButton(image: #imageLiteral(resourceName: "Bold.png"), tappedImage: #imageLiteral(resourceName: "BoldTapped.png"), index: i)//bold
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorBold"), tappedImage: #imageLiteral(resourceName: "EditorBoldTapped"), index: i)//bold
             case 1:
-                button = EditorButton(image: #imageLiteral(resourceName: "Italic.png"), tappedImage: #imageLiteral(resourceName: "ItalicTapped.png"), index: i)//italic
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorItalic"), tappedImage: #imageLiteral(resourceName: "EditorItalicTapped"), index: i)//italic
             case 2:
-                button = EditorButton(image: #imageLiteral(resourceName: "Underline.png"), tappedImage: #imageLiteral(resourceName: "UnderlineTapped.png"), index: i)//underline
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorUnderline"), tappedImage: #imageLiteral(resourceName: "EditorUnderlineTapped"), index: i)//underline
             case 4:
-                button = EditorButton(image: #imageLiteral(resourceName: "AlignLeft.png"), tappedImage: #imageLiteral(resourceName: "AlignLeftTapped.png"), index: i)//left
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorAlignLeft"), tappedImage: #imageLiteral(resourceName: "EditorAlignLeftTapped"), index: i)//left
             case 5:
-                button = EditorButton(image: #imageLiteral(resourceName: "AlignCenter.png"), tappedImage: #imageLiteral(resourceName: "AlignCenterTapped.png"), index: i)//center
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorAlignCenter"), tappedImage: #imageLiteral(resourceName: "EditorAlignCenterTapped"), index: i)//center
             case 6:
-                button = EditorButton(image: #imageLiteral(resourceName: "AlignRight.png"), tappedImage: #imageLiteral(resourceName: "AlignRightTapped.png"), index: i)//right
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorAlignRight"), tappedImage: #imageLiteral(resourceName: "EditorAlignRightTapped"), index: i)//right
             case 8:
-                button = EditorButton(image: #imageLiteral(resourceName: "TextSize15.png"), tappedImage: #imageLiteral(resourceName: "TextSize15Tapped.png"), index: i)//15
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorSize15"), tappedImage: #imageLiteral(resourceName: "EditorSize15Tapped"), index: i)//15
             case 9:
-                button = EditorButton(image: #imageLiteral(resourceName: "TextSize20.png"), tappedImage: #imageLiteral(resourceName: "TextSize20Tapped.png"), index: i)//20
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorSize20"), tappedImage: #imageLiteral(resourceName: "EditorSize20Tapped"), index: i)//20
             case 10:
-                button = EditorButton(image: #imageLiteral(resourceName: "TextSize36.png"), tappedImage: #imageLiteral(resourceName: "TextSize36Tapped.png"), index: i)//36
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorSize36"), tappedImage: #imageLiteral(resourceName: "EditorSize36Tapped"), index: i)//36
             case 11:
-                button = EditorButton(image: #imageLiteral(resourceName: "TextSize72.png"), tappedImage: #imageLiteral(resourceName: "TextSize72Tapped.png"), index: i)//72
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorSize72"), tappedImage: #imageLiteral(resourceName: "EditorSize72Tapped"), index: i)//72
             case 13:
-                button = EditorButton(image: #imageLiteral(resourceName: "ColorBlack.png"), tappedImage: #imageLiteral(resourceName: "ColorBlackTapped.png"), index: i)//black
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorBlack"), tappedImage: #imageLiteral(resourceName: "EditorColorBlackTapped"), index: i)//black
             case 14:
-                button = EditorButton(image: #imageLiteral(resourceName: "ColorRed.png"), tappedImage: #imageLiteral(resourceName: "ColorRedTapped.png"), index: i)//red
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorRed"), tappedImage: #imageLiteral(resourceName: "EditorColorRedTapped"), index: i)//red
             case 15:
-                button = EditorButton(image: #imageLiteral(resourceName: "ColorBlue.png"), tappedImage: #imageLiteral(resourceName: "ColorBlueTapped.png"), index: i)//blue
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorBlue"), tappedImage: #imageLiteral(resourceName: "EditorColorBlueTapped"), index: i)//blue
             case 16:
-                button = EditorButton(image: #imageLiteral(resourceName: "ColorYellow.png"), tappedImage: #imageLiteral(resourceName: "ColorYellowTapped.png"), index: i)//yellow
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorYellow"), tappedImage: #imageLiteral(resourceName: "EditorColorYellowTapped"), index: i)//yellow
             case 17:
-                button = EditorButton(image: #imageLiteral(resourceName: "ColorGray.png"), tappedImage: #imageLiteral(resourceName: "ColorGrayTapped.png"), index: i)//gray
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorGray"), tappedImage: #imageLiteral(resourceName: "EditorColorGrayTapped"), index: i)//gray
             case 18:
-                button = EditorButton(image: #imageLiteral(resourceName: "ColorGreen.png"), tappedImage: #imageLiteral(resourceName: "ColorGreenTapped.png"), index: i)//green
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorGreen"), tappedImage: #imageLiteral(resourceName: "EditorColorGreenTapped"), index: i)//green
             case 19:
-                button = EditorButton(image: #imageLiteral(resourceName: "ColorPink.png"), tappedImage: #imageLiteral(resourceName: "ColorPinkTapped.png"), index: i)//pink
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorPink"), tappedImage: #imageLiteral(resourceName: "EditorColorPinkTapped"), index: i)//pink
             default:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorSeparator.png"), tappedImage: #imageLiteral(resourceName: "EditorSeparator.png"), index: i)//separator
             }

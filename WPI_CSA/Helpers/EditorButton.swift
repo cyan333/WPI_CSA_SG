@@ -39,8 +39,8 @@ class EditorButton: UIBarButtonItem {
         } else {
             self.image = tappedImage.withRenderingMode(.alwaysOriginal)
         }
-        
         tapped = !tapped
+        
         delegate?.buttonClickedOnIndex(index: index)
     }
 }
