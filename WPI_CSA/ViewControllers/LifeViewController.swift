@@ -201,32 +201,11 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
     }
     
     @IBAction func click(_ sender: Any) {
-        let editor = EditorView(frame: CGRect(x: 0, y: 100, width: screenWidth, height: 44))
-        self.view.addSubview(editor)
+        //let editor = EditorView(frame: CGRect(x: 0, y: 100, width: screenWidth, height: 44))
+        //self.view.addSubview(editor)
         
-       
+        self.performSegue(withIdentifier: "feedEditorSegue", sender: nil)
         
-        /*
-        let clientToken = "sandbox_5sx62kcq_wnbj3bx4nwmtyz77"
-        
-        let request =  BTDropInRequest()
-        let dropIn = BTDropInController(authorization: clientToken, request: request)
-        { (controller, result, error) in
-            if (error != nil) {
-                print("ERROR")
-            } else if (result?.isCancelled == true) {
-                print("CANCELLED")
-            } else if let result = result {
-                print(result.paymentMethod?.nonce ?? "no nonce")
-                // Use the BTDropInResult properties to update your UI
-                // result.paymentOptionType
-                // result.paymentMethod
-                // result.paymentIcon
-                // result.paymentDescription
-            }
-            controller.dismiss(animated: true, completion: nil)
-        }
-        self.present(dropIn!, animated: true, completion: nil)*/
         
         
         /*

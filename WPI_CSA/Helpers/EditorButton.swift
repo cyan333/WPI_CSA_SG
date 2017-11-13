@@ -34,6 +34,10 @@ class EditorButton: UIBarButtonItem {
     
     
     @objc private func clicked () {
+        delegate?.buttonClickedOnIndex(index: index)
+    }
+    
+    func tap() {
         if tapped {
             self.image = untappedImage.withRenderingMode(.alwaysOriginal)
         } else {
@@ -41,6 +45,5 @@ class EditorButton: UIBarButtonItem {
         }
         tapped = !tapped
         
-        delegate?.buttonClickedOnIndex(index: index)
     }
 }
