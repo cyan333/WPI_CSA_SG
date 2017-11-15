@@ -47,6 +47,9 @@ class ReportViewController: UIViewController, UITextViewDelegate {
                                                name: NSNotification.Name.UIKeyboardWillChangeFrame,
                                                object: nil)
     }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
     
     @IBAction func cancelClicked(_ sender: UIBarButtonItem) {
         if reportTxtView.text.trimmingCharacters(in: .whitespacesAndNewlines) == ""{
