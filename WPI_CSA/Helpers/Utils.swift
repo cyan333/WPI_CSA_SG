@@ -152,22 +152,12 @@ open class Utils {
             appMode = .Offline
             NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
             if showAlert {
-                OperationQueue.main.addOperation{
-                    let alert = UIAlertController(title: "Something goes wrong",
-                                                  message: "The server is down. Please email admin@fmning.com for help",
-                                                  preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-                    vc.present(alert, animated: true, completion: nil)
-                }
+                show(alertMessage: "The server is down. Please email admin@fmning.com for help", onViewController: vc)
             }else{
                 print("server down but not showin")
             }
         }else{
-            OperationQueue.main.addOperation{
-                let alert = UIAlertController(title: "Something goes wrong", message: errorMsg, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-                vc.present(alert, animated: true, completion: nil)
-            }
+            show(alertMessage: errorMsg, onViewController: vc)
         }
         
     }
@@ -439,7 +429,7 @@ extension Formatter {
      UTC Time formatter that converts iso-8601 without millisecond.
      Mainly used to convert abbreviated iso-8601 time string from server to swift date in UTC timezone
      Examples:
-     "2017-01-09T17:34:12.215Z".Iso8601DateUTC returns UTC Date 2017-01-09 17:34:12
+     "2017-01-09T17:34:12Z".Iso8601DateUTC returns UTC Date 2017-01-09 17:34:12
      Formatter.iso8601AbbrUTC.string(from: AboveDate) returns 2017-01-09T17:34:12Z
      */
     static let iso8601AbbrUTC: DateFormatter = {
@@ -461,7 +451,7 @@ extension Formatter {
      Formatter.abbrLocalZone.date(from: "2006/05/01 10:41:00") returns 2006-05-01 14:41:00 UTC
      Formatter.abbrLocalZone.string(from: AboveDate) returns 2006/05/01 10:41:00
      
-     EST: Adding offsets for GMT-G between Nov to Mar
+     EST: Adding offsets for GMT-5 between Nov to Mar
      Formatter.abbrLocalZone.date(from: "2006/12/01 10:41:00") returns 2006-12-01 15:41:00 UTC
      Formatter.abbrLocalZone.string(from: AboveDate) returns 2006/05/01 10:41:00
      */
