@@ -12,9 +12,12 @@ class FeedEditorViewController: UIViewController {
     
     var feedType = "Blog"
     var titleView: UIView!
-    var editorView: UIView!
+    //var editorView: UIView!
+    var editorTextView: UITextView!
+    var editorBar: EditorView!
     
     var currentPageIndex = 0
+    var keyboardHeight: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,12 +53,34 @@ class FeedEditorViewController: UIViewController {
         titleLine.backgroundColor = .lightGray
         titleView.addSubview(titleLine)
         
-        let nextButton = UIButton(frame: CGRect(x: viewWidth/2 - 25, y: 150, width: 50, height: 50))
+        let nextButton = UIButton(frame: CGRect(x: viewWidth/2 + 25, y: 150, width: 50, height: 50))
         nextButton.setImage(#imageLiteral(resourceName: "Next.png"), for: .normal)
         nextButton.addTarget(self, action: #selector(goToEditor), for: .touchUpInside)
         titleView.addSubview(nextButton)
         
+        let cancelButton = UIButton(frame: CGRect(x: viewWidth/2 - 75, y: 150, width: 50, height: 50))
+        cancelButton.setImage(#imageLiteral(resourceName: "Cancel.png"), for: .normal)
+        titleView.addSubview(cancelButton)
+        
         self.view.addSubview(titleView)
+        
+        // Start setting up editor view
+        editorTextView = UITextView(frame: CGRect(x: 10 + screenWidth, y: 20, width: screenWidth - 20,
+                                                  height: screenHeight - keyboardHeight - 70))
+        editorTextView.keyboardType = .default
+        editorTextView.layer.shadowColor = UIColor.lightGray.cgColor
+        editorTextView.layer.shadowOpacity = 1
+        editorTextView.layer.shadowOffset = CGSize.zero
+        editorTextView.layer.shadowRadius = 5
+        editorTextView.layer.shadowPath = UIBezierPath(rect: editorTextView.bounds).cgPath
+        editorTextView.layer.shouldRasterize = true
+        editorTextView.clipsToBounds = false
+        
+        self.view.addSubview(editorTextView)
+        
+        editorBar = EditorView(frame: CGRect(x: 0, y: screenHeight - keyboardHeight, width: screenWidth, height: 44))
+        
+        self.view.addSubview(editorBar)
         
         titleField.becomeFirstResponder()
         
@@ -81,31 +106,15 @@ class FeedEditorViewController: UIViewController {
         if currentPageIndex == 0 {
             currentPageIndex = 1
             
-            let viewWidth = screenWidth - 20
-            editorView = UIView(frame: CGRect(x: 10 + screenWidth, y: 20, width: viewWidth, height: 250))
-            editorView.backgroundColor = .white
             
-            let editorTextView = UITextView(frame: CGRect(x: 0, y: 0, width: editorView.frame.size.width,
-                                                          height: editorView.frame.size.height))
-            editorTextView.keyboardType = .default
-            editorTextView.layer.shadowColor = UIColor.lightGray.cgColor
-            editorTextView.layer.shadowOpacity = 1
-            editorTextView.layer.shadowOffset = CGSize.zero
-            editorTextView.layer.shadowRadius = 5
-            editorTextView.layer.shadowPath = UIBezierPath(rect: editorTextView.bounds).cgPath
-            editorTextView.layer.shouldRasterize = true
-            editorTextView.clipsToBounds = false
-            
-            editorView.addSubview(editorTextView)
-            
-            self.view.addSubview(editorView)
             
             
             UIView.animate(withDuration: 0.5, animations: {
                 self.titleView.frame.origin.x -= screenWidth
-                self.editorView.frame.origin.x -= screenWidth
+                self.editorTextView.frame.origin.x -= screenWidth
+                self.editorBar.frame.origin.y = screenHeight - self.keyboardHeight - 44
             }, completion: { (_) in
-                editorTextView.becomeFirstResponder()
+                self.editorTextView.becomeFirstResponder()
             })
         } else {
             print("skipped")
@@ -116,11 +125,18 @@ class FeedEditorViewController: UIViewController {
         if let userInfo = notification.userInfo {
             let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
             
-            print(keyboardFrame?.size.height)
-            /*let heightConstraint = reportTxtView.constraints.filter { $0.identifier == "reportTxtViewHeight" }
-            if let heightConstraint = heightConstraint.first {
-                heightConstraint.constant = UIScreen.main.bounds.height - (keyboardFrame?.height)! - reportHeightOffset
-            }*/
+            //print(keyboardFrame?.size.height)
+            keyboardHeight = (keyboardFrame?.size.height)!
+            
+            
+            UIView.animate(withDuration: 0.5, animations: {
+                self.editorTextView.frame.size.height = screenHeight - self.keyboardHeight - 70
+                if self.currentPageIndex == 1{
+                self.editorBar.frame.origin.y = screenHeight - self.keyboardHeight - 44
+                }
+            }, completion: { (_) in
+                //
+            })
         }
     }
     

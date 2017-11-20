@@ -89,6 +89,7 @@
 		AA92D1DE1FB55D97008ACBE1 /* EditorSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = AA92D1BB1FB55D96008ACBE1 /* EditorSeparator.png */; };
 		AA92D1F11FB9320F008ACBE1 /* FeedEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92D1F01FB9320F008ACBE1 /* FeedEditorViewController.swift */; };
 		AA92D1F31FB961EA008ACBE1 /* Next.png in Resources */ = {isa = PBXBuildFile; fileRef = AA92D1F21FB960FD008ACBE1 /* Next.png */; };
+		AA96CD6B1FC2109600909032 /* Cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = AA96CD6A1FC2109500909032 /* Cancel.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -181,6 +182,7 @@
 		AA92D1BB1FB55D96008ACBE1 /* EditorSeparator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EditorSeparator.png; path = Icons/EditorSeparator.png; sourceTree = "<group>"; };
 		AA92D1F01FB9320F008ACBE1 /* FeedEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedEditorViewController.swift; path = ViewControllers/FeedEditorViewController.swift; sourceTree = "<group>"; };
 		AA92D1F21FB960FD008ACBE1 /* Next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Next.png; path = Icons/Next.png; sourceTree = "<group>"; };
+		AA96CD6A1FC2109500909032 /* Cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Cancel.png; path = Icons/Cancel.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +283,7 @@
 		877FD5951E942FAC00632887 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AA96CD6A1FC2109500909032 /* Cancel.png */,
 				87DE40081EC7776200BB49EB /* defaultAvatar.png */,
 				AA92D1BB1FB55D96008ACBE1 /* EditorSeparator.png */,
 				87E5D3181ECCD009004E1F84 /* Facebook.png */,
@@ -486,6 +489,7 @@
 				872779741F2D80B2009F83B7 /* appIcon.jpg in Resources */,
 				872779701F2985D1009F83B7 /* 85_3.jpg in Resources */,
 				87DE400F1EC7A00600BB49EB /* YouTube.png in Resources */,
+				AA96CD6B1FC2109600909032 /* Cancel.png in Resources */,
 				910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */,
 				871E35B51EB19FF700EA483E /* 1_5.jpg in Resources */,
 				87E5D3191ECCD009004E1F84 /* Facebook.png in Resources */,
