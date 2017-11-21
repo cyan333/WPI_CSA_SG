@@ -40,7 +40,7 @@ class LoadingView: UIView {
         
         //Setting up warning view
         let warningView = UITextView(frame: CGRect(x: 0, y: 130, width: 300, height: 50))
-        warningView.text = "There is an network issue. Click anywhere to refresh the page.\nIf still doesn't work, please contact admin@fmning.com"
+        warningView.text = "There is a network issue. Click anywhere to refresh the page.\nIf still doesn't work, please contact admin@fmning.com"
         warningView.font = UIFont(name: (warningView.font?.fontName)!, size: 10)
         warningView.textColor = .gray
         warningView.textAlignment = .center
