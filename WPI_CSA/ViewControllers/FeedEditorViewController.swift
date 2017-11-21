@@ -14,7 +14,7 @@ class FeedEditorViewController: UIViewController {
     var titleView: UIView!
     //var editorView: UIView!
     var editorTextView: UITextView!
-    var editorBar: EditorView!
+    var editorView: EditorView!
     
     var currentPageIndex = 0
     var keyboardHeight: CGFloat = 0
@@ -75,12 +75,14 @@ class FeedEditorViewController: UIViewController {
         editorTextView.layer.shadowPath = UIBezierPath(rect: editorTextView.bounds).cgPath
         editorTextView.layer.shouldRasterize = true
         editorTextView.clipsToBounds = false
+        editorTextView.delegate = self
         
         self.view.addSubview(editorTextView)
         
-        editorBar = EditorView(frame: CGRect(x: 0, y: screenHeight - keyboardHeight, width: screenWidth, height: 44))
+        editorView = EditorView(frame: CGRect(x: 0, y: screenHeight - keyboardHeight, width: screenWidth, height: 44))
+        editorView.delegate = self
         
-        self.view.addSubview(editorBar)
+        self.view.addSubview(editorView)
         
         titleField.becomeFirstResponder()
         
@@ -112,7 +114,7 @@ class FeedEditorViewController: UIViewController {
             UIView.animate(withDuration: 0.5, animations: {
                 self.titleView.frame.origin.x -= screenWidth
                 self.editorTextView.frame.origin.x -= screenWidth
-                self.editorBar.frame.origin.y = screenHeight - self.keyboardHeight - 44
+                self.editorView.frame.origin.y = screenHeight - self.keyboardHeight - 44
             }, completion: { (_) in
                 self.editorTextView.becomeFirstResponder()
             })
@@ -124,15 +126,18 @@ class FeedEditorViewController: UIViewController {
     @objc func keyboardNotification(notification: NSNotification) {
         if let userInfo = notification.userInfo {
             let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let duration = TimeInterval((userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.floatValue ?? 0.25)
+            let curve = UInt((userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue ?? 0)
+            let options = UIViewAnimationOptions(rawValue: curve)
             
             //print(keyboardFrame?.size.height)
             keyboardHeight = (keyboardFrame?.size.height)!
             
             
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
                 self.editorTextView.frame.size.height = screenHeight - self.keyboardHeight - 70
                 if self.currentPageIndex == 1{
-                self.editorBar.frame.origin.y = screenHeight - self.keyboardHeight - 44
+                self.editorView.frame.origin.y = screenHeight - self.keyboardHeight - 44
                 }
             }, completion: { (_) in
                 //
@@ -140,6 +145,57 @@ class FeedEditorViewController: UIViewController {
         }
     }
     
+}
+
+extension FeedEditorViewController: EditorViewDelegate {
+    func currentFontUpdated(to font: EditorFont) {
+        var textAttributes = editorTextView.typingAttributes
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        switch font.currentAlignment {
+        case "center":
+            paragraphStyle.alignment = .center
+        case "right":
+            paragraphStyle.alignment = .right
+        default:
+            paragraphStyle.alignment = .left
+        }
+        textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.red
+        textAttributes["\(NSAttributedStringKey.paragraphStyle)"] = paragraphStyle
+        
+        editorTextView.typingAttributes = textAttributes
+    }
+    
+    func backButtonClicked() {
+        //
+    }
+    
+    func cancelButtonClicked() {
+        //
+    }
+    
+    func submitButtonClicked() {
+        //
+    }
+    
+    func imageButtonClicked() {
+        //
+    }
+    
+    
+}
+
+extension FeedEditorViewController: UITextViewDelegate {
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        editorTextView.typingAttributes = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.blue, NSAttributedStringKey.font.rawValue: UIFont.systemFont(ofSize: 17)]
+        
+        return true
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+//        editorTextView.typingAttributes = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.blue, NSAttributedStringKey.font.rawValue: UIFont.systemFont(ofSize: 17)]
+    }
 }
 
 extension FeedEditorViewController: UITextFieldDelegate {
