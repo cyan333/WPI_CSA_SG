@@ -8,6 +8,14 @@
 
 import UIKit
 
+protocol EditorViewDelegate: class {
+    func currentFontUpdated(to font: EditorFont);
+    func backButtonClicked();
+    func cancelButtonClicked();
+    func submitButtonClicked();
+    func imageButtonClicked();
+}
+
 open class EditorView: UIView {
     private var toolbarScroll: UIScrollView
     private var toolbar: UIToolbar
@@ -15,16 +23,22 @@ open class EditorView: UIView {
     
     let editorFontSize = ["15", "20", "36", "72"]
     let editorFontColor = ["black", "red", "blue", "yellow", "gray", "green", "pink"]
-
     let editorAlignment = ["left", "center", "right"]
     
+    weak var delegate: EditorViewDelegate?
+    
+    /* The default values for current font
     var bold = false
     var italic = false
     var underline = false
-    
     var currentFontSize = "15"
     var currentFontColor = "black"
     var currentAlignment = "left"
+    */
+    var currentFont = EditorFont()
+    
+    
+    
     
     
     public override init(frame: CGRect) {
@@ -68,46 +82,54 @@ open class EditorView: UIView {
         
         
         var buttons = [UIBarButtonItem]()
-        for i in 0 ... 19 {
+        for i in 0 ... 24 {
             var button: EditorButton!
             
             switch (i){
             case 0:
-                button = EditorButton(image: #imageLiteral(resourceName: "EditorBold"), tappedImage: #imageLiteral(resourceName: "EditorBoldTapped"), index: i)//bold
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorBack"), tappedImage: #imageLiteral(resourceName: "EditorBack"), index: i)
             case 1:
-                button = EditorButton(image: #imageLiteral(resourceName: "EditorItalic"), tappedImage: #imageLiteral(resourceName: "EditorItalicTapped"), index: i)//italic
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorCancel"), tappedImage: #imageLiteral(resourceName: "EditorCancel"), index: i)
             case 2:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorSubmit"), tappedImage: #imageLiteral(resourceName: "EditorSubmit"), index: i)
+            case 3:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorImage"), tappedImage: #imageLiteral(resourceName: "EditorImage"), index: i)
+            case 5:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorBold"), tappedImage: #imageLiteral(resourceName: "EditorBoldTapped"), index: i)//bold
+            case 6:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorItalic"), tappedImage: #imageLiteral(resourceName: "EditorItalicTapped"), index: i)//italic
+            case 7:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorUnderline"), tappedImage: #imageLiteral(resourceName: "EditorUnderlineTapped"), index: i)//underline
-            case 4:
+            case 9:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorAlignLeft"), tappedImage: #imageLiteral(resourceName: "EditorAlignLeftTapped"), index: i)//left
                 button.tap()
-            case 5:
+            case 10:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorAlignCenter"), tappedImage: #imageLiteral(resourceName: "EditorAlignCenterTapped"), index: i)//center
-            case 6:
+            case 11:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorAlignRight"), tappedImage: #imageLiteral(resourceName: "EditorAlignRightTapped"), index: i)//right
-            case 8:
+            case 13:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorSize15"), tappedImage: #imageLiteral(resourceName: "EditorSize15Tapped"), index: i)//15
                 button.tap()
-            case 9:
+            case 14:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorSize20"), tappedImage: #imageLiteral(resourceName: "EditorSize20Tapped"), index: i)//20
-            case 10:
+            case 15:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorSize36"), tappedImage: #imageLiteral(resourceName: "EditorSize36Tapped"), index: i)//36
-            case 11:
+            case 16:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorSize72"), tappedImage: #imageLiteral(resourceName: "EditorSize72Tapped"), index: i)//72
-            case 13:
+            case 18:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorColorBlack"), tappedImage: #imageLiteral(resourceName: "EditorColorBlackTapped"), index: i)//black
                 button.tap()
-            case 14:
-                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorRed"), tappedImage: #imageLiteral(resourceName: "EditorColorRedTapped"), index: i)//red
-            case 15:
-                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorBlue"), tappedImage: #imageLiteral(resourceName: "EditorColorBlueTapped"), index: i)//blue
-            case 16:
-                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorYellow"), tappedImage: #imageLiteral(resourceName: "EditorColorYellowTapped"), index: i)//yellow
-            case 17:
-                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorGray"), tappedImage: #imageLiteral(resourceName: "EditorColorGrayTapped"), index: i)//gray
-            case 18:
-                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorGreen"), tappedImage: #imageLiteral(resourceName: "EditorColorGreenTapped"), index: i)//green
             case 19:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorRed"), tappedImage: #imageLiteral(resourceName: "EditorColorRedTapped"), index: i)//red
+            case 20:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorBlue"), tappedImage: #imageLiteral(resourceName: "EditorColorBlueTapped"), index: i)//blue
+            case 21:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorYellow"), tappedImage: #imageLiteral(resourceName: "EditorColorYellowTapped"), index: i)//yellow
+            case 22:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorGray"), tappedImage: #imageLiteral(resourceName: "EditorColorGrayTapped"), index: i)//gray
+            case 23:
+                button = EditorButton(image: #imageLiteral(resourceName: "EditorColorGreen"), tappedImage: #imageLiteral(resourceName: "EditorColorGreenTapped"), index: i)//green
+            case 24:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorColorPink"), tappedImage: #imageLiteral(resourceName: "EditorColorPinkTapped"), index: i)//pink
             default:
                 button = EditorButton(image: #imageLiteral(resourceName: "EditorSeparator.png"), tappedImage: #imageLiteral(resourceName: "EditorSeparator.png"), index: i)//separator
@@ -147,37 +169,55 @@ extension EditorView: EditorButtonClickDelegate {
     func buttonClickedOnIndex(index: Int) {
         let button = toolbar.items![index] as! EditorButton
         switch(index){
-        case 0, 1, 2:
+        case 0:
+            delegate?.backButtonClicked()
+        case 1:
+            delegate?.cancelButtonClicked()
+        case 2:
+            delegate?.submitButtonClicked()
+        case 3:
+            delegate?.imageButtonClicked()
+        case 5:
             button.tap()
-        case 4, 5, 6:
-            let offset = 4
-            let currentIndex = editorAlignment.index(of: currentAlignment)! + offset
+            currentFont.bold = !currentFont.bold
+            delegate?.currentFontUpdated(to: currentFont)
+        case 6:
+            button.tap()
+            currentFont.italic = !currentFont.italic
+            delegate?.currentFontUpdated(to: currentFont)
+        case 7:
+            button.tap()
+            currentFont.underline = !currentFont.underline
+            delegate?.currentFontUpdated(to: currentFont)
+        case 9, 10, 11:
+            let offset = 9
+            let currentIndex = editorAlignment.index(of: currentFont.currentAlignment)! + offset
             if currentIndex != index {
                 let currentButton = toolbar.items![currentIndex] as! EditorButton
                 currentButton.tap()
                 button.tap()
-                currentAlignment = editorAlignment[index - offset]
-                print(currentAlignment)
+                currentFont.currentAlignment = editorAlignment[index - offset]
+                delegate?.currentFontUpdated(to: currentFont)
             }
-        case 8, 9, 10, 11:
-            let offset = 8
-            let currentIndex = editorFontSize.index(of: currentFontSize)! + offset
-            if currentIndex != index {
-                let currentButton = toolbar.items![currentIndex] as! EditorButton
-                currentButton.tap()
-                button.tap()
-                currentFontSize = editorFontSize[index - offset]
-                print(currentFontSize)
-            }
-        case 13, 14, 15, 16, 17, 18, 19:
+        case 13, 14, 15, 16:
             let offset = 13
-            let currentIndex = editorFontColor.index(of: currentFontColor)! + offset
+            let currentIndex = editorFontSize.index(of: currentFont.currentFontSize)! + offset
             if currentIndex != index {
                 let currentButton = toolbar.items![currentIndex] as! EditorButton
                 currentButton.tap()
                 button.tap()
-                currentFontColor = editorFontColor[index - offset]
-                print(currentFontColor)
+                currentFont.currentFontSize = editorFontSize[index - offset]
+                delegate?.currentFontUpdated(to: currentFont)
+            }
+        case 18, 19, 20, 21, 22, 23, 24:
+            let offset = 18
+            let currentIndex = editorFontColor.index(of: currentFont.currentFontColor)! + offset
+            if currentIndex != index {
+                let currentButton = toolbar.items![currentIndex] as! EditorButton
+                currentButton.tap()
+                button.tap()
+                currentFont.currentFontColor = editorFontColor[index - offset]
+                delegate?.currentFontUpdated(to: currentFont)
             }
         default:
             button.tap()

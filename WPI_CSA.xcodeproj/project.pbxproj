@@ -89,6 +89,8 @@
 		AA92D1DE1FB55D97008ACBE1 /* EditorSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = AA92D1BB1FB55D96008ACBE1 /* EditorSeparator.png */; };
 		AA92D1F11FB9320F008ACBE1 /* FeedEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA92D1F01FB9320F008ACBE1 /* FeedEditorViewController.swift */; };
 		AA92D1F31FB961EA008ACBE1 /* Next.png in Resources */ = {isa = PBXBuildFile; fileRef = AA92D1F21FB960FD008ACBE1 /* Next.png */; };
+		AA96CD6B1FC2109600909032 /* Cancel.png in Resources */ = {isa = PBXBuildFile; fileRef = AA96CD6A1FC2109500909032 /* Cancel.png */; };
+		AAA2CCFC1FC3D648002E59E4 /* EditorFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA2CCFB1FC3D648002E59E4 /* EditorFont.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -170,8 +172,8 @@
 		910CFDD11E80C1130005CC1D /* MenuHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuHelper.swift; path = Helpers/MenuHelper.swift; sourceTree = "<group>"; };
 		910CFDD31E80C1130005CC1D /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuViewController.swift; path = ViewControllers/MenuViewController.swift; sourceTree = "<group>"; };
 		910CFDDA1E80C13A0005CC1D /* PresentMenuAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PresentMenuAnimator.swift; path = Helpers/PresentMenuAnimator.swift; sourceTree = "<group>"; };
-		AA0645681FB165FD0048A0F9 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditorView.swift; path = Helpers/EditorView.swift; sourceTree = "<group>"; };
-		AA06456A1FB175330048A0F9 /* EditorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditorButton.swift; path = Helpers/EditorButton.swift; sourceTree = "<group>"; };
+		AA0645681FB165FD0048A0F9 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditorView.swift; path = Helpers/Editor/EditorView.swift; sourceTree = "<group>"; };
+		AA06456A1FB175330048A0F9 /* EditorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditorButton.swift; path = Helpers/Editor/EditorButton.swift; sourceTree = "<group>"; };
 		AA210ADE1F89EEB100B28BC4 /* WCEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WCEvent.swift; path = WebService/WCEvent.swift; sourceTree = "<group>"; };
 		AA3CBF341F86A284007BEEBC /* RequestMocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RequestMocker.swift; path = WebService/RequestMocker.swift; sourceTree = "<group>"; };
 		AA5740F81F9D678D00350911 /* WCPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WCPayment.swift; path = WebService/WCPayment.swift; sourceTree = "<group>"; };
@@ -181,6 +183,8 @@
 		AA92D1BB1FB55D96008ACBE1 /* EditorSeparator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = EditorSeparator.png; path = Icons/EditorSeparator.png; sourceTree = "<group>"; };
 		AA92D1F01FB9320F008ACBE1 /* FeedEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedEditorViewController.swift; path = ViewControllers/FeedEditorViewController.swift; sourceTree = "<group>"; };
 		AA92D1F21FB960FD008ACBE1 /* Next.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Next.png; path = Icons/Next.png; sourceTree = "<group>"; };
+		AA96CD6A1FC2109500909032 /* Cancel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Cancel.png; path = Icons/Cancel.png; sourceTree = "<group>"; };
+		AAA2CCFB1FC3D648002E59E4 /* EditorFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EditorFont.swift; path = Helpers/Editor/EditorFont.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,10 +242,9 @@
 			isa = PBXGroup;
 			children = (
 				87CAC3941ED3D5A4004D0A97 /* ActivityIndicator */,
+				AAA2CCFA1FC3D443002E59E4 /* Editor */,
 				87D0975B1F5721D000D78BF8 /* ColoredView.swift */,
 				910CFDCE1E80C1130005CC1D /* DismissMenuAnimator.swift */,
-				AA06456A1FB175330048A0F9 /* EditorButton.swift */,
-				AA0645681FB165FD0048A0F9 /* EditorView.swift */,
 				910CFDCF1E80C1130005CC1D /* Interactor.swift */,
 				AA88DB951F95A08400BFF6CB /* LoadingView.swift */,
 				910CFDD11E80C1130005CC1D /* MenuHelper.swift */,
@@ -281,6 +284,7 @@
 		877FD5951E942FAC00632887 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				AA96CD6A1FC2109500909032 /* Cancel.png */,
 				87DE40081EC7776200BB49EB /* defaultAvatar.png */,
 				AA92D1BB1FB55D96008ACBE1 /* EditorSeparator.png */,
 				87E5D3181ECCD009004E1F84 /* Facebook.png */,
@@ -395,6 +399,16 @@
 			path = WPI_CSA;
 			sourceTree = "<group>";
 		};
+		AAA2CCFA1FC3D443002E59E4 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				AA06456A1FB175330048A0F9 /* EditorButton.swift */,
+				AA0645681FB165FD0048A0F9 /* EditorView.swift */,
+				AAA2CCFB1FC3D648002E59E4 /* EditorFont.swift */,
+			);
+			name = Editor;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -486,6 +500,7 @@
 				872779741F2D80B2009F83B7 /* appIcon.jpg in Resources */,
 				872779701F2985D1009F83B7 /* 85_3.jpg in Resources */,
 				87DE400F1EC7A00600BB49EB /* YouTube.png in Resources */,
+				AA96CD6B1FC2109600909032 /* Cancel.png in Resources */,
 				910CFDBA1E80BF950005CC1D /* Main.storyboard in Resources */,
 				871E35B51EB19FF700EA483E /* 1_5.jpg in Resources */,
 				87E5D3191ECCD009004E1F84 /* Facebook.png in Resources */,
@@ -602,6 +617,7 @@
 				87D0975A1F55F75F00D78BF8 /* TabBarViewController.swift in Sources */,
 				87D0975E1F5A357600D78BF8 /* CacheManager.swift in Sources */,
 				87CAC39C1ED3D6CC004D0A97 /* NVActivityIndicatorShape.swift in Sources */,
+				AAA2CCFC1FC3D648002E59E4 /* EditorFont.swift in Sources */,
 				87E5D3171ECCCCEB004E1F84 /* Utils.swift in Sources */,
 				871E35CC1EBAA44B00EA483E /* HTTPSecurity.swift in Sources */,
 				87CAC39A1ED3D649004D0A97 /* NVActivityIndicatorAnimationDelegate.swift in Sources */,
