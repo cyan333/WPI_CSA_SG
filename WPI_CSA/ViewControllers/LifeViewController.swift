@@ -115,6 +115,7 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
                 self.reloadingFlag = false
                 self.tableView.reloadData()
                 if error == serverDown {
+                    self.serverDownFlag = true
                     self.loadingView.showServerDownView()
                 } else {
                     self.loadingView.removeFromSuperview()
@@ -171,7 +172,7 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
         if keepLoadingFlag {
             return
         } else {
-            keepLoadingFlag = false
+            keepLoadingFlag = true
         }
         
         WCFeedManager.getRecentFeeds(withLimit: feedLoadLimit, andCheckPoint: checkPoint) {
