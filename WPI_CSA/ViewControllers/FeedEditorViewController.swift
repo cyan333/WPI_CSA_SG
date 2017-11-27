@@ -16,6 +16,8 @@ class FeedEditorViewController: UIViewController {
     var editorTextView: UITextView!
     var editorView: EditorView!
     
+    var currentTypingAttributes: [String: Any] = [:]
+    
     var currentPageIndex = 0
     var keyboardHeight: CGFloat = 0
     
@@ -68,13 +70,13 @@ class FeedEditorViewController: UIViewController {
         editorTextView = UITextView(frame: CGRect(x: 10 + screenWidth, y: 20, width: screenWidth - 20,
                                                   height: screenHeight - keyboardHeight - 70))
         editorTextView.keyboardType = .default
+        editorTextView.clipsToBounds = true
         editorTextView.layer.shadowColor = UIColor.lightGray.cgColor
         editorTextView.layer.shadowOpacity = 1
         editorTextView.layer.shadowOffset = CGSize.zero
         editorTextView.layer.shadowRadius = 5
         editorTextView.layer.shadowPath = UIBezierPath(rect: editorTextView.bounds).cgPath
         editorTextView.layer.shouldRasterize = true
-        editorTextView.clipsToBounds = false
         editorTextView.delegate = self
         
         self.view.addSubview(editorTextView)
@@ -149,7 +151,24 @@ class FeedEditorViewController: UIViewController {
 
 extension FeedEditorViewController: EditorViewDelegate {
     func currentFontUpdated(to font: EditorFont) {
-        var textAttributes = editorTextView.typingAttributes
+        
+        let fontSize = CGFloat(Int(font.currentFontSize) ?? 15)
+        var newFont = UIFont.systemFont(ofSize: fontSize, weight: font.bold ? UIFont.Weight.heavy : UIFont.Weight.regular)
+        
+        
+        if font.italic {
+            let fontDescriptor = newFont.fontDescriptor.withSymbolicTraits(.traitItalic)
+            newFont = UIFont(descriptor: fontDescriptor!, size: 0)
+        }
+        
+        currentTypingAttributes[NSAttributedStringKey.font.rawValue] = newFont
+        
+        if font.underline {
+            currentTypingAttributes[NSAttributedStringKey.underlineStyle.rawValue] = NSUnderlineStyle.styleSingle.rawValue
+        } else {
+            currentTypingAttributes[NSAttributedStringKey.underlineStyle.rawValue] = NSUnderlineStyle.styleNone.rawValue
+        }
+        
         
         let paragraphStyle = NSMutableParagraphStyle()
         switch font.currentAlignment {
@@ -160,10 +179,25 @@ extension FeedEditorViewController: EditorViewDelegate {
         default:
             paragraphStyle.alignment = .left
         }
-        textAttributes["\(NSAttributedStringKey.foregroundColor)"] = UIColor.red
-        textAttributes["\(NSAttributedStringKey.paragraphStyle)"] = paragraphStyle
+        currentTypingAttributes[NSAttributedStringKey.paragraphStyle.rawValue] = paragraphStyle
         
-        editorTextView.typingAttributes = textAttributes
+        switch font.currentFontColor {
+        case "red":
+            currentTypingAttributes[NSAttributedStringKey.foregroundColor.rawValue] = UIColor(hexString: "E31B0F")
+        case "blue":
+            currentTypingAttributes[NSAttributedStringKey.foregroundColor.rawValue] = UIColor(hexString: "07C5F1")
+        case "yellow":
+            currentTypingAttributes[NSAttributedStringKey.foregroundColor.rawValue] = UIColor(hexString: "FFD64C")
+        case "gray":
+            currentTypingAttributes[NSAttributedStringKey.foregroundColor.rawValue] = UIColor(hexString: "808080")
+        case "green":
+            currentTypingAttributes[NSAttributedStringKey.foregroundColor.rawValue] = UIColor(hexString: "68A46E")
+        case "pink":
+            currentTypingAttributes[NSAttributedStringKey.foregroundColor.rawValue] = UIColor(hexString: "FF6B89")
+        default:
+            currentTypingAttributes[NSAttributedStringKey.foregroundColor.rawValue] = UIColor.black
+        }
+        
     }
     
     func backButtonClicked() {
@@ -175,11 +209,31 @@ extension FeedEditorViewController: EditorViewDelegate {
     }
     
     func submitButtonClicked() {
-        //
+        //print(editorTextView.attributedText.htmlString() ?? "failed")
+        let newString = editorTextView.attributedText!
+        newString.enumerateAttributes(in: NSMakeRange(0, newString.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) {
+            (object, range, stop) in
+            if object.keys.contains(NSAttributedStringKey.attachment) {
+                print(1)
+            } else {
+                print(2)
+            }
+        }
     }
     
     func imageButtonClicked() {
-        //
+        let image1Attachment = NSTextAttachment()
+        image1Attachment.image = UIImage(named: "defaultAvatar.png")
+        
+        let imageString = NSAttributedString(attachment: image1Attachment)
+        
+        let newString = NSMutableAttributedString(attributedString: editorTextView.attributedText)
+        newString.replaceCharacters(in: editorTextView.selectedRange, with: imageString)
+        
+        editorTextView.attributedText = newString
+        
+        
+        
     }
     
     
@@ -188,7 +242,15 @@ extension FeedEditorViewController: EditorViewDelegate {
 extension FeedEditorViewController: UITextViewDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        editorTextView.typingAttributes = [NSAttributedStringKey.foregroundColor.rawValue: UIColor.blue, NSAttributedStringKey.font.rawValue: UIFont.systemFont(ofSize: 17)]
+        editorTextView.allowsEditingTextAttributes = true
+        
+        currentTypingAttributes = editorTextView.typingAttributes
+        currentTypingAttributes[NSAttributedStringKey.font.rawValue] = UIFont.systemFont(ofSize: 15)
+        return true
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        textView.typingAttributes = currentTypingAttributes
         
         return true
     }
