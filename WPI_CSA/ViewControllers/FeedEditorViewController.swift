@@ -8,10 +8,11 @@
 
 import UIKit
 
-class FeedEditorViewController: UIViewController {
+class FeedEditorViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var feedType = "Blog"
     var titleView: UIView!
+    var titleField: UITextField!
     //var editorView: UIView!
     var editorTextView: UITextView!
     var editorView: EditorView!
@@ -28,12 +29,6 @@ class FeedEditorViewController: UIViewController {
         
         titleView = UIView(frame: CGRect(x: 20, y: 50, width: viewWidth, height: 250))
         titleView.backgroundColor = .white
-//        titleView.layer.shadowColor = UIColor.lightGray.cgColor
-//        titleView.layer.shadowOpacity = 1
-//        titleView.layer.shadowOffset = CGSize.zero
-//        titleView.layer.shadowRadius = 5
-//        titleView.layer.shadowPath = UIBezierPath(rect: titleView.bounds).cgPath
-//        titleView.layer.shouldRasterize = true
         
         let items = ["Blog", "Trade"]
         let picker = UISegmentedControl(items: items)
@@ -43,7 +38,7 @@ class FeedEditorViewController: UIViewController {
         titleView.addSubview(picker)
         
         
-        let titleField = UITextField(frame: CGRect(x: 20, y: 90, width: viewWidth - 40, height: 25))
+        titleField = UITextField(frame: CGRect(x: 20, y: 90, width: viewWidth - 40, height: 25))
         titleField.tag = 1
         titleField.textAlignment = .center
         titleField.placeholder = "Enter the title for the article"
@@ -62,6 +57,7 @@ class FeedEditorViewController: UIViewController {
         
         let cancelButton = UIButton(frame: CGRect(x: viewWidth/2 - 75, y: 150, width: 50, height: 50))
         cancelButton.setImage(#imageLiteral(resourceName: "Cancel.png"), for: .normal)
+        cancelButton.addTarget(self, action: #selector(cancelClicked), for: .touchUpInside)
         titleView.addSubview(cancelButton)
         
         self.view.addSubview(titleView)
@@ -71,12 +67,6 @@ class FeedEditorViewController: UIViewController {
                                                   height: screenHeight - keyboardHeight - 70))
         editorTextView.keyboardType = .default
         editorTextView.clipsToBounds = true
-        editorTextView.layer.shadowColor = UIColor.lightGray.cgColor
-        editorTextView.layer.shadowOpacity = 1
-        editorTextView.layer.shadowOffset = CGSize.zero
-        editorTextView.layer.shadowRadius = 5
-        editorTextView.layer.shadowPath = UIBezierPath(rect: editorTextView.bounds).cgPath
-        editorTextView.layer.shouldRasterize = true
         editorTextView.delegate = self
         
         self.view.addSubview(editorTextView)
@@ -85,6 +75,62 @@ class FeedEditorViewController: UIViewController {
         editorView.delegate = self
         
         self.view.addSubview(editorView)
+        
+        if let savedTitle = Utils.getParam(named: localTitle), savedTitle.trim() != "" {
+            titleField.text = savedTitle
+        }
+        var savedArticle = Utils.getParam(named: localArticle)?.replacingOccurrences(of: ".SFUIText", with: "Helvetica")
+        print(savedArticle!)
+        if savedArticle != nil && savedArticle!.trim() != "" {
+            let savedAttributedArticle = NSMutableAttributedString(string: "")
+            
+            //editorTextView.attributedText = savedArticle.htmlAttributedString(ratio: .Enlarged)
+            DispatchQueue.global(qos: .background).async {
+                let regex = try! NSRegularExpression(pattern:
+                    "<img.*?>")
+                let matchs = regex.matches(in: savedArticle!, range: NSRange(location: 0, length: savedArticle!.count))
+                    .map{(savedArticle! as NSString).substring(with: $0.range)}
+                let count = matchs.count
+                
+                for i in 0 ..< count {
+                    let parts = savedArticle!.components(separatedBy: matchs[i])
+                    let first = parts[0]
+                    if first.count > 0 {
+                        savedAttributedArticle.append(first.htmlAttributedString(ratio: .Normal)!)
+                    }
+                    
+                    let imgAttributes = matchs[i].getHtmlAttributes()
+                    
+                    if let base64 = imgAttributes["src"] as? String {
+                        let imageData = Data(base64Encoded: String(base64.split(separator: ",")[1]), options: [])
+                        let image = UIImage(data: imageData!)
+                        
+                        let attachmentWidth = screenWidth - 40
+                        let attachment = NSTextAttachment()
+                        attachment.image = image
+                        attachment.bounds = CGRect(x: 0, y: 0, width: attachmentWidth,
+                                                   height: image!.size.height * attachmentWidth / image!.size.width)
+                        
+                        let imageString = NSAttributedString(attachment: attachment)
+                        savedAttributedArticle.append(imageString);
+                    }
+                    
+                    
+                    
+                    
+                    savedArticle = parts[1]
+                }
+                
+                if savedArticle != "" {
+                    savedAttributedArticle.append(savedArticle!.htmlAttributedString(ratio: .Normal)!)
+                }
+                
+                DispatchQueue.main.async {
+                    self.editorTextView.attributedText = savedAttributedArticle
+                }
+            }
+            
+        }
         
         titleField.becomeFirstResponder()
         
@@ -109,9 +155,6 @@ class FeedEditorViewController: UIViewController {
     @objc func goToEditor(){
         if currentPageIndex == 0 {
             currentPageIndex = 1
-            
-            
-            
             
             UIView.animate(withDuration: 0.5, animations: {
                 self.titleView.frame.origin.x -= screenWidth
@@ -147,13 +190,97 @@ class FeedEditorViewController: UIViewController {
         }
     }
     
+    @objc func cancelClicked() {
+        
+        if titleField.text!.trimmingCharacters(in: .whitespacesAndNewlines) != "" ||
+            editorTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines) != "" {
+            let confirm = UIAlertController(title: nil, message: "Are you sure you want to cancel?", preferredStyle: .alert)
+            confirm.addAction(UIAlertAction(title: "Yes, discard article", style: .default, handler: {
+                (alert: UIAlertAction!) -> Void in
+                Utils.setParam(named: localTitle, withValue: "")
+                Utils.setParam(named: localArticle, withValue: "")
+                self.dismiss(animated: true, completion: nil)
+            }))
+            confirm.addAction(UIAlertAction(title: "Yes, save article locally", style: .default, handler: {
+                (alert: UIAlertAction!) -> Void in
+                Utils.setParam(named: localTitle, withValue: self.titleField.text!)
+                Utils.setParam(named: localArticle, withValue: self.getEditorHtmlText())
+                self.dismiss(animated: true, completion: nil)
+            }))
+            confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            
+            self.present(confirm, animated: true, completion: nil)
+            return
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func getEditorHtmlText() -> String {
+        
+        var resultText = ""
+        var index = 0
+        
+        if let htmlText = editorTextView.attributedText.htmlString() {
+            resultText = htmlText
+            let newString = editorTextView.attributedText!
+            newString.enumerateAttributes(in: NSMakeRange(0, newString.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) {
+                (object, range, stop) in
+                if let attachment = object[NSAttributedStringKey.attachment] as? NSTextAttachment {
+                    if let image = attachment.image {
+                        let compressionRate = image.compressRateForSize(target: 250)
+                        let imgString = UIImageJPEGRepresentation(image, compressionRate)?.base64EncodedString()//.base64EncodedString(options: NSData.Base64DecodingOptions.)
+                        
+                        let imgNameExt = index == 0 ? "" : "_\(index)"
+                        
+                        index += 1
+                        guard let range = resultText
+                            .range(of: "<img src=\"file:///Attachment\(imgNameExt).png\" alt=\"Attachment\(imgNameExt).png\">") else {
+                                return
+                        }
+                        
+                        resultText = resultText.replacingCharacters(in: range, with: "<img src=\"data:image/jpeg;base64,\(imgString!)\">")
+                    }
+                }
+            }
+        }
+        return resultText
+        
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let chosenImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            
+            let attachmentWidth = screenWidth - 40
+            let attachment = NSTextAttachment()
+            attachment.image = chosenImage
+            attachment.bounds = CGRect(x: 0, y: 0, width: attachmentWidth,
+                                       height: chosenImage.size.height * attachmentWidth / chosenImage.size.width)
+            
+            let imageString = NSAttributedString(attachment: attachment)
+            let newString = NSMutableAttributedString(attributedString: editorTextView.attributedText)
+            newString.replaceCharacters(in: editorTextView.selectedRange, with: imageString)
+            editorTextView.attributedText = newString
+        }
+        
+        self.dismiss(animated: true) {
+            self.editorTextView.becomeFirstResponder()
+        }
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true) {
+            self.editorTextView.becomeFirstResponder()
+        }
+    }
+    
 }
 
 extension FeedEditorViewController: EditorViewDelegate {
     func currentFontUpdated(to font: EditorFont) {
         
         let fontSize = CGFloat(Int(font.currentFontSize) ?? 15)
-        var newFont = UIFont.systemFont(ofSize: fontSize, weight: font.bold ? UIFont.Weight.heavy : UIFont.Weight.regular)
+        var newFont = UIFont.systemFont(ofSize: fontSize, weight: font.bold ? UIFont.Weight.bold : UIFont.Weight.regular)
         
         
         if font.italic {
@@ -201,38 +328,37 @@ extension FeedEditorViewController: EditorViewDelegate {
     }
     
     func backButtonClicked() {
-        //
+        currentPageIndex = 0
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.titleView.frame.origin.x += screenWidth
+            self.editorTextView.frame.origin.x += screenWidth
+            self.editorView.frame.origin.y = screenHeight - self.keyboardHeight
+        }, completion: { (_) in
+            self.titleField.becomeFirstResponder()
+        })
     }
     
     func cancelButtonClicked() {
-        //
+        cancelClicked()
     }
     
     func submitButtonClicked() {
-        //print(editorTextView.attributedText.htmlString() ?? "failed")
-        let newString = editorTextView.attributedText!
-        newString.enumerateAttributes(in: NSMakeRange(0, newString.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) {
-            (object, range, stop) in
-            if object.keys.contains(NSAttributedStringKey.attachment) {
-                print(1)
-            } else {
-                print(2)
-            }
-        }
+        print(getEditorHtmlText())
     }
     
     func imageButtonClicked() {
-        let image1Attachment = NSTextAttachment()
-        image1Attachment.image = UIImage(named: "defaultAvatar.png")
         
-        let imageString = NSAttributedString(attachment: image1Attachment)
-        
-        let newString = NSMutableAttributedString(attributedString: editorTextView.attributedText)
-        newString.replaceCharacters(in: editorTextView.selectedRange, with: imageString)
-        
-        editorTextView.attributedText = newString
-        
-        
+        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .savedPhotosAlbum;
+            imagePicker.allowsEditing = false
+            
+            self.present(imagePicker, animated: true, completion: nil)
+        } else {
+            Utils.show(alertMessage: "Can not add image. Photo album not available", onViewController: self)
+        }
         
     }
     
