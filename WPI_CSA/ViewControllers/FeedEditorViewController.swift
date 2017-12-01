@@ -67,12 +67,6 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
                                                   height: screenHeight - keyboardHeight - 70))
         editorTextView.keyboardType = .default
         editorTextView.clipsToBounds = true
-//        editorTextView.layer.shadowColor = UIColor.lightGray.cgColor
-//        editorTextView.layer.shadowOpacity = 1
-//        editorTextView.layer.shadowOffset = CGSize.zero
-//        editorTextView.layer.shadowRadius = 5
-//        editorTextView.layer.shadowPath = UIBezierPath(rect: editorTextView.bounds).cgPath
-//        editorTextView.layer.shouldRasterize = true
         editorTextView.delegate = self
         
         self.view.addSubview(editorTextView)
@@ -81,6 +75,62 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
         editorView.delegate = self
         
         self.view.addSubview(editorView)
+        
+        if let savedTitle = Utils.getParam(named: localTitle), savedTitle.trim() != "" {
+            titleField.text = savedTitle
+        }
+        var savedArticle = Utils.getParam(named: localArticle)?.replacingOccurrences(of: ".SFUIText", with: "Helvetica")
+        print(savedArticle!)
+        if savedArticle != nil && savedArticle!.trim() != "" {
+            let savedAttributedArticle = NSMutableAttributedString(string: "")
+            
+            //editorTextView.attributedText = savedArticle.htmlAttributedString(ratio: .Enlarged)
+            DispatchQueue.global(qos: .background).async {
+                let regex = try! NSRegularExpression(pattern:
+                    "<img.*?>")
+                let matchs = regex.matches(in: savedArticle!, range: NSRange(location: 0, length: savedArticle!.count))
+                    .map{(savedArticle! as NSString).substring(with: $0.range)}
+                let count = matchs.count
+                
+                for i in 0 ..< count {
+                    let parts = savedArticle!.components(separatedBy: matchs[i])
+                    let first = parts[0]
+                    if first.count > 0 {
+                        savedAttributedArticle.append(first.htmlAttributedString(ratio: .Normal)!)
+                    }
+                    
+                    let imgAttributes = matchs[i].getHtmlAttributes()
+                    
+                    if let base64 = imgAttributes["src"] as? String {
+                        let imageData = Data(base64Encoded: String(base64.split(separator: ",")[1]), options: [])
+                        let image = UIImage(data: imageData!)
+                        
+                        let attachmentWidth = screenWidth - 40
+                        let attachment = NSTextAttachment()
+                        attachment.image = image
+                        attachment.bounds = CGRect(x: 0, y: 0, width: attachmentWidth,
+                                                   height: image!.size.height * attachmentWidth / image!.size.width)
+                        
+                        let imageString = NSAttributedString(attachment: attachment)
+                        savedAttributedArticle.append(imageString);
+                    }
+                    
+                    
+                    
+                    
+                    savedArticle = parts[1]
+                }
+                
+                if savedArticle != "" {
+                    savedAttributedArticle.append(savedArticle!.htmlAttributedString(ratio: .Normal)!)
+                }
+                
+                DispatchQueue.main.async {
+                    self.editorTextView.attributedText = savedAttributedArticle
+                }
+            }
+            
+        }
         
         titleField.becomeFirstResponder()
         
@@ -176,22 +226,20 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
             let newString = editorTextView.attributedText!
             newString.enumerateAttributes(in: NSMakeRange(0, newString.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) {
                 (object, range, stop) in
-                if object.keys.contains(NSAttributedStringKey.attachment) {
-                    if let attachment = object[NSAttributedStringKey.attachment] as? NSTextAttachment {
-                        if let image = attachment.image {
-                            let compressionRate = image.compressRateForSize(target: 250)
-                            let imgString = UIImageJPEGRepresentation(image, compressionRate)?.base64EncodedString()//.base64EncodedString(options: NSData.Base64DecodingOptions.)
-                            
-                            let imgNameExt = index == 0 ? "" : "_\(index)"
-                            
-                            index += 1
-                            guard let range = resultText
-                                .range(of: "<img src=\"file:///Attachment\(imgNameExt).png\" alt=\"Attachment\(imgNameExt).png\">") else {
+                if let attachment = object[NSAttributedStringKey.attachment] as? NSTextAttachment {
+                    if let image = attachment.image {
+                        let compressionRate = image.compressRateForSize(target: 250)
+                        let imgString = UIImageJPEGRepresentation(image, compressionRate)?.base64EncodedString()//.base64EncodedString(options: NSData.Base64DecodingOptions.)
+                        
+                        let imgNameExt = index == 0 ? "" : "_\(index)"
+                        
+                        index += 1
+                        guard let range = resultText
+                            .range(of: "<img src=\"file:///Attachment\(imgNameExt).png\" alt=\"Attachment\(imgNameExt).png\">") else {
                                 return
-                            }
-                            
-                            resultText = resultText.replacingCharacters(in: range, with: "<img src=\"data:image/jpeg;base64,\(imgString!)\">")
                         }
+                        
+                        resultText = resultText.replacingCharacters(in: range, with: "<img src=\"data:image/jpeg;base64,\(imgString!)\">")
                     }
                 }
             }
@@ -232,7 +280,7 @@ extension FeedEditorViewController: EditorViewDelegate {
     func currentFontUpdated(to font: EditorFont) {
         
         let fontSize = CGFloat(Int(font.currentFontSize) ?? 15)
-        var newFont = UIFont.systemFont(ofSize: fontSize, weight: font.bold ? UIFont.Weight.heavy : UIFont.Weight.regular)
+        var newFont = UIFont.systemFont(ofSize: fontSize, weight: font.bold ? UIFont.Weight.bold : UIFont.Weight.regular)
         
         
         if font.italic {
