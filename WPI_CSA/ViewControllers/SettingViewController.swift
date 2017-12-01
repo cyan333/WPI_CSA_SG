@@ -278,7 +278,7 @@ extension SettingViewController : UITableViewDataSource {
                     labelText.append(NSAttributedString(string: " Verified"))
                     cell.emailVerifyLabel.attributedText = labelText
                 } else {
-                    statusImage.image = UIImage(named: "notVarified.png")
+                    statusImage.image = UIImage(named: "notVerified.png")
                     statusImage.bounds = CGRect(x: 0, y: -2, width: 13, height: 13)
                     let statusString = NSAttributedString(attachment: statusImage)
                     let labelText = NSMutableAttributedString(string: "")

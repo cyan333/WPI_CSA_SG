@@ -66,7 +66,7 @@
 		87DE400D1EC79FFF00BB49EB /* Instagram.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE400C1EC79FFF00BB49EB /* Instagram.png */; };
 		87DE400F1EC7A00600BB49EB /* YouTube.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE400E1EC7A00600BB49EB /* YouTube.png */; };
 		87DE40121EC9420A00BB49EB /* verified.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40101EC9420A00BB49EB /* verified.png */; };
-		87DE40131EC9420A00BB49EB /* notVarified.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40111EC9420A00BB49EB /* notVarified.png */; };
+		87DE40131EC9420A00BB49EB /* notVerified.png in Resources */ = {isa = PBXBuildFile; fileRef = 87DE40111EC9420A00BB49EB /* notVerified.png */; };
 		87E5D3171ECCCCEB004E1F84 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E5D3161ECCCCEB004E1F84 /* Utils.swift */; };
 		87E5D3191ECCD009004E1F84 /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 87E5D3181ECCD009004E1F84 /* Facebook.png */; };
 		87E5D31B1ED1FEFA004E1F84 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E5D31A1ED1FEFA004E1F84 /* RegisterViewController.swift */; };
@@ -156,7 +156,7 @@
 		87DE400C1EC79FFF00BB49EB /* Instagram.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Instagram.png; path = Icons/Instagram.png; sourceTree = "<group>"; };
 		87DE400E1EC7A00600BB49EB /* YouTube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = YouTube.png; path = Icons/YouTube.png; sourceTree = "<group>"; };
 		87DE40101EC9420A00BB49EB /* verified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = verified.png; path = Icons/verified.png; sourceTree = "<group>"; };
-		87DE40111EC9420A00BB49EB /* notVarified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = notVarified.png; path = Icons/notVarified.png; sourceTree = "<group>"; };
+		87DE40111EC9420A00BB49EB /* notVerified.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = notVerified.png; path = Icons/notVerified.png; sourceTree = "<group>"; };
 		87E5D3161ECCCCEB004E1F84 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Helpers/Utils.swift; sourceTree = "<group>"; };
 		87E5D3181ECCD009004E1F84 /* Facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Facebook.png; path = Icons/Facebook.png; sourceTree = "<group>"; };
 		87E5D31A1ED1FEFA004E1F84 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegisterViewController.swift; path = ViewControllers/RegisterViewController.swift; sourceTree = "<group>"; };
@@ -292,7 +292,7 @@
 				877FD5971E94300E00632887 /* menuCollapsed.png */,
 				877FD5961E94300E00632887 /* menuExpanded.png */,
 				AA92D1F21FB960FD008ACBE1 /* Next.png */,
-				87DE40111EC9420A00BB49EB /* notVarified.png */,
+				87DE40111EC9420A00BB49EB /* notVerified.png */,
 				87DE40101EC9420A00BB49EB /* verified.png */,
 				87DE400E1EC7A00600BB49EB /* YouTube.png */,
 			);
@@ -490,7 +490,7 @@
 				87DE40091EC7776200BB49EB /* defaultAvatar.png in Resources */,
 				871E35BB1EB19FF700EA483E /* cover.jpg in Resources */,
 				871E35C11EB6BBED00EA483E /* 85_1.jpg in Resources */,
-				87DE40131EC9420A00BB49EB /* notVarified.png in Resources */,
+				87DE40131EC9420A00BB49EB /* notVerified.png in Resources */,
 				871E35BD1EB2B73D00EA483E /* 62_1.jpg in Resources */,
 				87BB2BE41F3A905900083536 /* 35_1.jpg in Resources */,
 				AA92D1DE1FB55D97008ACBE1 /* EditorSeparator.png in Resources */,
