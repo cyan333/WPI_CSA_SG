@@ -276,24 +276,15 @@ extension String {
             (value, range, stop) in
             
             if let font = value[NSAttributedStringKey.font] as? UIFont {
+                
                 let fontRatio: CGFloat = ratio == .Normal ? 0.75 : 1.25
-                print(font.fontName)
+                //print(font.fontName)
                 let weight = font.fontDescriptor.symbolicTraits.contains(.traitBold) ? UIFont.Weight.bold : UIFont.Weight.regular
 
                 let finalFont = UIFont.systemFont(ofSize: font.pointSize * fontRatio, weight: weight)//UIFont(name: font.fontName, size: font.pointSize * fontRatio)!
                 html.addAttribute(NSAttributedStringKey.font,
                                   value: finalFont,
                                   range: range)
-            } else
-            if let attachment = value[NSAttributedStringKey.attachment] as? NSTextAttachment {
-                if let image = attachment.image {
-                    
-                    let attachmentWidth = screenWidth - 40
-                    attachment.bounds = CGRect(x: 0, y: 0, width: attachmentWidth,
-                                               height: image.size.height * attachmentWidth / image.size.width)
-                    
-                    
-                }
             }
         }
         html.endEditing()
