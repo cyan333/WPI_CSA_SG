@@ -97,7 +97,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         Utils.showLoadingIndicator()
         WCService.reportSGProblem(forMenu: menuId!, byUser: userId, andEmail: email, withReport: report) { (error) in
             if error == "" {
-                Utils.dismissIndicator()
+                Utils.hideIndicator()
                 self.dismiss(animated: true, completion: nil)
                 var toastMessage: String
                 if email != "" {
@@ -108,7 +108,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
                 let messageDict = ["message": toastMessage]
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSG"), object: nil, userInfo: messageDict)
             }else{
-                Utils.dismissIndicator()
+                Utils.hideIndicator()
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
             }
         }

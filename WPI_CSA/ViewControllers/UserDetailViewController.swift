@@ -173,7 +173,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
                                                     
                                                     if avatarUpdated {
                                                         DispatchQueue.main.async {
-                                                            Utils.dismissIndicator()
+                                                            Utils.hideIndicator()
                                                             self.navigationController?.popViewController(animated: true)
                                                             let messageDict = ["message": "Saved successfully"]//TODO: Error?
                                                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
@@ -197,7 +197,7 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
                 
                 if userDetailUpdated {
                     DispatchQueue.main.async {
-                        Utils.dismissIndicator()
+                        Utils.hideIndicator()
                         self.navigationController?.popViewController(animated: true)
                         let messageDict = ["message": "Saved successfully"]//TODO: Error?
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)

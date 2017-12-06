@@ -213,7 +213,7 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
                 Utils.showLoadingIndicator()
                 WCPaymentManager.makePayment(for: "Event", withId: event!.id, paying: event!.fee!,
                                              completion: { (error, status, ticketStatus, ticketId, ticket) in
-                    Utils.dismissIndicator()
+                    Utils.hideIndicator()
                     if error != "" {
                         Utils.show(alertMessage: error, onViewController: self)
                     } else {
@@ -232,7 +232,7 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
                                 (alert: UIAlertAction!) -> Void in
                                 Utils.showLoadingIndicator()
                                 WCService.getTicket(withId: ticketId!, completion: { (error, ticket) in
-                                    Utils.dismissIndicator()
+                                    Utils.hideIndicator()
                                     if error == "" {
                                         let ticketView = PKAddPassesViewController(pass: ticket!)
                                         ticketView.delegate = self

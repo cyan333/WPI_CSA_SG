@@ -22,6 +22,8 @@ let savedUsername = "username"
 let savedPassword = "password"
 let localTitle = "title"
 let localArticle = "article"
+let localArticleType = "articleType"
+let localArticleCover = "articleCover"
 
 //View tag numbers
 let statusBackgroundViewTag = 50 // Used to change status bar color
@@ -87,7 +89,7 @@ open class Utils {
                     (alert: UIAlertAction!) -> Void in
                     Utils.setParam(named: appVersion, withValue: version)
                 }))
-                dismissIndicator()
+                hideIndicator()
                 vc.present(alert, animated: true, completion: nil)
                 
                 dismissIndicatorAndTryLogin(vc: vc, showAlert: showAlert)
@@ -98,11 +100,11 @@ open class Utils {
                     (alert: UIAlertAction!) -> Void in
                     Utils.setParam(named: appStatus, withValue: "")
                 }))
-                dismissIndicator()
+                hideIndicator()
                 vc.present(alert, animated: true, completion: nil)
                 //Do not login user because http request updates may break login process
             } else {
-                dismissIndicator()
+                hideIndicator()
                 process(errorMessage: status, onViewController: vc, showingServerdownAlert: showAlert)
             }
             
@@ -125,22 +127,22 @@ open class Utils {
                     if error == "" {
                         appMode = .LoggedOn
                         WCService.currentUser = user
-                        dismissIndicator()
+                        hideIndicator()
                         NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
                                                         object: nil)
                     }else{
-                        dismissIndicator()
+                        hideIndicator()
                         process(errorMessage: error,
                                 onViewController: vc,
                                 showingServerdownAlert: showAlert)
                     }
                 })
             }else{
-                dismissIndicator()
+                hideIndicator()
                 NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
             }
         }else{
-            dismissIndicator()
+            hideIndicator()
             NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
         }
     }
@@ -176,7 +178,7 @@ open class Utils {
         }
     }
     
-    open class func dismissIndicator(){
+    open class func hideIndicator(){
         OperationQueue.main.addOperation{
             NVActivityIndicatorPresenter.sharedInstance.stopAnimating()
         }
@@ -279,9 +281,21 @@ extension String {
                 
                 let fontRatio: CGFloat = ratio == .Normal ? 0.75 : 1.25
                 //print(font.fontName)
-                let weight = font.fontDescriptor.symbolicTraits.contains(.traitBold) ? UIFont.Weight.bold : UIFont.Weight.regular
-
-                let finalFont = UIFont.systemFont(ofSize: font.pointSize * fontRatio, weight: weight)//UIFont(name: font.fontName, size: font.pointSize * fontRatio)!
+                let size = font.pointSize * fontRatio
+                var finalFont = UIFont.systemFont(ofSize: size)
+                
+                if font.fontDescriptor.symbolicTraits.contains(.traitItalic)
+                    && font.fontDescriptor.symbolicTraits.contains(.traitBold) {
+                    finalFont = UIFont(descriptor: finalFont.fontDescriptor.withSymbolicTraits([.traitItalic, .traitBold])!, size: size)
+                } else if font.fontDescriptor.symbolicTraits.contains(.traitItalic) {
+                    finalFont = UIFont(descriptor: finalFont.fontDescriptor
+                        .withSymbolicTraits(.traitItalic)!, size: size)
+                } else if font.fontDescriptor.symbolicTraits.contains(.traitBold) {
+                    finalFont = UIFont(descriptor: finalFont.fontDescriptor
+                        .withSymbolicTraits(.traitBold)!, size: size)
+                }
+                
+                
                 html.addAttribute(NSAttributedStringKey.font,
                                   value: finalFont,
                                   range: range)

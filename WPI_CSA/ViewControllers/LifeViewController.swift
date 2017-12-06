@@ -58,7 +58,8 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
         
         /*============================== TESTING AREA STARTS ==============================*/
         
-	let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+        
+        /*let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
                                                                         .userDomainMask, true)[0] as NSString
         let filePath = documentDirectoryPath.appendingPathComponent("imageCache")
         var fileSize : UInt64
@@ -77,7 +78,7 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
 
         } catch {
             print("Error: \(error)")
-        }
+        }*/
         
         /*============================== TESTING AREA ENDS ==============================*/
         
