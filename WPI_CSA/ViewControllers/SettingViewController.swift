@@ -90,16 +90,16 @@ class SettingViewController: UIViewController {
                                                     if error == ""{
                                                         WCService.currentUser?.accessToken = accessToken
                                                         Utils.setParam(named: savedPassword, withValue: encryptedNewPwd)
-                                                        Utils.dismissIndicator()
+                                                        Utils.hideIndicator()
                                                         Utils.show(alertMessage: "Done", onViewController: self)
                                                     }else{
-                                                        Utils.dismissIndicator()
+                                                        Utils.hideIndicator()
                                                         Utils.process(errorMessage: error,
                                                                       onViewController: self,
                                                                       showingServerdownAlert: true)                                                    }
                     })
                 } else {
-                    Utils.dismissIndicator()
+                    Utils.hideIndicator()
                     Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                 }
             }
@@ -149,16 +149,16 @@ class SettingViewController: UIViewController {
                                                     Utils.appMode = .LoggedOn
                                                     Utils.setParam(named: savedUsername, withValue: username)
                                                     Utils.setParam(named: savedPassword, withValue: WCUtils.md5(password + salt))
-                                                    Utils.dismissIndicator()
+                                                    Utils.hideIndicator()
                                                     self.reloadUserCell()
                                                 } else {
-                                                    Utils.dismissIndicator()
+                                                    Utils.hideIndicator()
                                                     Utils.process(errorMessage: error, onViewController: self,
                                                                   showingServerdownAlert: true)
                                                 }
                     })
                 } else {
-                    Utils.dismissIndicator()
+                    Utils.hideIndicator()
                     Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                 }
             }

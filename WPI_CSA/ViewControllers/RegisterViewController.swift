@@ -131,7 +131,7 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                                         }
                                         WCService.currentUser!.avatarId = imgId
                                         NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                        Utils.dismissIndicator()
+                                        Utils.hideIndicator()
                                         OperationQueue.main.addOperation{
                                             let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
                                                 " with a link to confirm your email. Please click on the link in 24 hours. " +
@@ -145,7 +145,7 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                                     })
                                 } else {
                                     NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                    Utils.dismissIndicator()
+                                    Utils.hideIndicator()
                                     OperationQueue.main.addOperation{
                                         let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
                                             " with a link to confirm your email. Please click on the link in 24 hours. " +
@@ -159,18 +159,18 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                                 
                             }else{
                                 NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                Utils.dismissIndicator()
+                                Utils.hideIndicator()
                                 Utils.show(alertMessage: "User created but name is not stored correctly. " + error, onViewController: self)
                             }
                             
                         })
                     }else{
-                        Utils.dismissIndicator()
+                        Utils.hideIndicator()
                         Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                     }
                 })
             } else {
-                Utils.dismissIndicator()
+                Utils.hideIndicator()
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
             }
         }

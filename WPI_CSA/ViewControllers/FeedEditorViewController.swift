@@ -10,10 +10,11 @@ import UIKit
 
 class FeedEditorViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
-    var feedType = "Blog"
+    var articleType = "Blog"
+    var coverImageView: UIImageView!
     var titleView: UIView!
     var titleField: UITextField!
-    //var editorView: UIView!
+    
     var editorTextView: UITextView!
     var editorView: EditorView!
     
@@ -21,6 +22,8 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
     
     var currentPageIndex = 0
     var keyboardHeight: CGFloat = 0
+    
+    var addingCoverImage = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,15 +33,32 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
         titleView = UIView(frame: CGRect(x: 20, y: 50, width: viewWidth, height: 250))
         titleView.backgroundColor = .white
         
+        coverImageView = UIImageView(frame: CGRect(x: viewWidth/2 - 120, y: 40, width: 240, height: 150))
+        coverImageView.contentMode = .scaleAspectFill
+        coverImageView.clipsToBounds = true
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = coverImageView.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        coverImageView.addSubview(blurEffectView)
+        titleView.addSubview(coverImageView)
+        
         let items = ["Blog", "Trade"]
         let picker = UISegmentedControl(items: items)
         picker.selectedSegmentIndex = 0
-        picker.frame = CGRect(x: viewWidth/2 - 50, y: 40, width: 100, height: 25)
+        picker.frame = CGRect(x: viewWidth/2 - 50, y: 10, width: 100, height: 25)
         picker.addTarget(self, action: #selector(selectFeedType(sender:)), for: .valueChanged)
         titleView.addSubview(picker)
         
+        let coverButton = UIButton(type: .system)
+        coverButton.frame = CGRect(x: viewWidth/2 - 70, y: 100, width: 140, height: 20)
+        coverButton.setTitle("Add cover image", for: .normal)
+        coverButton.titleLabel?.font =  UIFont.systemFont(ofSize: 13)
+        coverButton.addTarget(self, action: #selector(selectCoverImage), for: .touchUpInside)
+        titleView.addSubview(coverButton)
         
-        titleField = UITextField(frame: CGRect(x: 20, y: 90, width: viewWidth - 40, height: 25))
+        titleField = UITextField(frame: CGRect(x: 20, y: 150, width: viewWidth - 40, height: 25))
         titleField.tag = 1
         titleField.textAlignment = .center
         titleField.placeholder = "Enter the title for the article"
@@ -46,16 +66,16 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
         titleField.delegate = self
         titleView.addSubview(titleField)
         
-        let titleLine = UIView(frame: CGRect(x: 30, y: 120, width: viewWidth - 60, height: 1))
+        let titleLine = UIView(frame: CGRect(x: 30, y: 180, width: viewWidth - 60, height: 1))
         titleLine.backgroundColor = .lightGray
         titleView.addSubview(titleLine)
         
-        let nextButton = UIButton(frame: CGRect(x: viewWidth/2 + 25, y: 150, width: 50, height: 50))
+        let nextButton = UIButton(frame: CGRect(x: viewWidth/2 + 25, y: 200, width: 50, height: 50))
         nextButton.setImage(#imageLiteral(resourceName: "Next.png"), for: .normal)
         nextButton.addTarget(self, action: #selector(goToEditor), for: .touchUpInside)
         titleView.addSubview(nextButton)
         
-        let cancelButton = UIButton(frame: CGRect(x: viewWidth/2 - 75, y: 150, width: 50, height: 50))
+        let cancelButton = UIButton(frame: CGRect(x: viewWidth/2 - 75, y: 200, width: 50, height: 50))
         cancelButton.setImage(#imageLiteral(resourceName: "Cancel.png"), for: .normal)
         cancelButton.addTarget(self, action: #selector(cancelClicked), for: .touchUpInside)
         titleView.addSubview(cancelButton)
@@ -76,12 +96,27 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
         
         self.view.addSubview(editorView)
         
+        if let savedArticleType = Utils.getParam(named: localArticleType), savedArticleType.trim() != "" {
+            if savedArticleType == "Trade" {
+                picker.selectedSegmentIndex = 1
+            }
+        }
+        
+        if let savedArticleCover = Utils.getParam(named: localArticleCover), savedArticleCover.trim() != "" {
+            let imageData = Data(base64Encoded: savedArticleCover, options: [])
+            if let imageData = imageData {
+                let image = UIImage(data: imageData)
+                coverImageView.image = image
+            }
+        }
+        
         if let savedTitle = Utils.getParam(named: localTitle), savedTitle.trim() != "" {
             titleField.text = savedTitle
         }
         
         DispatchQueue.global(qos: .background).async {
-            var savedArticle = Utils.getParam(named: localArticle)?.replacingOccurrences(of: ".SFUIText", with: "Helvetica")
+            //TODO: This is a trick since .SFUIText bold font is not recognized
+            let savedArticle = Utils.getParam(named: localArticle)?.replacingOccurrences(of: ".SFUIText", with: "Helvetica")
             //print(savedArticle!)
             var savedAttributedArticle :NSMutableAttributedString? = nil
             if savedArticle != nil && savedArticle!.trim() != "" {
@@ -105,23 +140,21 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
                 }
                 savedAttributedArticle = NSMutableAttributedString(string: "")
                 savedAttributedArticle?.append(savedArticle!.htmlAttributedString(ratio: .Normal)!);
-                
                 savedAttributedArticle?.beginEditing()
+                
+                var currentIndex = 0
                 savedAttributedArticle?.enumerateAttributes(in: NSMakeRange(0, (savedAttributedArticle?.length)!), options: .init(rawValue: 0)) {
                     (value, range, stop) in
                     
                     if let attachment = value[NSAttributedStringKey.attachment] as? NSTextAttachment {
-                        print("attachment")
-                        if let image = attachment.image {
-                            
-                            let attachmentWidth = screenWidth - 40
-                            attachment.bounds = CGRect(x: 0, y: 0, width: attachmentWidth,
-                                                       height: image.size.height * attachmentWidth / image.size.width)
-                            
-                            
-                        }
-                    } else {
-                        print("others")
+                        let currentImage = imageList[currentIndex]
+                        let attachmentWidth = screenWidth - 40
+                        
+                        attachment.image = currentImage
+                        attachment.bounds = CGRect(x: 0, y: 0, width: attachmentWidth,
+                                                   height: currentImage.size.height * attachmentWidth / currentImage.size.width)
+                        currentIndex += 1
+                        
                     }
                 }
                 savedAttributedArticle!.endEditing()
@@ -151,9 +184,23 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
     
     @objc func selectFeedType(sender: UISegmentedControl){
         if sender.selectedSegmentIndex == 0 {
-            feedType = "Blog"
+            articleType = "Blog"
         } else {
-            feedType = "Trade"
+            articleType = "Trade"
+        }
+    }
+    
+    @objc func selectCoverImage() {
+        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum){
+            addingCoverImage = true
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .savedPhotosAlbum;
+            imagePicker.allowsEditing = false
+            
+            self.present(imagePicker, animated: true, completion: nil)
+        } else {
+            Utils.show(alertMessage: "Can not add image. Photo album not available", onViewController: self)
         }
     }
     
@@ -192,6 +239,10 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
             }, completion: { (_) in
                 //
             })
+            
+            UIView.animate(withDuration: duration, animations: {
+                self.titleView.frame.origin.y = (screenHeight - self.keyboardHeight - 250) / 2
+            })
         }
     }
     
@@ -204,13 +255,24 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
                 (alert: UIAlertAction!) -> Void in
                 Utils.setParam(named: localTitle, withValue: "")
                 Utils.setParam(named: localArticle, withValue: "")
+                Utils.setParam(named: localArticleCover, withValue: "")
+                Utils.setParam(named: localArticleType, withValue: "")
                 self.dismiss(animated: true, completion: nil)
             }))
             confirm.addAction(UIAlertAction(title: "Yes, save article locally", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
                 Utils.setParam(named: localTitle, withValue: self.titleField.text!)
                 Utils.setParam(named: localArticle, withValue: self.getEditorHtmlText())
+                if let image = self.coverImageView.image {
+                    let compressionRate = image.compressRateForSize(target: 250)
+                    let imgString = UIImageJPEGRepresentation(image, compressionRate)?.base64EncodedString()
+                    if let imgString = imgString {
+                        Utils.setParam(named: localArticleCover, withValue: imgString)
+                    }
+                }
+                Utils.setParam(named: localArticleType, withValue: self.articleType)
                 self.dismiss(animated: true, completion: nil)
+                
             }))
             confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
             
@@ -261,21 +323,31 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let chosenImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            if addingCoverImage {
+                coverImageView.image = chosenImage
+            } else {
+                let attachmentWidth = screenWidth - 40
+                let attachment = NSTextAttachment()
+                attachment.image = chosenImage
+                attachment.bounds = CGRect(x: 0, y: 0, width: attachmentWidth,
+                                           height: chosenImage.size.height * attachmentWidth / chosenImage.size.width)
+                
+                let imageString = NSAttributedString(attachment: attachment)
+                let newString = NSMutableAttributedString(attributedString: editorTextView.attributedText)
+                newString.replaceCharacters(in: editorTextView.selectedRange, with: imageString)
+                editorTextView.attributedText = newString
+            }
             
-            let attachmentWidth = screenWidth - 40
-            let attachment = NSTextAttachment()
-            attachment.image = chosenImage
-            attachment.bounds = CGRect(x: 0, y: 0, width: attachmentWidth,
-                                       height: chosenImage.size.height * attachmentWidth / chosenImage.size.width)
-            
-            let imageString = NSAttributedString(attachment: attachment)
-            let newString = NSMutableAttributedString(attributedString: editorTextView.attributedText)
-            newString.replaceCharacters(in: editorTextView.selectedRange, with: imageString)
-            editorTextView.attributedText = newString
         }
         
         self.dismiss(animated: true) {
-            self.editorTextView.becomeFirstResponder()
+            if self.addingCoverImage {
+                self.titleField.becomeFirstResponder()
+                self.addingCoverImage = false
+            } else {
+                self.editorTextView.becomeFirstResponder()
+            }
+            
         }
     }
     
@@ -291,12 +363,20 @@ extension FeedEditorViewController: EditorViewDelegate {
     func currentFontUpdated(to font: EditorFont) {
         
         let fontSize = CGFloat(Int(font.currentFontSize) ?? 15)
-        var newFont = UIFont.systemFont(ofSize: fontSize, weight: font.bold ? UIFont.Weight.bold : UIFont.Weight.regular)
+        var newFont = UIFont.systemFont(ofSize: fontSize)
         
         
-        if font.italic {
+        if font.italic && font.bold {
+            let fontDescriptor = newFont.fontDescriptor.withSymbolicTraits([.traitItalic, .traitBold])
+            newFont = UIFont(descriptor: fontDescriptor!, size: fontSize)
+        } else if font.italic {
             let fontDescriptor = newFont.fontDescriptor.withSymbolicTraits(.traitItalic)
-            newFont = UIFont(descriptor: fontDescriptor!, size: 0)
+            newFont = UIFont(descriptor: fontDescriptor!, size: fontSize)
+        } else if font.bold {
+            let fontDescriptor = newFont.fontDescriptor.withSymbolicTraits(.traitBold)
+            newFont = UIFont(descriptor: fontDescriptor!, size: fontSize)
+        } else {
+            
         }
         
         currentTypingAttributes[NSAttributedStringKey.font.rawValue] = newFont
@@ -355,7 +435,8 @@ extension FeedEditorViewController: EditorViewDelegate {
     }
     
     func submitButtonClicked() {
-        print(getEditorHtmlText())
+        let a = getEditorHtmlText().components(separatedBy: CharacterSet.newlines).joined(separator: "")
+        print(a)
     }
     
     func imageButtonClicked() {
