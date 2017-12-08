@@ -108,7 +108,7 @@ open class WCUserManager{
         }
     }
     
-    open class func regesterSalt(forUsername username: String, completion: @escaping(_ error: String, _ salt: String) -> Void){
+    open class func registerSalt(forUsername username: String, completion: @escaping(_ error: String, _ salt: String) -> Void){
         do {
             let params = ["username": username, "offset": NSTimeZone.local.secondsFromGMT() / 3600] as [String : Any]
             let opt = try HTTP.POST(serviceBase + pathRegisterSalt, parameters: params)

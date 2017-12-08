@@ -70,7 +70,7 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
         }
         
         guard let password = password else{
-            Utils.show(alertMessage: "Unknown error", onViewController: self)
+            Utils.show(alertMessage: "You must enter a password", onViewController: self)
             return
         }
         
@@ -100,7 +100,7 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
         }
         
         Utils.showLoadingIndicator()
-        WCUserManager.regesterSalt(forUsername: username) { (error, salt) in
+        WCUserManager.registerSalt(forUsername: username) { (error, salt) in
             if error == "" {
                 WCUserManager.register(forUsername: username,
                                        andEncryptedPassword: WCUtils.md5(password + salt),
@@ -115,10 +115,10 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                                     WCService.currentUser!.birthday = birthday
                                 }
                                 if let classOf = self.classOf {
-                                    WCService.currentUser!.birthday = classOf
+                                    WCService.currentUser!.classOf = classOf
                                 }
                                 if let major = self.major {
-                                    WCService.currentUser!.birthday = major
+                                    WCService.currentUser!.major = major
                                 }
                                 Utils.setParam(named: savedUsername, withValue: username)
                                 Utils.setParam(named: savedPassword,
@@ -160,13 +160,7 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                             }else{
                                 NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
                                 Utils.dismissIndicator()
-                                OperationQueue.main.addOperation{
-                                    let alert = UIAlertController(title: nil, message: "User created but name is not stored correctly. " + error, preferredStyle: .alert)
-                                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
-                                        self.dismiss(animated: true, completion: nil)
-                                    }))
-                                    self.present(alert, animated: true, completion: nil)
-                                }
+                                Utils.show(alertMessage: "User created but name is not stored correctly. " + error, onViewController: self)
                             }
                             
                         })
