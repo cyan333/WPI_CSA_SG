@@ -172,5 +172,30 @@ open class WCFeedManager {
         }
     }
     
+    open class func createFeed(withTitiele title: String, type: String, body: String, coverImageString: String?,
+                               completion: @escaping (_ error: String) -> Void) {
+        do {
+            var params = ["accessToken": WCService.currentUser!.accessToken!, "title": title, "type": type, "body": body]
+            if let coverImageString = coverImageString {
+                params["coverImage"] = coverImageString
+            }
+            let opt = try HTTP.POST(serviceBase + pathCreateFeed , parameters: params)
+            opt.start{ response in
+                if response.error != nil {
+                    completion(serverDown)
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String)
+                }else{
+                    completion("")
+                }
+            }
+        } catch let error {
+            print(error.localizedDescription)
+            completion(serverDown)
+        }
+    }
     
 }

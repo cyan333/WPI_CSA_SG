@@ -98,6 +98,7 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
         
         if let savedArticleType = Utils.getParam(named: localArticleType), savedArticleType.trim() != "" {
             if savedArticleType == "Trade" {
+                articleType = "Trade"
                 picker.selectedSegmentIndex = 1
             }
         }
@@ -122,8 +123,7 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
             if savedArticle != nil && savedArticle!.trim() != "" {
                 
                 //editorTextView.attributedText = savedArticle.htmlAttributedString(ratio: .Enlarged)
-                let regex = try! NSRegularExpression(pattern:
-                    "<img.*?>")
+                let regex = try! NSRegularExpression(pattern: "<img.*?>")
                 let matchs = regex.matches(in: savedArticle!, range: NSRange(location: 0, length: savedArticle!.count))
                     .map{(savedArticle! as NSString).substring(with: $0.range)}
                 let count = matchs.count
@@ -135,7 +135,9 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
                         let imageData = Data(base64Encoded: String(base64.split(separator: ",")[1]), options: [])
                         let image = UIImage(data: imageData!)
                         
-                        imageList.append(image!)
+                        if let image = image {
+                            imageList.append(image)
+                        }
                     }
                 }
                 savedAttributedArticle = NSMutableAttributedString(string: "")
@@ -262,9 +264,14 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
             confirm.addAction(UIAlertAction(title: "Yes, save article locally", style: .default, handler: {
                 (alert: UIAlertAction!) -> Void in
                 Utils.setParam(named: localTitle, withValue: self.titleField.text!)
-                Utils.setParam(named: localArticle, withValue: self.getEditorHtmlText())
+                if self.isNilOrEmptyAttributtedString(string: self.editorTextView.attributedText) {
+                    Utils.setParam(named: localArticle, withValue: "")
+                } else {
+                    Utils.setParam(named: localArticle, withValue: self.getEditorHtmlText())
+                }
+                
                 if let image = self.coverImageView.image {
-                    let compressionRate = image.compressRateForSize(target: 250)
+                    let compressionRate = image.compressRateForSize(target: 500)
                     let imgString = UIImageJPEGRepresentation(image, compressionRate)?.base64EncodedString()
                     if let imgString = imgString {
                         Utils.setParam(named: localArticleCover, withValue: imgString)
@@ -290,21 +297,25 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
         
         if let htmlText = editorTextView.attributedText.htmlString() {
             resultText = htmlText
+            
+            let regex = try! NSRegularExpression(pattern: "<img.*?>")
+            let results = regex.matches(in: htmlText, range: NSRange(location: 0, length: htmlText.count))
+                .map{(htmlText as NSString).substring(with: $0.range)}
+            
             let newString = editorTextView.attributedText!
             newString.enumerateAttributes(in: NSMakeRange(0, newString.length), options: NSAttributedString.EnumerationOptions(rawValue: 0)) {
                 (object, range, stop) in
                 if let attachment = object[NSAttributedStringKey.attachment] as? NSTextAttachment {
                     if let image = attachment.image {
-                        let compressionRate = image.compressRateForSize(target: 250)
-                        let imgString = UIImageJPEGRepresentation(image, compressionRate)?.base64EncodedString()//.base64EncodedString(options: NSData.Base64DecodingOptions.)
+                        let compressionRate = image.compressRateForSize(target: 500)
+                        let imgString = UIImageJPEGRepresentation(image, compressionRate)?.base64EncodedString()
                         
-                        let imgNameExt = index == 0 ? "" : "_\(index)"
                         
-                        index += 1
                         guard let range = resultText
-                            .range(of: "<img src=\"file:///Attachment\(imgNameExt).png\" alt=\"Attachment\(imgNameExt).png\">") else {
+                            .range(of: results[index]) else {
                                 return
                         }
+                        index += 1
                         
                         let attachmentWidth = screenWidth - 40
                         let attachmentHeight = image.size.height * attachmentWidth / image.size.width
@@ -312,12 +323,23 @@ class FeedEditorViewController: UIViewController, UINavigationControllerDelegate
                         let imgWidth = Int(attachmentWidth)
                         let imgHeight = Int(attachmentHeight)
                         resultText = resultText.replacingCharacters(in: range,
-                                                                    with: "<img src=\"data:image/jpeg;base64,\(imgString!)\" width=\"\(imgWidth)\" height=\"\(imgHeight)\" >")
+                                                                    with: "<img src=\"data:image/jpeg;base64,\(imgString!)\" width=\"\(imgWidth)\" height=\"\(imgHeight)\" />")
                     }
                 }
             }
         }
         return resultText
+        
+    }
+    
+    func isNilOrEmptyAttributtedString(string: NSAttributedString) -> Bool {
+        if let mutableCopy = string.mutableCopy() as? NSMutableAttributedString {
+            var plainString = mutableCopy.mutableString.replacingOccurrences(of: "\n", with: "")
+            plainString = plainString.trimmingCharacters(in: .whitespacesAndNewlines)
+            return plainString.count == 0
+        } else {
+            return true
+        }
         
     }
     
@@ -435,8 +457,37 @@ extension FeedEditorViewController: EditorViewDelegate {
     }
     
     func submitButtonClicked() {
-        let a = getEditorHtmlText().components(separatedBy: CharacterSet.newlines).joined(separator: "")
-        print(a)
+        guard let title = titleField.text, title.trim().count > 0 else {
+            Utils.show(alertMessage: "Title must not be empty", onViewController: self)
+            return
+        }
+        
+        guard let body = editorTextView.attributedText else {
+            Utils.show(alertMessage: "Content cannot be empty", onViewController: self)
+            return
+        }
+        
+        if isNilOrEmptyAttributtedString(string: body) {
+            Utils.show(alertMessage: "Content cannot be empty", onViewController: self)
+            return
+        }
+        
+        guard let coverImage = coverImageView.image else {
+            Utils.show(alertMessage: "Please add a cover image", onViewController: self)
+            return
+        }
+        
+        let compressionRate = coverImage.compressRateForSize(target: 500)
+        let imgString = UIImageJPEGRepresentation(coverImage, compressionRate)?.base64EncodedString()
+        if let imgString = imgString {
+            Utils.setParam(named: localArticleCover, withValue: imgString)
+        }
+        
+        WCFeedManager.createFeed(withTitiele: title, type: articleType, body: getEditorHtmlText(),
+                                 coverImageString: imgString) { (error) in
+                                    print(error)
+        }
+        
     }
     
     func imageButtonClicked() {
