@@ -312,7 +312,7 @@ extension String {
     
     func getHtmlAttributes() -> [String: Any] {
         var dic = [String: Any]()
-        let regex = try! NSRegularExpression(pattern: "[^ ]*[ ]*=[ ]*\".*?\"")
+        let regex = try! NSRegularExpression(pattern: "\\w+\\s?=\\s?\".*?\"")
         let matchs = regex.matches(in: self, range: NSRange(location: 0, length: self.count)).map{(self as NSString).substring(with: $0.range)}
         
         for i in 0 ..< matchs.count {
