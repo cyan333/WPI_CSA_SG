@@ -146,6 +146,7 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                                 } else {
                                     NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
                                     Utils.hideIndicator()
+                                    
                                     OperationQueue.main.addOperation{
                                         let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
                                             " with a link to confirm your email. Please click on the link in 24 hours. " +
@@ -160,7 +161,13 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                             }else{
                                 NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
                                 Utils.hideIndicator()
-                                Utils.show(alertMessage: "User created but name is not stored correctly. " + error, onViewController: self)
+                                OperationQueue.main.addOperation{
+                                    let alert = UIAlertController(title: nil, message: "User created but name is not stored correctly. " + error, preferredStyle: .alert)
+                                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                                        self.dismiss(animated: true, completion: nil)
+                                    }))
+                                    self.present(alert, animated: true, completion: nil)
+                                }
                             }
                             
                         })
