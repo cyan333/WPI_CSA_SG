@@ -1,40 +1,40 @@
 PODS:
-  - Braintree (4.9.4):
-    - Braintree/Card (= 4.9.4)
-    - Braintree/Core (= 4.9.4)
-    - Braintree/PayPal (= 4.9.4)
-    - Braintree/UI (= 4.9.4)
-  - Braintree/Card (4.9.4):
+  - Braintree (4.10.0):
+    - Braintree/Card (= 4.10.0)
+    - Braintree/Core (= 4.10.0)
+    - Braintree/PayPal (= 4.10.0)
+    - Braintree/UI (= 4.10.0)
+  - Braintree/Card (4.10.0):
     - Braintree/Core
-  - Braintree/Core (4.9.4)
-  - Braintree/PayPal (4.9.4):
+  - Braintree/Core (4.10.0)
+  - Braintree/PayPal (4.10.0):
     - Braintree/Core
     - Braintree/PayPalOneTouch
-  - Braintree/PayPalDataCollector (4.9.4):
+  - Braintree/PayPalDataCollector (4.10.0):
     - Braintree/Core
     - Braintree/PayPalUtils
-  - Braintree/PayPalOneTouch (4.9.4):
+  - Braintree/PayPalOneTouch (4.10.0):
     - Braintree/Core
     - Braintree/PayPalDataCollector
     - Braintree/PayPalUtils
-  - Braintree/PayPalUtils (4.9.4)
-  - Braintree/UI (4.9.4):
+  - Braintree/PayPalUtils (4.10.0)
+  - Braintree/UI (4.10.0):
     - Braintree/Card
     - Braintree/Core
-  - Braintree/UnionPay (4.9.4):
+  - Braintree/UnionPay (4.10.0):
     - Braintree/Card
     - Braintree/Core
-  - Braintree/Venmo (4.9.4):
+  - Braintree/Venmo (4.10.0):
     - Braintree/Core
     - Braintree/PayPalDataCollector
-  - BraintreeDropIn (5.2.3):
-    - BraintreeDropIn/DropIn (= 5.2.3)
-  - BraintreeDropIn/DropIn (5.2.3):
+  - BraintreeDropIn (5.3.0):
+    - BraintreeDropIn/DropIn (= 5.3.0)
+  - BraintreeDropIn/DropIn (5.3.0):
     - Braintree/Card (~> 4.0)
     - Braintree/Core (~> 4.0)
     - Braintree/UnionPay (~> 4.0)
     - BraintreeDropIn/UIKit
-  - BraintreeDropIn/UIKit (5.2.3)
+  - BraintreeDropIn/UIKit (5.3.0)
 
 DEPENDENCIES:
   - Braintree
@@ -43,8 +43,8 @@ DEPENDENCIES:
   - BraintreeDropIn
 
 SPEC CHECKSUMS:
-  Braintree: de7e58b8df95bf6514813cbc510578e3737b1c3b
-  BraintreeDropIn: 20109bea730b9bd31d71792ca84545265b7d27e4
+  Braintree: 424a8b0bf1d31fe1110035cfde438701e1425c1a
+  BraintreeDropIn: 5882cca8dc3c4a5b8f11faa44fca52323253c857
 
 PODFILE CHECKSUM: fc3ea6a67ac62aecc3f3a3b5ec7e628cf4296565
 

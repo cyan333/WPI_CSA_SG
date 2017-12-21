@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'B7F9C17EEF35B1512FDCE8283D7E6ACC'
+               BlueprintIdentifier = '9E2AA8A63388D65DCCC690B1262C93D1'
                BlueprintName = 'BraintreeDropIn-Braintree-UIKit-Localization'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'Braintree-UIKit-Localization.bundle'>

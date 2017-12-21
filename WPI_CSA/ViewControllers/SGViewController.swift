@@ -107,7 +107,7 @@ class SGViewController: UIViewController {
             menuList = database.getSubMenus(by: 0, withPrefix: "")
             
             self.article = database.getArticle(byMenuId: 1)
-            
+            self.article = Article(content: "<span style=\"font-size:14px;font-weight:bold;\">Chinese Corner Coordinator</span><br>郝美 Mei Hao<br>mhao@wpi.edu<br>ME<h3>Chinese Corner Coordinator</h3><br>郝美 Mei Hao<br>mhao@wpi.edu<br>ME<h3>Chinese Corner Coordinator</h3>郝美 Mei Hao<br>mhao@wpi.edu<br>ME")
         }catch {
             print(error)
         }
