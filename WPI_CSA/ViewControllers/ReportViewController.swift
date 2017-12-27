@@ -78,9 +78,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
             if email != "" && Utils.isEmailAddress(email: email) {
                 Utils.setParam(named: reportEmail, withValue: email)
             }else if email != "" {
-                let alert = UIAlertController(title: nil, message: "Please check email format", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                Utils.show(alertMessage: "Please check email format", onViewController: self)
                 return
             }
         }
@@ -88,9 +86,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         
         let report = reportTxtView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         if report == "" {
-            let alert = UIAlertController(title: nil, message: "Please enter a valid report", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            Utils.show(alertMessage: "Please enter a valid report", onViewController: self)
             return
         }
         
