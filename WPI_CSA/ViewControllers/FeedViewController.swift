@@ -177,7 +177,7 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
             Utils.show(alertMessage: "This feature is not supported from iPad",
                        onViewController: self)
         } else if Utils.appMode != .LoggedOn{
-            Utils.show(alertMessage: "You have to log to buy ticket", onViewController: self)
+            Utils.show(alertMessage: "You have to log in to buy ticket", onViewController: self)
         } else if event!.fee! > 0 {
             let clientToken = "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77"
             
