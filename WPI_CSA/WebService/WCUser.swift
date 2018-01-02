@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 open class WCUser{
     var id: Int
@@ -158,10 +159,11 @@ open class WCUserManager{
         }
     }
     
-    open class func saveCurrentUserDetails(name: String?, birthday: String?, classOf: String?, major: String?, completion: @escaping (_ error: String) -> Void){
+    open class func saveCurrentUserDetails(name: String?, birthday: String?, classOf: String?, major: String?, avatar: UIImage?,
+                                           targetSize: Int? = nil, completion: @escaping (_ error: String, _ imgId: Int?) -> Void){
         if localMode {
             let mock = RequestMocker.getFakeResponse(forRequestPath: pathSaveUserDetails)
-            completion(mock[0] as! String)
+            completion(mock[0] as! String, mock[1] as? Int)
             return
         }
         do {
@@ -178,28 +180,41 @@ open class WCUserManager{
             if let major = major {
                 params["major"] = major
             }
+            if let avatar = avatar {
+                var compressRate: CGFloat = 1
+                if let targetSize = targetSize {
+                    compressRate = avatar.compressRateForSize(target: targetSize)
+                }
+                let imageData = UIImageJPEGRepresentation(avatar, compressRate)!
+                let base64 = imageData.base64EncodedString()
+                params["avatar"] = base64
+            }
             
             if params.count == 1 {
-                completion("No user details to be saved")
+                completion("No user details to be saved", nil)
                 return
             }
             
             let opt = try HTTP.POST(serviceBase + pathSaveUserDetails, parameters: params)
             opt.start { response in
                 if response.error != nil {
-                    completion(serverDown)
+                    completion(serverDown, nil)
                     return
                 }
                 let dict = WCUtils.convertToDictionary(data: response.data)
                 if dict!["error"] as! String != "" {
-                    completion(dict!["error"]! as! String)
+                    completion(dict!["error"]! as! String, nil)
                 }else{
-                    completion("")
+                    var imgId: Int? = nil
+                    if let newId = dict!["imageId"] as? Int {
+                        imgId = newId
+                    }
+                    completion("", imgId)
                 }
             }
         } catch let error{
             print (error.localizedDescription)
-            completion(serverDown)
+            completion(serverDown, nil)
         }
     }
     

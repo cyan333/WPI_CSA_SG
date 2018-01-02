@@ -108,7 +108,7 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                     if error == "" {
                         WCService.currentUser = user
                         Utils.appMode = .LoggedOn
-                        WCUserManager.saveCurrentUserDetails(name: name, birthday: self.birthday, classOf: self.classOf, major: self.major, completion: { (error) in
+                        WCUserManager.saveCurrentUserDetails(name: name, birthday: self.birthday, classOf: self.classOf, major: self.major, avatar: self.newAvatar, targetSize: 250, completion: { (error, imgId) in
                             if error == "" {
                                 WCService.currentUser!.name = name
                                 if let birthday = self.birthday {
@@ -120,49 +120,31 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
                                 if let major = self.major {
                                     WCService.currentUser!.major = major
                                 }
+                                if let imgId = imgId {
+                                    WCService.currentUser?.avatarId = imgId
+                                    CacheManager.saveImageToLocal(image: self.newAvatar!, id: imgId)
+                                }
+                                
                                 Utils.setParam(named: savedUsername, withValue: username)
                                 Utils.setParam(named: savedPassword,
                                                withValue: WCUtils.md5(password + salt))
-                                if let avatar = self.newAvatar {
-                                    CacheManager.uploadImage(image: avatar, type: "Avatar", targetSize:  250,
-                                                             completion: { (error, imgId) in
-                                        if error != "" {
-                                            print(error)
-                                        }
-                                        WCService.currentUser!.avatarId = imgId
-                                        NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                        Utils.hideIndicator()
-                                        OperationQueue.main.addOperation{
-                                            let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
-                                                " with a link to confirm your email. Please click on the link in 24 hours. " +
-                                                "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
-                                            alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
-                                                self.dismiss(animated: true, completion: nil)
-                                            }))
-                                            self.present(alert, animated: true, completion: nil)
-                                        }
-                                        
-                                    })
-                                } else {
-                                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                    Utils.hideIndicator()
-                                    
-                                    OperationQueue.main.addOperation{
-                                        let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
-                                            " with a link to confirm your email. Please click on the link in 24 hours. " +
-                                            "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
-                                        alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
-                                            self.dismiss(animated: true, completion: nil)
-                                        }))
-                                        self.present(alert, animated: true, completion: nil)
-                                    }
+                                NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                                Utils.hideIndicator()
+                                OperationQueue.main.addOperation{
+                                    let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
+                                        " with a link to confirm your email. Please click on the link in 24 hours. " +
+                                        "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
+                                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                                        self.dismiss(animated: true, completion: nil)
+                                    }))
+                                    self.present(alert, animated: true, completion: nil)
                                 }
                                 
                             }else{
                                 NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
                                 Utils.hideIndicator()
                                 OperationQueue.main.addOperation{
-                                    let alert = UIAlertController(title: nil, message: "User created but name is not stored correctly. " + error, preferredStyle: .alert)
+                                    let alert = UIAlertController(title: nil, message: "User created but user details is not stored correctly. " + error, preferredStyle: .alert)
                                     alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
                                         self.dismiss(animated: true, completion: nil)
                                     }))

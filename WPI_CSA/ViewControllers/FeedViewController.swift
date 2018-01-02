@@ -215,7 +215,7 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
                                              completion: { (error, status, ticketStatus, ticketId, ticket) in
                     Utils.hideIndicator()
                     if error != "" {
-                        Utils.show(alertMessage: error, onViewController: self)
+                        Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                     } else {
                         if status == "ok" {
                             if ticketStatus == "ok" {
@@ -238,7 +238,7 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
                                         ticketView.delegate = self
                                         self.present(ticketView, animated: true)
                                     } else {
-                                        Utils.show(alertMessage: error, onViewController: self)
+                                        Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
                                     }
                                 })
                             }))

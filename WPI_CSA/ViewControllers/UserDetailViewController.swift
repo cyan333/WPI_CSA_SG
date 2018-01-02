@@ -121,8 +121,6 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
     @IBAction func saveBtnClicked(_ sender: Any) {
         tableView.endEditing(true)
         var userDetailChanged = false
-        var userDetailUpdated = false
-        var avatarUpdated = false
         for i in 0 ..< userDetails.count {
             if userDetails[i].trim() != userDetailsOriginal[i] {
                 userDetailChanged = true
@@ -130,10 +128,11 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
             }
         }
         
-        userDetailUpdated = !userDetailChanged
-        avatarUpdated = !avatarChanged
-        
-        if userDetailChanged {
+        if !userDetailChanged && !avatarChanged {
+            navigationController?.popViewController(animated: true)
+            let messageDict = ["message": "Nothing is changed"]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
+        } else {
             let name = userDetails[0].trim()
             let birthday = userDetails[1].trim()
             let classOf = userDetails[2].trim()
@@ -159,59 +158,31 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
             }
             
             Utils.showLoadingIndicator()
-            WCUserManager.saveCurrentUserDetails(name: name, birthday: birthday, classOf: classOf, major: major,
-                                                 completion: { (error) in
-                                                    if error != "" {
-                                                        print(error)//TODO: do something
-                                                    } else {
-                                                        WCService.currentUser?.name = name
-                                                        WCService.currentUser?.birthday = birthday
-                                                        WCService.currentUser?.classOf = classOf
-                                                        WCService.currentUser?.major = major
-                                                    }
-                                                    userDetailUpdated = true
-                                                    
-                                                    if avatarUpdated {
-                                                        DispatchQueue.main.async {
-                                                            Utils.hideIndicator()
-                                                            self.navigationController?.popViewController(animated: true)
-                                                            let messageDict = ["message": "Saved successfully"]//TODO: Error?
-                                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
-                                                            self.delegate?.updateUserDetails()
-                                                        }
-                                                    }
-                                                    
-                                                    
-            })
-        }
-        
-        if avatarChanged {
-            Utils.showLoadingIndicator()
-            CacheManager.uploadImage(image: self.newAvatar!, type: "Avatar", targetSize:  250,
-                                     completion: { (error, imgId) in
+            WCUserManager.saveCurrentUserDetails(name: name, birthday: birthday, classOf: classOf, major: major, avatar: self.newAvatar, targetSize: 250, completion: { (error, imgId) in
+                Utils.hideIndicator()
                 if error != "" {
-                    print(error)
-                }
-                WCService.currentUser?.avatarId = imgId
-                avatarUpdated = true
-                
-                if userDetailUpdated {
-                    DispatchQueue.main.async {
-                        Utils.hideIndicator()
-                        self.navigationController?.popViewController(animated: true)
-                        let messageDict = ["message": "Saved successfully"]//TODO: Error?
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
-                        self.delegate?.updateUserDetails()
+                    Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                } else {
+                    WCService.currentUser?.name = name
+                    WCService.currentUser?.birthday = birthday
+                    WCService.currentUser?.classOf = classOf
+                    WCService.currentUser?.major = major
+                    
+                    if let imgId = imgId {
+                        WCService.currentUser?.avatarId = imgId
+                        CacheManager.saveImageToLocal(image: self.newAvatar!, id: imgId)
                     }
+                    
+                    self.navigationController?.popViewController(animated: true)
+                    let messageDict = ["message": "Saved successfully"]//TODO: Error?
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
+                    self.delegate?.updateUserDetails()
+                    
                 }
+                
             })
         }
         
-        if !userDetailChanged && !avatarChanged{
-            navigationController?.popViewController(animated: true)
-            let messageDict = ["message": "Nothing is changed"]
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
-        }
     }
     
     @objc func goBack() {

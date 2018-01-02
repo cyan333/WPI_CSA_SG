@@ -182,5 +182,17 @@ open class CacheManager {
         }
     }
     
+    open class func saveImageToLocal(image: UIImage, id: Int) {
+        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                        .userDomainMask, true)[0] as NSString
+        let imgPath = documentDirectoryPath.appendingPathComponent("imageCache/\(id).jpg")
+        do{
+            try UIImageJPEGRepresentation(image, 1)?.write(to: URL(fileURLWithPath: imgPath), options: .atomic)
+            Database.createOrUpdateImageCache(imageId: id)
+        }catch let error{
+            print(error.localizedDescription)
+        }
+    }
+    
 }
 

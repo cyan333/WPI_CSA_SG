@@ -71,7 +71,7 @@ open class RequestMocker {
             user.name = "Fangming Ning"
             return ["", user]
         case pathSaveUserDetails:
-            return [""]
+            return ["", 1]
         default:
             return []
         }
