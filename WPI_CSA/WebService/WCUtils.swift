@@ -8,8 +8,11 @@
 
 import Foundation
 
-//let serviceBase = "https://wcservice.fmning.com/" //*****************PROD
-let serviceBase = "http://wc.fmning.com/" //********************TEST
+let prodMode = false;
+
+let serviceBase = prodMode ? "https://wcservice.fmning.com/" : "http://wc.fmning.com/"
+
+let clientToken = "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77"
 
 //If enabled, most of the HTTP request will return faked local value, instead of making network calls
 let localMode = false

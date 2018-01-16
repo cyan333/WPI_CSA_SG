@@ -174,12 +174,13 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
     
     @objc func payAndGetTicket() {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            Utils.show(alertMessage: "This feature is not supported from iPad",
+            Utils.show(alertMessage: "This feature is not supported on iPad",
                        onViewController: self)
         } else if Utils.appMode != .LoggedOn{
             Utils.show(alertMessage: "You have to log in to buy ticket", onViewController: self)
+        } else if !WCService.currentUser!.emailConfirmed {
+            Utils.show(alertMessage: "Please go to App Setting and verify your email before buying ticket", onViewController: self)
         } else if event!.fee! > 0 {
-            let clientToken = "sandbox_bk8pdqf3_wnbj3bx4nwmtyz77"
             
             let request =  BTDropInRequest()
             let dropIn = BTDropInController(authorization: clientToken, request: request)
@@ -207,50 +208,52 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
             if !username.trim().lowercased().hasSuffix("@wpi.edu") {
                 Utils.show(alertMessage: "To get free ticket, you have to log in with your wpi email, with the email verified.",
                            onViewController: self)
-            } else if !WCService.currentUser!.emailConfirmed {
-                Utils.show(alertMessage: "Please go to App Setting and verify your email before buying ticket", onViewController: self)
             } else {
-                Utils.showLoadingIndicator()
-                WCPaymentManager.makePayment(for: "Event", withId: event!.id, paying: event!.fee!,
-                                             completion: { (error, status, ticketStatus, ticketId, ticket) in
-                    Utils.hideIndicator()
-                    if error != "" {
-                        Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
-                    } else {
-                        if status == "ok" {
-                            if ticketStatus == "ok" {
-                                let ticketView = PKAddPassesViewController(pass: ticket!)
-                                ticketView.delegate = self
-                                self.present(ticketView, animated: true)
-                            } else {
-                                Utils.show(alertMessage: "Transaction is successful. " + ticketStatus
-                                    + "Please contact admin@fmning.com", onViewController: self)
-                            }
-                        } else if status == "AlreadyPaid"{
-                            let alert = UIAlertController(title: nil, message: "You have already paid for it. Do you want to download ticket again?", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
-                                (alert: UIAlertAction!) -> Void in
-                                Utils.showLoadingIndicator()
-                                WCService.getTicket(withId: ticketId!, completion: { (error, ticket) in
-                                    Utils.hideIndicator()
-                                    if error == "" {
-                                        let ticketView = PKAddPassesViewController(pass: ticket!)
-                                        ticketView.delegate = self
-                                        self.present(ticketView, animated: true)
-                                    } else {
-                                        Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
-                                    }
-                                })
-                            }))
-                            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-                            self.present(alert, animated: true, completion: nil)
-                        } else {
-                            Utils.show(alertMessage: "Unknown status " + status, onViewController: self)
-                        }
-                    }
-                })
+                makePaymentRequest()
             }
         }
+    }
+    
+    func makePaymentRequest() {
+        Utils.showLoadingIndicator()
+        WCPaymentManager.makePayment(for: "Event", withId: event!.id, paying: event!.fee!,
+                                     completion: { (error, status, ticketStatus, ticketId, ticket) in
+                                        Utils.hideIndicator()
+                                        if error != "" {
+                                            Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                                        } else {
+                                            if status == "ok" {
+                                                if ticketStatus == "ok" {
+                                                    let ticketView = PKAddPassesViewController(pass: ticket!)
+                                                    ticketView.delegate = self
+                                                    self.present(ticketView, animated: true)
+                                                } else {
+                                                    Utils.show(alertMessage: "Transaction is successful. " + ticketStatus
+                                                        + "Please contact admin@fmning.com", onViewController: self)
+                                                }
+                                            } else if status == "AlreadyPaid"{
+                                                let alert = UIAlertController(title: nil, message: "You have already paid for it. Do you want to download ticket again?", preferredStyle: .alert)
+                                                alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: {
+                                                    (alert: UIAlertAction!) -> Void in
+                                                    Utils.showLoadingIndicator()
+                                                    WCService.getTicket(withId: ticketId!, completion: { (error, ticket) in
+                                                        Utils.hideIndicator()
+                                                        if error == "" {
+                                                            let ticketView = PKAddPassesViewController(pass: ticket!)
+                                                            ticketView.delegate = self
+                                                            self.present(ticketView, animated: true)
+                                                        } else {
+                                                            Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                                                        }
+                                                    })
+                                                }))
+                                                alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                                                self.present(alert, animated: true, completion: nil)
+                                            } else {
+                                                Utils.show(alertMessage: "Unknown status " + status, onViewController: self)
+                                            }
+                                        }
+        })
     }
     
 }
