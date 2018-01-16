@@ -10,6 +10,39 @@ import Foundation
 import PassKit
 
 open class WCPaymentManager{
+    
+    open class func checkPaymentStatus(for type: String, withId id: Int,
+                                completion: @escaping (_ error: String, _ status: String, _ ticketStatus: String?,
+        _ ticketId: Int?) -> Void) {
+        do {
+            let params = ["type": type, "id" : id,
+                          "accessToken": WCService.currentUser!.accessToken!] as [String : Any]
+            let opt = try HTTP.POST(serviceBase + pathCheckPaymentStatus , parameters: params)
+            opt.start{ response in
+                if response.error != nil {
+                    completion(serverDown, "", "", nil)
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String, "", "", nil)
+                }else{
+                    guard let status = dict!["status"] as? String else {
+                        completion(respondFormatError, "", "", nil)
+                        return
+                    }
+                    let ticketStatus = dict!["ticketStatus"] as? String
+                    let ticketId = dict!["ticketId"] as? Int
+                    completion("", status, ticketStatus, ticketId)
+                }
+            }
+        } catch let error {
+            print(error.localizedDescription)
+            completion(serverDown, "", "", nil)
+        }
+    }
+    
+    
     open class func makePayment(for type: String, withId id: Int, paying amount: Double,
                                 completion: @escaping (_ error: String, _ status: String, _ ticketStatus: String,
                                                        _ ticketId: Int?, _ ticket: PKPass?) -> Void) {

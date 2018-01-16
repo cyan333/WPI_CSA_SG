@@ -41,6 +41,7 @@ let pathGetEvent = "get_event"
 let pathGetFeed = "get_feed"
 let pathGetTicket = "get_ticket"
 let pathMakePayment = "make_payment"
+let pathCheckPaymentStatus = "check_payment_status"
 let pathCreateFeed = "create_feed"
 
 
