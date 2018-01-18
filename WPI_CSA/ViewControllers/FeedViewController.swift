@@ -204,7 +204,6 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
                                            onViewController: self)
                                 return
                             }
-                            
                             var method: String
                             switch(result.paymentOptionType) {
                             case .visa:
@@ -214,7 +213,7 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
                             case .discover:
                                 method = "Discover"
                             case .masterCard:
-                                method = "Master"
+                                method = "MasterCard"
                             case .JCB:
                                 method = "JCB"
                             case .payPal:
