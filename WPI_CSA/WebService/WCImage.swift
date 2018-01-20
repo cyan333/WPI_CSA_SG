@@ -48,6 +48,7 @@ open class WCImageManager {
                 if dict!["error"] as! String != "" {
                     completion(dict!["error"]! as! String, -1)
                 }else{
+                    WCUtils.checkAndSaveAccessToken(dict: dict)
                     completion("", dict!["imageId"]! as! Int)
                 }
             }

@@ -67,11 +67,11 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func doneClicked(_ sender: UIBarButtonItem) {
-        var userId: Int?
+        var accessToken: String?
         var email: String
         
         if Utils.appMode == .LoggedOn {
-            userId = WCService.currentUser!.id
+            accessToken = WCService.currentUser!.accessToken
             email = WCService.currentUser!.username!
         } else {
             email = emailTxtField.text!.trim()
@@ -91,7 +91,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         }
         
         Utils.showLoadingIndicator()
-        WCService.reportSGProblem(forMenu: menuId!, byUser: userId, andEmail: email, withReport: report) { (error) in
+        WCService.reportSGProblem(forMenu: menuId!, byUser: accessToken, andEmail: email, withReport: report) { (error) in
             if error == "" {
                 Utils.hideIndicator()
                 self.dismiss(animated: true, completion: nil)

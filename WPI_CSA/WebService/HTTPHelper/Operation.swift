@@ -262,7 +262,7 @@ open class HTTP: Operation {
         }
         set(newState) {
             willChangeValue(forKey: "state")
-            stateLock.withCriticalScope { //Void -> Void in   Commented out during swift 4.0 migration
+            stateLock.withCriticalScope {
                 guard _state != .finished else {
                     print("Invalid! - Attempted to back out of Finished State")
                     return
@@ -648,8 +648,6 @@ public class DelegateManager: NSObject, URLSessionDataDelegate, URLSessionDownlo
 /**
  Handles providing singletons of NSURLSession.
  */
-//public is added here for swift 4.0 migration
-//TODO: This is a bug from apple. Check to remove public from future release.
 public class SharedSession {
     public static let defaultSession = URLSession(configuration: URLSessionConfiguration.default,
                                            delegate: DelegateManager.sharedInstance, delegateQueue: nil)

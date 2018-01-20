@@ -25,9 +25,7 @@ let localMode = false
    Save: create a new object if does not exist. update if it exists
 */
 let pathGetVersionInfo = "get_version_info"
-let pathGetSalt = "login_for_salt"
 let pathLogin = "login"
-let pathRegisterSalt = "register_for_salt"
 let pathRegister = "register"
 let pathSaveUserDetails = "save_user_detail"
 let pathSendVerificationEmail = "send_verification_email"
@@ -61,20 +59,14 @@ open class WCUtils{
     }
     
     
-    open class func md5(_ string: String) -> String {
+    open class func checkAndSaveAccessToken(dict: [String : Any]?) {
         
-        let context = UnsafeMutablePointer<CC_MD5_CTX>.allocate(capacity: 1)
-        var digest = Array<UInt8>(repeating:0, count:Int(CC_MD5_DIGEST_LENGTH))
-        CC_MD5_Init(context)
-        CC_MD5_Update(context, string, CC_LONG(string.lengthOfBytes(using: String.Encoding.utf8)))
-        CC_MD5_Final(&digest, context)
-        context.deallocate(capacity: 1)
-        var hexString = ""
-        for byte in digest {
-            hexString += String(format:"%02x", byte)
+        if let dict = dict {
+            if let accessToken = dict["accessToken"] as? String {
+                WCService.currentUser?.accessToken = accessToken
+                Utils.setParam(named: savedAccessToken, withValue: accessToken)// Is it really good to involve Utils here?
+            }
         }
-        
-        return hexString
     }
     
 }

@@ -12,7 +12,7 @@ import UIKit
 
 //Format: AppMajorVerion.AppSubVersion.ContentVersion
 //Update this number results server version update
-let baseVersion = "1.03.001"
+let baseVersion = "1.10.001"
 
 //All application parameters are declared here
 let appVersion = "appVersion"
@@ -20,6 +20,7 @@ let appStatus = "appStatus"
 let reportEmail = "email"
 let savedUsername = "username"
 let savedPassword = "password"
+let savedAccessToken = "accessToken"
 let localTitle = "title"
 let localArticle = "article"
 let localArticleType = "articleType"
@@ -119,29 +120,52 @@ open class Utils {
     }
     
     open class func dismissIndicatorAndTryLogin(vc: UIViewController, showAlert: Bool){
-        if let password = Utils.getParam(named: savedPassword),
-            let username = Utils.getParam(named: savedUsername){
-            if password != "" && username != ""{
-                WCUserManager.loginUser(withUsername: username, andPassword: password, completion: {
-                    (error, user) in
-                    if error == "" {
-                        appMode = .LoggedOn
-                        WCService.currentUser = user
-                        hideIndicator()
-                        NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
-                                                        object: nil)
-                    }else{
-                        hideIndicator()
-                        process(errorMessage: error,
-                                onViewController: vc,
-                                showingServerdownAlert: showAlert)
-                    }
-                })
-            }else{
-                hideIndicator()
-                NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-            }
-        }else{
+        if let password = Utils.getParam(named: savedPassword), let username = Utils.getParam(named: savedUsername),
+            password != "", username != "" {
+            //migration starts
+            Utils.deleteParam(named: savedUsername)
+            Utils.deleteParam(named: savedPassword)
+            
+            WCUserManager.loginMigration(forUsername: username, andEncryptedPassword: password,
+                                         completion: { (error, migratedAccessToken) in
+                if error == "" {
+                    WCUserManager.loginUser(withAccessToken: migratedAccessToken, completion: { (error, user) in
+                        if error == "" {
+                            appMode = .LoggedOn
+                            hideIndicator()
+                            NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
+                                                            object: nil)
+                        } else {
+                            appMode = .Login
+                            hideIndicator()
+                            NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
+                                                            object: nil)
+                        }
+                    })
+                } else {
+                    appMode = .Login
+                    hideIndicator()
+                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
+                                                    object: nil)
+                }
+            })
+            
+        } else if let accessToken = Utils.getParam(named: savedAccessToken), accessToken != "" {
+            WCUserManager.loginUser(withAccessToken: accessToken, completion: {
+                (error, user) in
+                if error == "" {
+                    appMode = .LoggedOn
+                    hideIndicator()
+                    NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"),
+                                                    object: nil)
+                }else{
+                    hideIndicator()
+                    process(errorMessage: error,
+                            onViewController: vc,
+                            showingServerdownAlert: showAlert)
+                }
+            })
+        } else {
             hideIndicator()
             NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
         }

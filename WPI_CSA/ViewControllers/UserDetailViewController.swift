@@ -172,11 +172,12 @@ class UserDetailViewController: UIViewController, UINavigationControllerDelegate
                         WCService.currentUser?.avatarId = imgId
                         CacheManager.saveImageToLocal(image: self.newAvatar!, id: imgId)
                     }
-                    
-                    self.navigationController?.popViewController(animated: true)
-                    let messageDict = ["message": "Saved successfully"]//TODO: Error?
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
-                    self.delegate?.updateUserDetails()
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                        let messageDict = ["message": "Saved successfully"]//TODO: Error?
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showToastOnSetting"), object: nil, userInfo: messageDict)
+                        self.delegate?.updateUserDetails()
+                    }
                     
                 }
                 

@@ -32,17 +32,6 @@ open class CacheManager {
             print("error occurred, here are the details:\n \(error)")
         }
         
-        /* DB 2.0 Migration code starts */
-        let legacyDBPath = documentDirectoryPath.appendingPathComponent("SG.sqlite")
-        if fileManager.fileExists(atPath: legacyDBPath){
-            do{
-                try fileManager.removeItem(atPath: legacyDBPath)
-            }catch let error {
-                print(error.localizedDescription)
-            }
-        }
-        /* DB 2.0 Migration code ends */
-        
         // Creating image cache folder
         let imageCacheDir = documentDirectoryPath.appendingPathComponent("imageCache")
         do {
@@ -75,21 +64,6 @@ open class CacheManager {
             try imgCachePathUrl.setResourceValues(resourceValues)
             
         } catch let error{
-            print(error.localizedDescription)
-        }
-    }
-    
-    open class func migrationToVersion2() {
-        //let fileManager = FileManager.default
-        let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString
-        
-        
-        let img = UIImage(named: "1_2.jpg")
-        let imgPath = URL(fileURLWithPath: documentDirectoryPath.appendingPathComponent("1.jpg"))
-        
-        do{
-            try UIImageJPEGRepresentation(img!, 1.0)?.write(to: imgPath, options: .atomic)
-        }catch let error{
             print(error.localizedDescription)
         }
     }

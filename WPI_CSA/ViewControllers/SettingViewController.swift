@@ -79,25 +79,12 @@ class SettingViewController: UIViewController {
             self.changePwdController.textFields![1].text = ""
             self.changePwdController.textFields![2].text = ""
             
-            let username = WCService.currentUser!.username!
             Utils.showLoadingIndicator()
-            WCUserManager.getSaltForUser(withUsername: username) { (error, salt) in
+            WCUserManager.changePassword(from: self.oldPass, to: self.newPass) { (error) in
                 if error == "" {
-                    let encryptedNewPwd = WCUtils.md5(self.newPass + salt)
-                    WCUserManager.changePassword(from: WCUtils.md5(self.oldPass + salt),
-                                                 to: encryptedNewPwd,
-                                                 completion: { (error, accessToken) in
-                                                    if error == ""{
-                                                        WCService.currentUser?.accessToken = accessToken
-                                                        Utils.setParam(named: savedPassword, withValue: encryptedNewPwd)
-                                                        Utils.hideIndicator()
-                                                        Utils.show(alertMessage: "Done", onViewController: self)
-                                                    }else{
-                                                        Utils.hideIndicator()
-                                                        Utils.process(errorMessage: error,
-                                                                      onViewController: self,
-                                                                      showingServerdownAlert: true)                                                    }
-                    })
+                    Utils.hideIndicator()
+                    Utils.show(alertMessage: "Done", onViewController: self)
+                    
                 } else {
                     Utils.hideIndicator()
                     Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
@@ -138,25 +125,22 @@ class SettingViewController: UIViewController {
         if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? SettingLoginCell{
             let username = cell.usernameField.text!
             let password = cell.passwordField.text!
+            
+            if username.trim() == "" {
+                Utils.show(alertMessage: "Please enter your username.", onViewController: self)
+                return
+            }
+            if password.trim() == "" {
+                Utils.show(alertMessage: "Please enter your password.", onViewController: self)
+                return
+            }
+            
             Utils.showLoadingIndicator()
-            WCUserManager.getSaltForUser(withUsername: username) { (error, salt) in
+            WCUserManager.loginUser(withUsername: username, andPassword: password) { (error, user) in
                 if error == "" {
-                    WCUserManager.loginUser(withUsername: username,
-                                            andPassword: WCUtils.md5(password + salt),
-                                            completion: { (error, user) in
-                                                if error == "" {
-                                                    WCService.currentUser = user
-                                                    Utils.appMode = .LoggedOn
-                                                    Utils.setParam(named: savedUsername, withValue: username)
-                                                    Utils.setParam(named: savedPassword, withValue: WCUtils.md5(password + salt))
-                                                    Utils.hideIndicator()
-                                                    self.reloadUserCell()
-                                                } else {
-                                                    Utils.hideIndicator()
-                                                    Utils.process(errorMessage: error, onViewController: self,
-                                                                  showingServerdownAlert: true)
-                                                }
-                    })
+                    Utils.appMode = .LoggedOn
+                    Utils.hideIndicator()
+                    self.reloadUserCell()
                 } else {
                     Utils.hideIndicator()
                     Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
@@ -387,8 +371,7 @@ extension SettingViewController : UITableViewDelegate {
                 (alert: UIAlertAction!) -> Void in
                 WCService.currentUser = nil
                 Utils.appMode = .Login
-                Utils.deleteParam(named: savedUsername)
-                Utils.deleteParam(named: savedPassword)
+                Utils.deleteParam(named: savedAccessToken)
                 tableView.reloadData()
             }))
             confirm.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))

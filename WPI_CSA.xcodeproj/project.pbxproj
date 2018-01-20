@@ -213,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				871E35C31EBA5D6300EA483E /* HTTPHelper */,
+				AA3CBF341F86A284007BEEBC /* RequestMocker.swift */,
 				874F3D3C1EF9AAE500B47492 /* WCArticle.swift */,
 				AA210ADE1F89EEB100B28BC4 /* WCEvent.swift */,
 				87D097631F70CC5A00D78BF8 /* WCFeed.swift */,
@@ -221,7 +222,6 @@
 				8732FE021EBC1F6800B1CDB1 /* WCService.swift */,
 				87DE3FC11EC41DF800BB49EB /* WCUser.swift */,
 				8732FE061EBD07A600B1CDB1 /* WCUtils.swift */,
-				AA3CBF341F86A284007BEEBC /* RequestMocker.swift */,
 			);
 			name = WebService;
 			sourceTree = "<group>";

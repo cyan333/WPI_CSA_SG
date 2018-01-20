@@ -79,7 +79,6 @@ class LifeViewController: UIViewController ,PKAddPassesViewControllerDelegate{
         } catch {
             print("Error: \(error)")
         }*/
-        
         /*============================== TESTING AREA ENDS ==============================*/
         
         refreshControl = UIRefreshControl()

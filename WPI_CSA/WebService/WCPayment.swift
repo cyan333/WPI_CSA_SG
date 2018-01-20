@@ -30,6 +30,7 @@ open class WCPaymentManager{
                         completion(respondFormatError, "", nil)
                         return
                     }
+                    WCUtils.checkAndSaveAccessToken(dict: dict)
                     let ticketId = dict!["ticketId"] as? Int
                     completion("", status, ticketId)
                 }
@@ -66,7 +67,8 @@ open class WCPaymentManager{
                     }
                     let ticketId = dict!["ticketId"] as? Int
                     let ticketStr = dict!["ticket"] as? String
-                    
+                    WCUtils.checkAndSaveAccessToken(dict: dict)
+                    WCUtils.checkAndSaveAccessToken(dict: dict)
                     if ticketStr != nil {
                         var error: NSError?
                         let ticket = PKPass(data: Data(base64Encoded:ticketStr!, options: .ignoreUnknownCharacters)!, error: &error)

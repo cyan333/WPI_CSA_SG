@@ -61,12 +61,8 @@ open class RequestMocker {
             event.fee = 0
             
             return ["", event]
-        case pathGetSalt:
-            return ["", "salt"]
         case pathLogin:
-            let user = WCUser(id: 1,
-                              username: "fning@wpi.edu",
-                              accessToken: "token")
+            let user = WCUser(username: "fning@wpi.edu", accessToken: "token")
             user.emailConfirmed = true
             user.name = "Fangming Ning"
             return ["", user]

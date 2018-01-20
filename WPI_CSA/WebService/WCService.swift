@@ -52,12 +52,18 @@ open class WCService {
     }
     
     open class func reportSGProblem(forMenu menuId: Int,
-                                    byUser userId: Int?,
-                                    andEmail email: String,
+                                    byUser accessToken: String?,
+                                    andEmail email: String?,
                                     withReport report: String,
                                     completion: @escaping (String) -> Void) {
         do {
-            let params = ["menuId": menuId, "userId": userId as Any, "email": email, "report": report] as [String : Any]
+            var params = ["menuId": menuId, "report": report] as [String : Any]
+            if let email = email {
+                params["email"] = email
+            }
+            if let accessToken = accessToken {
+                params["accessToken"] = accessToken
+            }
             let opt = try HTTP.New(serviceBase + pathCreateReport, method: .POST, parameters: params, headers: nil, requestSerializer: JSONParameterSerializer(), isDownload: false)
             opt.start { response in
                 if response.error != nil {
@@ -102,6 +108,7 @@ open class WCService {
                     let pass = PKPass(data: Data(base64Encoded:base64, options: .ignoreUnknownCharacters)!, error: &error)
                     
                     if error == nil {
+                        WCUtils.checkAndSaveAccessToken(dict: dict)
                         completion("", pass)
                     } else {
                         completion(error!.localizedDescription, nil)

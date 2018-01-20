@@ -100,69 +100,34 @@ class RegisterViewController: UIViewController, UINavigationControllerDelegate, 
         }
         
         Utils.showLoadingIndicator()
-        WCUserManager.registerSalt(forUsername: username) { (error, salt) in
-            if error == "" {
-                WCUserManager.register(forUsername: username,
-                                       andEncryptedPassword: WCUtils.md5(password + salt),
-                                       completion: { (error, user) in
-                    if error == "" {
-                        WCService.currentUser = user
-                        Utils.appMode = .LoggedOn
-                        WCUserManager.saveCurrentUserDetails(name: name, birthday: self.birthday, classOf: self.classOf, major: self.major, avatar: self.newAvatar, targetSize: 250, completion: { (error, imgId) in
-                            if error == "" {
-                                WCService.currentUser!.name = name
-                                if let birthday = self.birthday {
-                                    WCService.currentUser!.birthday = birthday
-                                }
-                                if let classOf = self.classOf {
-                                    WCService.currentUser!.classOf = classOf
-                                }
-                                if let major = self.major {
-                                    WCService.currentUser!.major = major
-                                }
-                                if let imgId = imgId {
-                                    WCService.currentUser?.avatarId = imgId
-                                    CacheManager.saveImageToLocal(image: self.newAvatar!, id: imgId)
-                                }
-                                
-                                Utils.setParam(named: savedUsername, withValue: username)
-                                Utils.setParam(named: savedPassword,
-                                               withValue: WCUtils.md5(password + salt))
-                                NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                Utils.hideIndicator()
-                                OperationQueue.main.addOperation{
-                                    let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
-                                        " with a link to confirm your email. Please click on the link in 24 hours. " +
-                                        "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
-                                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
-                                        self.dismiss(animated: true, completion: nil)
-                                    }))
-                                    self.present(alert, animated: true, completion: nil)
-                                }
-                                
-                            }else{
-                                NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
-                                Utils.hideIndicator()
-                                OperationQueue.main.addOperation{
-                                    let alert = UIAlertController(title: nil, message: "User created but user details is not stored correctly. " + error, preferredStyle: .alert)
-                                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
-                                        self.dismiss(animated: true, completion: nil)
-                                    }))
-                                    self.present(alert, animated: true, completion: nil)
-                                }
-                            }
-                            
-                        })
-                    }else{
-                        Utils.hideIndicator()
-                        Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
-                    }
-                })
+        WCUserManager.register(forUsername: username, andPassword: password, andName: name, andBirthday: self.birthday,
+                               andClassOd: self.classOf, andMajor: self.major, avatar: self.newAvatar, targetSize: 250) { (error, user) in
+            if (error == "") {
+                Utils.appMode = .LoggedOn
+                
+                if let avatarId = user?.avatarId {
+                    WCService.currentUser?.avatarId = avatarId
+                    CacheManager.saveImageToLocal(image: self.newAvatar!, id: avatarId)
+                }
+                
+                NotificationCenter.default.post(name: NSNotification.Name.init("reloadUserCell"), object: nil)
+                Utils.hideIndicator()
+                OperationQueue.main.addOperation{
+                    let alert = UIAlertController(title: nil, message: "An email has been sent to " + user!.username! +
+                        " with a link to confirm your email. Please click on the link in 24 hours. " +
+                        "Please check your junk folder if you cannot see the email.", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "ok", style: .default, handler: { (_) in
+                        self.dismiss(animated: true, completion: nil)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
             } else {
                 Utils.hideIndicator()
                 Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
             }
         }
+        
     }
     
     @objc func keyboardWillShow(notification:NSNotification){
