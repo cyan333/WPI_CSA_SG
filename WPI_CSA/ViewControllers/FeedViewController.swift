@@ -209,7 +209,7 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
                             case .visa:
                                 method = "Visa"
                             case .AMEX:
-                                method = "AMEX"
+                                method = "American Express"
                             case .discover:
                                 method = "Discover"
                             case .masterCard:
