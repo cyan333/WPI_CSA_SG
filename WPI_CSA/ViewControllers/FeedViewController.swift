@@ -334,10 +334,10 @@ extension FeedViewController: UITableViewDataSource {
         } else if section == 1 {
             return article.paragraphs.count
         } else {
-            if event!.fee == nil{
-                return 1
-            } else {
+            if event!.active {
                 return 2
+            } else {
+                return 1
             }
         }
     }

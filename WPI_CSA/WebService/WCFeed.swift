@@ -147,9 +147,10 @@ open class WCFeedManager {
                                 let startTime = (eventDic["startTime"] as! String).Iso8601DateUTC
                                 let endTime = (eventDic["endTime"] as! String).Iso8601DateUTC
                                 let location = eventDic["location"] as! String
+                                let active = eventDic["active"] as! Bool
                                 
                                 let event = WCEvent(id: id, title: title, startTime: startTime,
-                                                    endTime: endTime, location: location)
+                                                    endTime: endTime, location: location, active: active)
                                 event.ownerId = eventDic["ownerId"] as? Int
                                 event.createdAt = (eventDic["createdAt"] as! String).Iso8601DateUTC
                                 event.description = eventDic["description"] as! String

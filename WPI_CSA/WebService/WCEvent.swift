@@ -18,13 +18,15 @@ open class WCEvent {
     var fee: Double?
     var ownerId: Int?
     var createdAt: Date?
+    var active: Bool
     
-    init(id: Int, title: String, startTime: Date, endTime: Date, location: String){
+    init(id: Int, title: String, startTime: Date, endTime: Date, location: String, active: Bool){
         self.id = id
         self.title = title
         self.startTime = startTime
         self.endTime = endTime
         self.location = location
+        self.active = active
         self.description = ""
     }
     
@@ -54,8 +56,9 @@ open class WCEventManager {
                     let startTime = (dict!["startTime"]! as! String).Iso8601DateUTC
                     let endTime = (dict!["endTime"]! as! String).Iso8601DateUTC
                     let location = dict!["location"]! as! String
+                    let active = dict!["active"]! as! Bool
                     
-                    let event = WCEvent(id: id, title: title, startTime: startTime, endTime: endTime, location: location)
+                    let event = WCEvent(id: id, title: title, startTime: startTime, endTime: endTime, location: location, active: active)
                     event.ownerId = dict!["ownerId"]! as? Int
                     event.createdAt = (dict!["createdAt"]! as! String).Iso8601DateUTC
                     event.description = dict!["description"]! as! String

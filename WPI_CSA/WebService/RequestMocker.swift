@@ -42,7 +42,7 @@ open class RequestMocker {
             let sTime = "2018-04-10T22:00:00Z".Iso8601DateUTC
             let eTime = "2018-04-11T02:00:00Z".Iso8601DateUTC
             let event = WCEvent(id: 1, title: "Dragon night 2018", startTime: sTime, endTime: eTime,
-                                location: "Aldem Hall")
+                                location: "Aldem Hall", active: true)
             event.ownerId = 11
             event.createdAt = "2017-10-15T23:01:31.732580Z".Iso8601DateUTC
             event.description = "This is dragon night event for 2018, hosted by CSA. There will be chinese shows and food."
@@ -54,7 +54,7 @@ open class RequestMocker {
             let sTime = "2018-04-10T22:00:00Z".Iso8601DateUTC
             let eTime = "2018-04-11T02:00:00Z".Iso8601DateUTC
             let event = WCEvent(id: 1, title: "Dragon night 2018", startTime: sTime, endTime: eTime,
-                                location: "Aldem Hall")
+                                location: "Aldem Hall", active: true)
             event.ownerId = 11
             event.createdAt = "2017-10-15T23:01:31.732580Z".Iso8601DateUTC
             event.description = "This is dragon night event for 2018, hosted by CSA. There will be chinese shows and food."
