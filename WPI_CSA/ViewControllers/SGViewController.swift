@@ -204,10 +204,10 @@ class SGViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
             return
         }
-        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
+        /*let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
         optionMenu.addAction(UIAlertAction(title: "Report a problem", style: .default, handler: {
-            (alert: UIAlertAction!) -> Void in
+            (alert: UIAlertAction!) -> Void in*/
             if Utils.appMode == .Login {
                 let alert = UIAlertController(title: nil, message: "No user logged in. Please login so that we can get back to you and keep track of reports.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Login & Register", style: .default, handler: {
@@ -224,7 +224,7 @@ class SGViewController: UIViewController {
                 self.performSegue(withIdentifier: "SGReportSegue", sender: nil)
             }
             
-        }))
+        /*}))
         optionMenu.addAction(UIAlertAction(title: "Create new artile", style: .default, handler: {
             (alert: UIAlertAction!) -> Void in
             if Utils.appMode == .Login {
@@ -238,7 +238,7 @@ class SGViewController: UIViewController {
         }))
         optionMenu.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         optionMenu.popoverPresentationController?.barButtonItem = self.navigationItem.rightBarButtonItem
-        self.present(optionMenu, animated: true, completion: nil)
+        self.present(optionMenu, animated: true, completion: nil)*/
         
     }
     

@@ -16,6 +16,7 @@ class SettingLoginCell: UITableViewCell {
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var forgetButton: UIButton!
 }
 
 class SettingUserCell: UITableViewCell {
@@ -149,6 +150,30 @@ class SettingViewController: UIViewController {
         }
     }
     
+    @objc func forget() {
+        let resetPwdController = UIAlertController(title: "Enter your username (email)", message: "", preferredStyle: .alert)
+        resetPwdController.addTextField { (textField : UITextField!) -> Void in }
+        resetPwdController.addAction(UIAlertAction(title: "Ok", style: .default, handler: {
+            alert -> Void in
+            let email = resetPwdController.textFields![0].text!.trim()
+            if(email == "") {
+                Utils.show(alertMessage: "Please enter a valid username", onViewController: self)
+            } else {
+                Utils.showLoadingIndicator()
+                WCUserManager.resetPassword(for: email, completion: { (error) in
+                    Utils.hideIndicator()
+                    if error == "" {
+                        Utils.show(alertMessage: "An email has been sent to \(email) with a link to reset your password. Please click on the link in 24 hours. Please check your junk folder if you cannot see the email.", onViewController: self)
+                    } else {
+                        Utils.process(errorMessage: error, onViewController: self, showingServerdownAlert: true)
+                    }
+                })
+            }
+        }))
+        resetPwdController.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        self.present(resetPwdController, animated: true, completion: nil)
+    }
+    
     @objc func reconnect(){
         Utils.checkVerisonInfoAndLoginUser(onViewController: self, showingServerdownAlert: true)
     }
@@ -243,6 +268,7 @@ extension SettingViewController : UITableViewDataSource {
                 cell.passwordField.delegate = self
                 cell.passwordField.isSecureTextEntry = true
                 cell.loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
+                cell.forgetButton.addTarget(self, action: #selector(forget), for: .touchUpInside)
                 return cell
             }else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SettingUserCell") as! SettingUserCell

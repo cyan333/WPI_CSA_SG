@@ -271,4 +271,27 @@ open class WCUserManager{
             completion(serverDown)
         }
     }
+    
+    open class func resetPassword(for email: String, completion: @escaping(_ error: String) -> Void){
+        do {
+            let params = ["email": email]
+            let opt = try HTTP.POST(serviceBase + pathResetPassword, parameters: params)
+            opt.start { response in
+                if response.error != nil {
+                    completion(serverDown)
+                    return
+                }
+                let dict = WCUtils.convertToDictionary(data: response.data)
+                if dict!["error"] as! String != "" {
+                    completion(dict!["error"]! as! String)
+                }else{
+                    completion("")
+                }
+            }
+        } catch let error{
+            print (error.localizedDescription)
+            completion(serverDown)
+        }
+    }
+    
 }

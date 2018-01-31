@@ -41,6 +41,7 @@ let pathGetTicket = "get_ticket"
 let pathMakePayment = "make_payment"
 let pathCheckPaymentStatus = "check_payment_status"
 let pathCreateFeed = "create_feed"
+let pathResetPassword = "send_change_pwd_email"
 
 
 let serverDown = "Server down"
