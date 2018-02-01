@@ -224,7 +224,45 @@ class FeedViewController: UIViewController, PKAddPassesViewControllerDelegate {
                                 method = "Unknown"
                             }
                             
-                            self.makePaymentRequest(usingMethod: method, withToken: paymentNonce)
+                            var confirmMsg = "\nPaying for: \(self.event!.title)\n";
+                            confirmMsg += "Amount: $\(self.event!.fee ?? 0)\n";
+                            confirmMsg += "Method: " + method + "\n";
+                            
+                            if let cn = result.paymentMethod as? BTCardNonce {
+                                confirmMsg += "Card: " + cn.localizedDescription + "\n"
+                                method += ", " + cn.localizedDescription
+                            } else if let ppan = result.paymentMethod as? BTPayPalAccountNonce {
+                                confirmMsg += "Account: " + (ppan.email ?? "Unknown") + "\n"
+                                method += ", " + (ppan.email ?? "Unknown")
+                            } else if let van = result.paymentMethod as? BTVenmoAccountNonce {
+                                confirmMsg += "Account: " + (van.username ?? "Unknown") + "\n"
+                                method += ", " + (van.username ?? "Unknown")
+                            } else {
+                                method += ", Unknown"
+                            }
+                            let paragraphStyle = NSMutableParagraphStyle()
+                            paragraphStyle.alignment = NSTextAlignment.left
+
+                            let attributedmsg = NSMutableAttributedString(
+                                string: confirmMsg,
+                                attributes: [
+                                    NSAttributedStringKey.paragraphStyle: paragraphStyle,
+                                    NSAttributedStringKey.font : UIFont.systemFont(ofSize: 13),
+                                    NSAttributedStringKey.foregroundColor : UIColor.black
+                                ]
+                            )
+                            
+                            let alert = UIAlertController(title: "Confirm payment details", message: "",
+                                                          preferredStyle: .alert)
+                            alert.setValue(attributedmsg, forKey: "attributedMessage")
+                            alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                            alert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: {
+                                (alert: UIAlertAction!) -> Void in
+                                self.makePaymentRequest(usingMethod: method, withToken: paymentNonce)
+                            }))
+                            self.present(alert, animated: true, completion: nil)
+                            
+                            
                             
                         } else {
                             Utils.show(alertMessage: "Unknown error. Please contact support. You are NOT charged",
